@@ -19,6 +19,7 @@ require 'pry'
 RSpec.configure do |config|
   config.disable_monkey_patching!
   config.shared_context_metadata_behavior = :apply_to_host_groups
-  config.order = :random
   config.expect_with(:rspec) { |c| c.syntax = :expect }
+  config.order = :random
+  Kernel.srand config.seed
 end
