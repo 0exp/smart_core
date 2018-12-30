@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require 'smart_core/version'
-
+# @api public
+# @since 0.1.0
 module SmartCore
-  # Your code goes here...
+  require_relative 'smart_core/version'
+  require_relative 'smart_core/validator'
 end
