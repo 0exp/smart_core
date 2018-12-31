@@ -23,7 +23,7 @@ module SmartCore::Validator::Commands
     # @api private
     # @since 0.1.0
     def initialize(validating_method, nested_validations)
-      @validating_method  = validating_method
+      @validating_method = validating_method
       @nested_validations = nested_validations
     end
 
@@ -33,6 +33,7 @@ module SmartCore::Validator::Commands
     # @api private
     # @since 0.1.0
     def call(validator)
+
     end
   end
 end

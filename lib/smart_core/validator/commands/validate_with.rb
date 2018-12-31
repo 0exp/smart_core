@@ -23,7 +23,7 @@ module SmartCore::Validator::Commands
     # @api private
     # @since 0.1.0
     def initialize(validating_klass, nested_validations)
-      @validating_klass   = validating_klass
+      @validating_klass = validating_klass
       @nested_validations = nested_validations
     end
 
