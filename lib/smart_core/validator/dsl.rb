@@ -51,6 +51,8 @@ class SmartCore::Validator
     # @param nested_validations [Proc]
     # @return [void]
     #
+    # @see SmartCore::Validator::Commands::ValidateWith
+    #
     # @api private
     # @since 0.1.0
     def validate_with(validating_klass, &nested_validations)
