@@ -52,6 +52,14 @@ class SmartCore::Validator::CommandSet
     thread_safe { self.class.new.tap { |duplicate| duplicate.concat(self) } }
   end
 
+  # @return [void]
+  #
+  # @api private
+  # @since 0.1.0
+  def clear
+    thread_safe { commands.clear }
+  end
+
   private
 
   # @return [void]

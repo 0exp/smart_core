@@ -30,6 +30,14 @@ class SmartCore::Validator
       @commands
     end
 
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
+    def clear_commands!
+      commands.clear
+    end
+
     # @param validating_method [Symbol, String]
     # @param nested_validations [Proc]
     # @return [void]

@@ -28,14 +28,15 @@ class SmartCore::Validator
     end
 
     # @param validating_method [String, Symbol]
-    # @return [void]
+    # @return [Boolean]
     #
     # @api private
     # @since 0.1.0
     def call(validating_method)
       thread_safe do
-        clear_state!
+        errors.clear
         extended_validator.send(validating_method)
+        errors.empty?
       end
     end
 
@@ -65,14 +66,6 @@ class SmartCore::Validator
           invoker_context.send(:error, error_code)
         end
       end
-    end
-
-    # @return [void]
-    #
-    # @api private
-    # @since 0.1.0
-    def clear_state!
-      errors.clear
     end
 
     # @return [void]

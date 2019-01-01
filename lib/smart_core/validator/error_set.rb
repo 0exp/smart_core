@@ -39,6 +39,14 @@ class SmartCore::Validator
       thread_safe { errors.empty? }
     end
 
+    # @return [Boolean]
+    #
+    # @api private
+    # @since 0.1.0
+    def any?
+      thread_safe { errors.any? }
+    end
+
     # @return [void]
     #
     # @api private
