@@ -35,7 +35,7 @@ module SmartCore::Validator::Commands
     def call(validator)
       invoker = SmartCore::Validator::Invoker.new(validator)
       invoker.call(validating_method)
-      validator.append_errors(invoker.errors)
+      validator.__append_errors__(invoker.errors)
 
       if invoker.errors.empty?
         nested_validator = Class.new(validator.class).tap do |klass|
@@ -44,7 +44,7 @@ module SmartCore::Validator::Commands
         end.new
 
         unless nested_validator.valid?
-          validator.append_errors(nested_validator.send(:validation_errors))
+          validator.__append_errors__(nested_validator.send(:__validation_errors__))
         end
       end
     end

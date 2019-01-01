@@ -13,13 +13,19 @@ class SmartCore::Validator
   # @since 0.1.0
   extend DSL
 
-  # @return [void]
-  #
-  # @api public
-  # @since 0.1.0
-  def initialize
-    @access_lock = Mutex.new
-    @validation_errors = ErrorSet.new
+  class << self
+    # @param argumants [Any]
+    # @return [void]
+    #
+    # @api public
+    # @since 0.1.0
+    def new(*arguments)
+      allocate.tap do |object|
+        object.instance_variable_set(:@__access_lock__, Mutex.new)
+        object.instance_variable_set(:@__validation_errors__, ErrorSet.new)
+        object.send(:initialize, *arguments)
+      end
+    end
   end
 
   # @return [Boolean]
@@ -27,10 +33,10 @@ class SmartCore::Validator
   # @api public
   # @since 0.1.0
   def valid?
-    thread_safe do
-      validation_errors.clear
+    __thread_safe__ do
+      __validation_errors__.clear
       self.class.commands.each { |command| command.call(self) }
-      validation_errors.empty?
+      __validation_errors__.empty?
     end
   end
 
@@ -47,8 +53,8 @@ class SmartCore::Validator
   #
   # @api private
   # @since 0.1.0
-  def append_errors(error_set)
-    validation_errors.append_errors(error_set)
+  def __append_errors__(error_set)
+    __validation_errors__.append_errors(error_set)
   end
 
   private
@@ -57,13 +63,13 @@ class SmartCore::Validator
   #
   # @api private
   # @since 0.1.0
-  attr_reader :validation_errors
+  attr_reader :__validation_errors__
 
   # @return [void]
   #
   # @api private
   # @since 0.1.0
-  def thread_safe
-    @access_lock.synchronize { yield if block_given? }
+  def __thread_safe__
+    @__access_lock__.synchronize { yield if block_given? }
   end
 end
