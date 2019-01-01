@@ -33,7 +33,6 @@ module SmartCore::Validator::Commands
     # @api private
     # @since 0.1.0
     def call(validator)
-
     end
   end
 end

@@ -6,6 +6,7 @@ class SmartCore::Validator
   require_relative 'validator/exceptions'
   require_relative 'validator/command_set'
   require_relative 'validator/error_set'
+  require_relative 'validator/invoker'
   require_relative 'validator/commands'
   require_relative 'validator/dsl'
 
@@ -17,8 +18,8 @@ class SmartCore::Validator
   # @api public
   # @since 0.1.0
   def initialize
-    @error_set = ErrorSet.new
     @access_lock = Mutex.new
+    @validation_errors = ErrorSet.new
   end
 
   # @return [Boolean]
@@ -27,34 +28,36 @@ class SmartCore::Validator
   # @since 0.1.0
   def valid?
     thread_safe do
-      error_set.clear
+      validation_errors.clear
       self.class.commands.each { |command| command.call(self) }
-      error_set.empty?
+      validation_errors.empty?
     end
   end
 
+  # @return [Array<Symbol>]
+  #
+  # @api public
+  # @since 0.1.0
   def errors
-    thread_safe { error_set.error_codes }
+    validation_errors.codes
+  end
+
+  # @param error_set [SmartCore::Validator::ErrorSet]
+  # @return [void]
+  #
+  # @api private
+  # @since 0.1.0
+  def append_errors(error_set)
+    validation_errors.append_errors(error_set)
   end
 
   private
 
-  # @return [ErrorSet]
+  # @return [SmartCore::Validator::ErrorSet]
   #
   # @api private
   # @since 0.1.0
-  attr_reader :error_set
-
-  # @param error_code [Symbol, String]
-  # @return [void]
-  #
-  # @see SmartCore::Validator::ErrorSet#add_error
-  #
-  # @api public
-  # @since 0.1.0
-  def error(error_code)
-    error_set.add_error(error_code)
-  end
+  attr_reader :validation_errors
 
   # @return [void]
   #

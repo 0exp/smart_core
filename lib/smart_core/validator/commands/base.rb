@@ -8,5 +8,6 @@ class SmartCore::Validator::Commands::Base
   #
   # @api private
   # @since 0.1.0
-  def call(validator); end
+  def call(validator)
+  end
 end

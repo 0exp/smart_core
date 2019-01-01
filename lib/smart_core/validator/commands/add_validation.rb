@@ -25,7 +25,10 @@ module SmartCore::Validator::Commands
     # @api private
     # @since 0.1.0
     def call(validator)
-      validator.send(validating_method)
+      SmartCore::Validator::Invoker.new(validator).tap do |invoker|
+        invoker.call(validating_method)
+        validator.append_errors(invoker.errors)
+      end
     end
   end
 end

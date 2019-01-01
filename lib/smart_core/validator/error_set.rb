@@ -1,24 +1,34 @@
 # frozen_string_literal: true
 
 class SmartCore::Validator
+  # @api private
+  # @since 0.1.0
   class ErrorSet
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
     def initialize
       @errors = Set.new
       @access_lock = Mutex.new
     end
 
-    # @param error_code [Symbol, String]
+    # @param error_codes [Arrray<Symbol>]
     # @return [void]
-    #
-    # @raise [SmartCore::Validator::IncorrectErrorCodeError]
     #
     # @api private
     # @since 0.1.0
     def add_error(error_code)
-      thread_safe do
-        raise IncorrectErrorCodeError unless error_code.is_a?(Symbol)
-        errors << error_code
-      end
+      thread_safe { store_error(error_code) }
+    end
+
+    # @param error_set [SmartCore::Validator::ErrorSet]
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
+    def append_errors(error_set)
+      thread_safe { error_set.codes.each { |error_code| store_error(error_code) } }
     end
 
     # @return [Boolean]
@@ -37,15 +47,27 @@ class SmartCore::Validator
       thread_safe { errors.clear }
     end
 
-    # @return [Array<Symbol, String>]
+    # @return [Array<Symbol>]
     #
     # @api private
     # @since 0.1.0
-    def error_codes
-      thred_safe { errors.to_a }
+    def codes
+      thread_safe { errors.to_a }
     end
 
     private
+
+    # @param error_code [Symbol]
+    # @return [void]
+    #
+    # @raise [SmartCore::Validator::IncorrectErrorCodeError]
+    #
+    # @api private
+    # @since 0.1.0
+    def store_error(error_code)
+      raise IncorrectErrorCodeError unless error_code.is_a?(Symbol)
+      errors << error_code
+    end
 
     # @return [Array<Symbol>]
     #
