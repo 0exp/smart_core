@@ -3,8 +3,13 @@
 describe 'Validator' do
   specify do
     class SimpleValidator < SmartCore::Validator
+      attribute :email
+      attribute :password
+
       validate :peka do
-        validate :boom
+        validate :boom do
+          validate :juk
+        end
       end
 
       validate :fig
@@ -19,11 +24,14 @@ describe 'Validator' do
       end
 
       def boom
-        error(:boom)
+      end
+
+      def juk
+        error(:juk)
       end
     end
 
-    validator = SimpleValidator.new
+    validator = SimpleValidator.new(email: 'kek@pek.cheburek', password: 'lalala')
     validator.valid?
 
     binding.pry

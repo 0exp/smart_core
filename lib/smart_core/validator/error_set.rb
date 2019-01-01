@@ -27,7 +27,7 @@ class SmartCore::Validator
     #
     # @api private
     # @since 0.1.0
-    def append_errors(error_set)
+    def append_errors(error_set) # TODO: rename to "concat"
       thread_safe { error_set.codes.each { |error_code| store_error(error_code) } }
     end
 

@@ -39,7 +39,7 @@ module SmartCore::Validator::Commands
 
       if invoker.errors.empty?
         nested_validator = Class.new(validator.class).tap do |klass|
-          klass.clear_commands!
+          klass.clear_commands
           klass.instance_eval(&nested_validations)
         end.new
 

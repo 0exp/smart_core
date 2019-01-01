@@ -5,6 +5,7 @@
 class SmartCore::Validator
   require_relative 'validator/exceptions'
   require_relative 'validator/command_set'
+  require_relative 'validator/attribute_set'
   require_relative 'validator/error_set'
   require_relative 'validator/invoker'
   require_relative 'validator/commands'
@@ -19,14 +20,25 @@ class SmartCore::Validator
     #
     # @api public
     # @since 0.1.0
-    def new(*arguments)
+    def new(*arguments, **options)
       allocate.tap do |object|
         object.instance_variable_set(:@__access_lock__, Mutex.new)
         object.instance_variable_set(:@__validation_errors__, ErrorSet.new)
-        object.send(:initialize, *arguments)
+
+        attributes.each do |attribute|
+          object.instance_variable_set("@#{attribute}", options[attribute])
+        end
+
+        object.send(:initialize, *arguments, **options)
       end
     end
   end
+
+  # @return [void]
+  #
+  # @api public
+  # @since 0.1.0
+  def initialize(*, **); end
 
   # @return [Boolean]
   #
@@ -45,7 +57,7 @@ class SmartCore::Validator
   # @api public
   # @since 0.1.0
   def errors
-    validation_errors.codes
+    __validation_errors__.codes
   end
 
   # @param error_set [SmartCore::Validator::ErrorSet]
