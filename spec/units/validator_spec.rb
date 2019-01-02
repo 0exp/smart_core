@@ -2,6 +2,21 @@
 
 describe 'Validator' do
   specify do
+    class PekaValidator < SmartCore::Validator
+      attribute :password
+
+      validate :atata
+      validate :tratata
+
+      def atata
+        error(:atata)
+      end
+
+      def tratata
+        error(:tratata)
+      end
+    end
+
     class SimpleValidator < SmartCore::Validator
       attribute :email
       attribute :password
@@ -12,7 +27,9 @@ describe 'Validator' do
         end
       end
 
-      validate :fig
+      validate_with(PekaValidator) do
+        validate :fig
+      end
 
       private
 

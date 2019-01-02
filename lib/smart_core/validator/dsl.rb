@@ -86,7 +86,7 @@ class SmartCore::Validator
     # @api private
     # @since 0.1.0
     def validate_with(validating_klass, &nested_validations)
-      commands << Commands::ValidateWith.new(validating_klass, &nested_validations)
+      commands << Commands::ValidateWith.new(validating_klass, nested_validations)
     end
   end
 end

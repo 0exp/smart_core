@@ -38,13 +38,15 @@ module SmartCore::Validator::Commands
       validator.__append_errors__(invoker.errors)
 
       if invoker.errors.empty?
-        nested_validator = Class.new(validator.class).tap do |klass|
+        nested_validator_klass = Class.new(validator.class).tap do |klass|
           klass.clear_commands
           klass.instance_eval(&nested_validations)
-        end.new
+        end
+
+        nested_validator = nested_validator_klass.new(**validator.__attributes__)
 
         unless nested_validator.valid?
-          validator.__append_errors__(nested_validator.send(:__validation_errors__))
+          validator.__append_errors__(nested_validator.__validation_errors__)
         end
       end
     end

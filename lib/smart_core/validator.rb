@@ -34,6 +34,12 @@ class SmartCore::Validator
     end
   end
 
+  # @return [SmartCore::Validator::ErrorSet]
+  #
+  # @api private
+  # @since 0.1.0
+  attr_reader :__validation_errors__
+
   # @return [void]
   #
   # @api public
@@ -69,13 +75,15 @@ class SmartCore::Validator
     __validation_errors__.append_errors(error_set)
   end
 
-  private
-
-  # @return [SmartCore::Validator::ErrorSet]
+  # @return [Hash]
   #
   # @api private
   # @since 0.1.0
-  attr_reader :__validation_errors__
+  def __attributes__
+    self.class.attributes.each_with_object({}) do |attribute, accumulator|
+      accumulator[attribute] = instance_variable_get("@#{attribute}")
+    end
+  end
 
   # @return [void]
   #
