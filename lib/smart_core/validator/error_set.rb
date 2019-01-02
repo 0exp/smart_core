@@ -76,7 +76,7 @@ class SmartCore::Validator
     # @since 0.1.0
     def store_error(error_code)
       unless error_code.is_a?(Symbol) || error_code.is_a?(String)
-        raise IncorrectErrorCodeError, "Error code should be a symbol or a string"
+        raise IncorrectErrorCodeError, 'Error code should be a symbol or a string'
       end
 
       errors << error_code.to_sym
