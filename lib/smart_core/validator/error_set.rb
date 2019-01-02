@@ -27,8 +27,12 @@ class SmartCore::Validator
     #
     # @api private
     # @since 0.1.0
-    def append_errors(error_set) # TODO: rename to "concat"
-      thread_safe { error_set.codes.each { |error_code| store_error(error_code) } }
+    def concat(error_set)
+      thread_safe do
+        error_set.codes.each do |error_code|
+          store_error(error_code)
+        end
+      end
     end
 
     # @return [Boolean]
@@ -37,14 +41,6 @@ class SmartCore::Validator
     # @since 0.1.0
     def empty?
       thread_safe { errors.empty? }
-    end
-
-    # @return [Boolean]
-    #
-    # @api private
-    # @since 0.1.0
-    def any?
-      thread_safe { errors.any? }
     end
 
     # @return [void]
@@ -65,6 +61,12 @@ class SmartCore::Validator
 
     private
 
+    # @return [Array<Symbol>]
+    #
+    # @api private
+    # @since 0.1.0
+    attr_reader :errors
+
     # @param error_code [Symbol]
     # @return [void]
     #
@@ -76,12 +78,6 @@ class SmartCore::Validator
       raise IncorrectErrorCodeError unless error_code.is_a?(Symbol)
       errors << error_code
     end
-
-    # @return [Array<Symbol>]
-    #
-    # @api private
-    # @since 0.1.0
-    attr_reader :errors
 
     # @return [void]
     #

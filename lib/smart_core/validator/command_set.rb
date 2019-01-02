@@ -3,6 +3,9 @@
 # @api private
 # @since 0.1.0
 class SmartCore::Validator::CommandSet
+  # @since 0.1.0
+  include Enumerable
+
   # @return [Array<SmartCore::Validator::Commands::Base>]
   #
   # @api private
@@ -42,14 +45,6 @@ class SmartCore::Validator::CommandSet
   # @since 0.1.0
   def concat(command_set)
     thread_safe { commands.concat(command_set.commands) }
-  end
-
-  # @return [SmartCore::Validator::CommandSet]
-  #
-  # @api private
-  # @since 0.1.0
-  def dup
-    thread_safe { self.class.new.tap { |duplicate| duplicate.concat(self) } }
   end
 
   # @return [void]

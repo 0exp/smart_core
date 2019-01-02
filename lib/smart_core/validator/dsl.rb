@@ -90,4 +90,3 @@ class SmartCore::Validator
     end
   end
 end
-

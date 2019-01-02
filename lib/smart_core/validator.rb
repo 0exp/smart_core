@@ -22,8 +22,9 @@ class SmartCore::Validator
     # @since 0.1.0
     def new(*arguments, **options)
       allocate.tap do |object|
-        object.instance_variable_set(:@__access_lock__, Mutex.new)
         object.instance_variable_set(:@__validation_errors__, ErrorSet.new)
+        object.instance_variable_set(:@__invokation_lock__, Mutex.new)
+        object.instance_variable_set(:@__access_lock__, Mutex.new)
 
         attributes.each do |attribute|
           object.instance_variable_set("@#{attribute}", options[attribute])
@@ -51,7 +52,7 @@ class SmartCore::Validator
   # @api public
   # @since 0.1.0
   def valid?
-    __thread_safe__ do
+    __thread_safe_invokation__ do
       __validation_errors__.clear
       self.class.commands.each { |command| command.call(self) }
       __validation_errors__.empty?
@@ -63,7 +64,9 @@ class SmartCore::Validator
   # @api public
   # @since 0.1.0
   def errors
-    __validation_errors__.codes
+    __thread_safe_access__ do
+      __validation_errors__.codes
+    end
   end
 
   # @param error_set [SmartCore::Validator::ErrorSet]
@@ -72,7 +75,9 @@ class SmartCore::Validator
   # @api private
   # @since 0.1.0
   def __append_errors__(error_set)
-    __validation_errors__.append_errors(error_set)
+    __thread_safe_access__ do
+      __validation_errors__.concat(error_set)
+    end
   end
 
   # @return [Hash]
@@ -80,16 +85,28 @@ class SmartCore::Validator
   # @api private
   # @since 0.1.0
   def __attributes__
-    self.class.attributes.each_with_object({}) do |attribute, accumulator|
-      accumulator[attribute] = instance_variable_get("@#{attribute}")
+    __thread_safe_access__ do
+      self.class.attributes.each_with_object({}) do |attribute, accumulator|
+        accumulator[attribute] = instance_variable_get("@#{attribute}")
+      end
     end
+  end
+
+  private
+
+  # @return [void]
+  #
+  # @api private
+  # @since 0.1.0
+  def __thread_safe_invokation__
+    @__invokation_lock__.synchronize { yield if block_given? }
   end
 
   # @return [void]
   #
   # @api private
   # @since 0.1.0
-  def __thread_safe__
+  def __thread_safe_access__
     @__access_lock__.synchronize { yield if block_given? }
   end
 end

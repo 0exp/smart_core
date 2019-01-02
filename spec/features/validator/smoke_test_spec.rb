@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Validator' do
+describe 'Smoke Test' do
   specify do
     class PekaValidator < SmartCore::Validator
       attribute :password
@@ -33,15 +33,13 @@ describe 'Validator' do
 
       private
 
-      def peka
-      end
+      def peka; end
 
       def fig
         error(:fig)
       end
 
-      def boom
-      end
+      def boom; end
 
       def juk
         error(:juk)
@@ -50,7 +48,5 @@ describe 'Validator' do
 
     validator = SimpleValidator.new(email: 'kek@pek.cheburek', password: 'lalala')
     validator.valid?
-
-    binding.pry
   end
 end
