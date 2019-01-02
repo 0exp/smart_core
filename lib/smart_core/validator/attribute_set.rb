@@ -61,7 +61,10 @@ class SmartCore::Validator::AttributeSet
   # @since 0.1.0
   def prevent_incorrect_attribute!(attribute_name)
     unless attribute_name.is_a?(Symbol) || attribute_name.is_a?(String)
-      raise SmartCore::Validator::IncorrectAttributeNameError
+      raise(
+        SmartCore::Validator::IncorrectAttributeNameError,
+        'Attribute name should be a symbol or a string'
+      )
     end
   end
 
