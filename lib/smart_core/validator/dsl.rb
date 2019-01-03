@@ -21,6 +21,8 @@ class SmartCore::Validator
 
             child_klass.commands.concat(commands)
             child_klass.attributes.concat(attributes)
+
+            super(child_klass)
           end
         end)
       end
