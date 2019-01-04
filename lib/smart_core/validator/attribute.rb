@@ -34,4 +34,12 @@ class SmartCore::Validator::Attribute
   def default_value
     @default_value.is_a?(Proc) ? @default_value.call : @default_value
   end
+
+  # @return [SmartCore::Validator::Attribute]
+  #
+  # @api private
+  # @since 0.1.0
+  def dup
+    self.class.new(name, @default_value)
+  end
 end

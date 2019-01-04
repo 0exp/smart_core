@@ -37,7 +37,21 @@ class SmartCore::Validator::AttributeSet
   # @api private
   # @sinec 0.1.0
   def concat(attribute_set)
-    thread_safe { attributes.merge!(attribute_set.attributes) }
+    thread_safe { attributes.merge!(attribute_set.dup.attributes) }
+  end
+
+  # @return [SmartCore::Validator::AttributeSet]
+  #
+  # @api private
+  # @since 0.1.0
+  def dup
+    thread_safe do
+      self.class.new.tap do |duplicate|
+        attributes.each_value do |attribute|
+          duplicate.add_attribute(attribute.dup)
+        end
+      end
+    end
   end
 
   # @return [Enumerable]
