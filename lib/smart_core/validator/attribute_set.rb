@@ -17,20 +17,17 @@ class SmartCore::Validator::AttributeSet
   # @api private
   # @since 0.1.0
   def initialize
-    @attributes = Set.new
+    @attributes = {}
     @access_lock = Mutex.new
   end
 
-  # @param attribute_name [String, Symbol]
+  # @param attribute [Symbiont::Validator::Attribute]
   # @return [void]
   #
   # @api private
   # @since 0.1.0
-  def add_attribute(attribute_name)
-    thread_safe do
-      prevent_incorrect_attribute!(attribute_name)
-      attributes << attribute_name
-    end
+  def add_attribute(attribute)
+    thread_safe { attributes[attribute.name] = attribute }
   end
   alias_method :<<, :add_attribute
 
@@ -40,7 +37,7 @@ class SmartCore::Validator::AttributeSet
   # @api private
   # @sinec 0.1.0
   def concat(attribute_set)
-    thread_safe { attributes.merge(attribute_set.attributes) }
+    thread_safe { attributes.merge!(attribute_set.attributes) }
   end
 
   # @return [Enumerable]
@@ -48,25 +45,10 @@ class SmartCore::Validator::AttributeSet
   # @api private
   # @since 0.1.0
   def each(&block)
-    thread_safe { block_given? ? attributes.each(&block) : attributes }
+    thread_safe { block_given? ? attributes.each_value(&block) : attributes.each_value }
   end
 
   private
-
-  # @return [void]
-  #
-  # @raise [Symbiont::Validator::IncorrectAttributeNameError]
-  #
-  # @api private
-  # @since 0.1.0
-  def prevent_incorrect_attribute!(attribute_name)
-    unless attribute_name.is_a?(Symbol) || attribute_name.is_a?(String)
-      raise(
-        SmartCore::Validator::IncorrectAttributeNameError,
-        'Attribute name should be a symbol or a string'
-      )
-    end
-  end
 
   # @return [Any]
   #

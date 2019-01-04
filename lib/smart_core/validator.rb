@@ -5,6 +5,7 @@
 class SmartCore::Validator
   require_relative 'validator/exceptions'
   require_relative 'validator/command_set'
+  require_relative 'validator/attribute'
   require_relative 'validator/attribute_set'
   require_relative 'validator/error_set'
   require_relative 'validator/invoker'
@@ -27,7 +28,16 @@ class SmartCore::Validator
         object.instance_variable_set(:@__access_lock__, Mutex.new)
 
         attributes.each do |attribute|
-          object.instance_variable_set("@#{attribute}", options[attribute])
+          attribute_name = attribute.name
+
+          attribute_value =
+            if options.key?(attribute_name)
+              options[attribute_name]
+            else
+              attribute.default_value
+            end
+
+          object.instance_variable_set("@#{attribute_name}", attribute_value)
         end
 
         object.send(:initialize, *arguments, **options)
@@ -87,7 +97,7 @@ class SmartCore::Validator
   def __attributes__
     __thread_safe_access__ do
       self.class.attributes.each_with_object({}) do |attribute, accumulator|
-        accumulator[attribute] = instance_variable_get("@#{attribute}")
+        accumulator[attribute.name] = instance_variable_get("@#{attribute.name}")
       end
     end
   end

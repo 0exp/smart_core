@@ -126,6 +126,29 @@ describe SmartCore::Validator do
     expect(validator.errors).to eq([])
   end
 
+  specify 'custom attribute can be declared with default value (with literal OR with proc)' do
+    class ValidatorWithDefaultCustomAttributes < SmartCore::Validator
+      attribute :email,    default: 'kek@pek.cheburek'
+      attribute :password, default: -> { 1 + 1 }
+    end
+
+    validator = ValidatorWithDefaultCustomAttributes.new
+    expect(validator.email).to eq('kek@pek.cheburek')
+    expect(validator.password).to eq(2)
+
+    validator = ValidatorWithDefaultCustomAttributes.new(email: 'test@test.test')
+    expect(validator.email).to eq('test@test.test')
+    expect(validator.password).to eq(2)
+
+    validator = ValidatorWithDefaultCustomAttributes.new(password: 'atata')
+    expect(validator.email).to eq('kek@pek.cheburek')
+    expect(validator.password).to eq('atata')
+
+    validator = ValidatorWithDefaultCustomAttributes.new(email: 'test@pek.lel', password: '12345')
+    expect(validator.email).to eq('test@pek.lel')
+    expect(validator.password).to eq('12345')
+  end
+
   specify 'unprovided attributes have nil values' do
     class ValidatorWithDefaultNils < SmartCore::Validator
       attribute :token

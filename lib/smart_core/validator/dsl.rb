@@ -33,9 +33,10 @@ class SmartCore::Validator
     #
     # @api private
     # @since 0.1.0
-    def attribute(attribute_name)
-      attributes << attribute_name
-      attr_reader attribute_name
+    def attribute(attribute_name, default: nil)
+      attribute = SmartCore::Validator::Attribute.new(attribute_name, default)
+      attributes << attribute
+      attr_reader attribute.name
     end
 
     # @return [SmartCore::Validator::AttributeSet]
