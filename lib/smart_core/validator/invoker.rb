@@ -7,7 +7,7 @@ class SmartCore::Validator
     class << self
       # @param validator [SmartCore::Validator]
       # @param validating_method [Symbol, String]
-      # @return [ErrorSet]
+      # @return [SmartCore::Validator::ErrorSet]
       #
       # @api private
       # @since 0.1.0
@@ -33,7 +33,7 @@ class SmartCore::Validator
     end
 
     # @param validating_method [String, Symbol]
-    # @return [ErrorSet]
+    # @return [SmartCore::Validator::ErrorSet]
     #
     # @api private
     # @since 0.1.0
@@ -50,7 +50,7 @@ class SmartCore::Validator
     # Creates new validator object cloned from the original validator object
     # with the new functionality: error code interception.
     #
-    # @param outer_errors [ErrorSet]
+    # @param outer_errors [SmartCore::Validator::ErrorSet]
     # @return [SmartCore::Validator]
     #
     # @api private

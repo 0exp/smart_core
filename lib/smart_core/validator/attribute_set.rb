@@ -6,7 +6,7 @@ class SmartCore::Validator::AttributeSet
   # @since 0.1.0
   include Enumerable
 
-  # @return [Set]
+  # @return [Hash<Symbol, SmartCore::Validator::Attribute>]
   #
   # @api private
   # @since 0.1.0
