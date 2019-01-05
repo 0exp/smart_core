@@ -4,7 +4,7 @@ In active development.
 
 #### Completed abstractions:
 
-- Validation object (`SmartCore::Validator`)
+- **Validation object** (`SmartCore::Validator`)
   - support for nested validations;
   - inheritance works as expected `:)`;
   - command-style DSL;
