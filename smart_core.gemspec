@@ -5,14 +5,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'smart_core/version'
 
 Gem::Specification.new do |spec|
-  spec.required_ruby_version = '>= 2.3.7'
+  spec.required_ruby_version = '>= 2.3.8'
 
   spec.name          = 'smart_core'
   spec.version       = SmartCore::VERSION
   spec.authors       = ['Rustam Ibragimov']
   spec.email         = ['iamdaiver@icloud.com']
-  spec.summary       = 'Soon'
-  spec.description   = 'Soon'
+  spec.summary       = '(in active development) A set of common abstractions'
+  spec.description   = '(in active development) A set of common abstractions'
   spec.homepage      = 'https://github.com/0exp/smart_core'
   spec.license       = 'MIT'
 

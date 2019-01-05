@@ -105,19 +105,21 @@ class SmartCore::Validator
 
   private
 
-  # @return [void]
+  # @param block [Proc]
+  # @return [Any]
   #
   # @api private
   # @since 0.1.0
-  def __thread_safe_invokation__
-    @__invokation_lock__.synchronize { yield if block_given? }
+  def __thread_safe_invokation__(&block)
+    @__invokation_lock__.synchronize(&block)
   end
 
-  # @return [void]
+  # @param block [Proc]
+  # @return [Any]
   #
   # @api private
   # @since 0.1.0
-  def __thread_safe_access__
-    @__access_lock__.synchronize { yield if block_given? }
+  def __thread_safe_access__(&block)
+    @__access_lock__.synchronize(&block)
   end
 end

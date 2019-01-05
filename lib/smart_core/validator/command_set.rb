@@ -57,7 +57,8 @@ class SmartCore::Validator::CommandSet
 
   private
 
-  # @return [void]
+  # @param block [Proc]
+  # @return [Any]
   #
   # @api private
   # @since 0.1.0

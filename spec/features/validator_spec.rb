@@ -96,7 +96,7 @@ describe SmartCore::Validator do
       private
 
       def email_format
-        error(:incorrect_email) unless URI::MailTo::EMAIL_REGEXP.match?(email)
+        error(:incorrect_email) unless email.include?('@')
       end
 
       def password_rules

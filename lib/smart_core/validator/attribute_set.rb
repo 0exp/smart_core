@@ -64,11 +64,12 @@ class SmartCore::Validator::AttributeSet
 
   private
 
+  # @param block [Proc]
   # @return [Any]
   #
   # @api private
   # @since 0.1.0
-  def thread_safe
-    @access_lock.synchronize { yield if block_given? }
+  def thread_safe(&block)
+    @access_lock.synchronize(&block)
   end
 end

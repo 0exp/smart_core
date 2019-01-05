@@ -4,6 +4,7 @@
 # @since 0.1.0
 module SmartCore::Validator::Commands::WorkWithNestedsMixin
   # @param validator [SmartCore::Validator]
+  # @param nested_validations [Proc]
   # @return [void]
   #
   # @api private
@@ -17,6 +18,7 @@ module SmartCore::Validator::Commands::WorkWithNestedsMixin
   end
 
   # @param validator [SmartCore::Validator]
+  # @param nested_validations [Proc]
   # @return [SmartCore::Validator]
   #
   # @api private
