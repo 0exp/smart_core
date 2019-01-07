@@ -5,4 +5,5 @@
 module SmartCore
   require_relative 'smart_core/version'
   require_relative 'smart_core/validator'
+  require_relative 'smart_core/operation'
 end
