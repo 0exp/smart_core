@@ -12,10 +12,18 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
     super(**result_options)
 
     result_options.each_key do |result_name|
-      define_singleton_method(result_name) { @__result_options__[result_name] }
+      # TODO: fail if result_name intersects with API method names
+      define_singleton_method(result_name) do
+        @__result_options__[result_name]
+      end
     end
+  end
 
-    # TODO: фэйлиться, если ключ result_options'а совпадает с нативным аттр-ридером
-    #   (с __result_options__ или с __result_attributes__)
+  # @return [Boolean]
+  #
+  # @api public
+  # @since 0.2.0
+  def success?
+    true
   end
 end

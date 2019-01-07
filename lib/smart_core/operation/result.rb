@@ -25,4 +25,20 @@ class SmartCore::Operation::Result
     @__result_attributes__ = result_attributes
     @__result_options__ = result_options
   end
+
+  # @return [Boolean]
+  #
+  # @api public
+  # @since 0.2.0
+  def success?
+    false
+  end
+
+  # @return [Boolean]
+  #
+  # @api public
+  # @since 0.2.0
+  def failure?
+    false
+  end
 end

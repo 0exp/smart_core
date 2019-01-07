@@ -20,7 +20,7 @@ class SmartCore::Operation
           # @api private
           # @since 0.2.0
           def inherited(child_klass)
-            child_klass.instance_variable_set(:__attributes__, AttributeSet.new)
+            child_klass.instance_variable_set(:@__attributes__, AttributeSet.new)
             child_klass.__attributes__.concat(__attributes__)
             super(child_klass)
           end

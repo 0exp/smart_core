@@ -17,4 +17,12 @@ class SmartCore::Operation::Failure < SmartCore::Operation::Result
   def initialize(*errors)
     super(*errors)
   end
+
+  # @return [Boolean]
+  #
+  # @api public
+  # @since 0.2.0
+  def failure?
+    true
+  end
 end

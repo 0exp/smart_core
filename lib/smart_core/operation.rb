@@ -7,23 +7,49 @@ class SmartCore::Operation
   require_relative 'operation/attribute'
   require_relative 'operation/attribute_set'
   require_relative 'operation/attribute_dsl'
-  require_relative 'operation/calllable'
   require_relative 'operation/result'
   require_relative 'operation/success'
   require_relative 'operation/failure'
-  require_relative 'operation/result_interface_mixin'
 
   # @since 0.2.0
   extend AttributeDSL
-  # @since 0.2.0
-  extend Callable
-  # @since 0.2.0
-  include ResultInterfaceMixin
+
+  class << self
+    # @param arguments [Any]
+    # @param options [Hash<Symbil, Any>]
+    # @param block [Proc]
+    # @return [Any]
+    #
+    # @api public
+    # @since 0.2.0
+    def call(*arguments, **options, &block)
+      new(*arguments, **options, &block).call
+    end
+  end
 
   # @api public
   # @since 0.2.0
-  def call; end
+  def call
+    Success
+  end
 
-  # TODO: надо сделать обертку вокруг call-метода, чтобы call мог принимать proc, в который
-  # сидится result как maybe монада, на которой есть success и failure :)
+  private
+
+  # @param result_data [Hash<Symbol,Any>]
+  # @return [SmartCore::Operation::Success]
+  #
+  # @api public
+  # @since 0.2.0
+  def Success(**result_data)
+    SmartCore::Operation::Success.new(**result_data)
+  end
+
+  # @param errors [Array<Symbol|Any>]
+  # @return [SmartCore::Operation::Failure]
+  #
+  # @api public
+  # @since 0.2.0
+  def Failure(*errors)
+    SmartCore::Operation::Failure.new(*errors)
+  end
 end
