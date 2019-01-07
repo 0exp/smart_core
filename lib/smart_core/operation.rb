@@ -23,4 +23,7 @@ class SmartCore::Operation
   # @api public
   # @since 0.2.0
   def call; end
+
+  # TODO: надо сделать обертку вокруг call-метода, чтобы call мог принимать proc, в который
+  # сидится result как maybe монада, на которой есть success и failure :)
 end
