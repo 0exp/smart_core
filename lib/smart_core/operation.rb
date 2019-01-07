@@ -8,11 +8,17 @@ class SmartCore::Operation
   require_relative 'operation/attribute_set'
   require_relative 'operation/attribute_dsl'
   require_relative 'operation/calllable'
+  require_relative 'operation/result'
+  require_relative 'operation/success'
+  require_relative 'operation/failure'
+  require_relative 'operation/result_interface_mixin'
 
   # @since 0.2.0
   extend AttributeDSL
   # @since 0.2.0
   extend Callable
+  # @since 0.2.0
+  include ResultInterfaceMixin
 
   # @api public
   # @since 0.2.0
