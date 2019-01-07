@@ -31,7 +31,7 @@ class SmartCore::Validator
     # @param attribute_name [String, Symbol]
     # @return [void]
     #
-    # @api private
+    # @api public
     # @since 0.1.0
     def attribute(attribute_name, default: nil)
       attribute = SmartCore::Validator::Attribute.new(attribute_name, default)
@@ -86,7 +86,7 @@ class SmartCore::Validator
     #
     # @see SmartCore::Validator::Commands::ValidateWith
     #
-    # @api private
+    # @api public
     # @since 0.1.0
     def validate_with(validating_klass, &nested_validations)
       commands << Commands::ValidateWith.new(validating_klass, nested_validations)

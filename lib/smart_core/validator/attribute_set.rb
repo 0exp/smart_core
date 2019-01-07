@@ -21,7 +21,7 @@ class SmartCore::Validator::AttributeSet
     @access_lock = Mutex.new
   end
 
-  # @param attribute [Symbiont::Validator::Attribute]
+  # @param attribute [SmartCore::Validator::Attribute]
   # @return [void]
   #
   # @api private

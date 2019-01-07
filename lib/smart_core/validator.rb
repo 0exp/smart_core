@@ -18,11 +18,12 @@ class SmartCore::Validator
   class << self
     # @param argumants [Any]
     # @param options [Hash<Symbol, Object>]
+    # @param block [Proc]
     # @return [void]
     #
     # @api public
     # @since 0.1.0
-    def new(*arguments, **options)
+    def new(*arguments, **options, &block)
       allocate.tap do |object|
         object.instance_variable_set(:@__validation_errors__, ErrorSet.new)
         object.instance_variable_set(:@__invokation_lock__, Mutex.new)
@@ -41,7 +42,7 @@ class SmartCore::Validator
           object.instance_variable_set("@#{attribute_name}", attribute_value)
         end
 
-        object.send(:initialize, *arguments, **options)
+        object.send(:initialize, *arguments, **options, &block)
       end
     end
   end
@@ -56,7 +57,7 @@ class SmartCore::Validator
   #
   # @api public
   # @since 0.1.0
-  def initialize(*, **); end
+  def initialize(*, **, &block); end
 
   # @return [Boolean]
   #
