@@ -6,19 +6,20 @@ class SmartCore::Operation
   require_relative 'operation/exceptions'
   require_relative 'operation/attribute'
   require_relative 'operation/attribute_set'
-  require_relative 'operation/attribute_dsl'
   require_relative 'operation/result'
   require_relative 'operation/success'
   require_relative 'operation/failure'
+  require_relative 'operation/instance_builder'
+  require_relative 'operation/initialization_dsl'
 
   # @since 0.2.0
-  extend AttributeDSL
+  include InitializationDSL
 
   class << self
     # @param arguments [Any]
     # @param options [Hash<Symbol,Any>]
     # @param block [Proc]
-    # @return [Any]
+    # @return [SmartCore::Operation::Success, SmartCore::Operation::Failure]
     #
     # @api public
     # @since 0.2.0
@@ -27,10 +28,12 @@ class SmartCore::Operation
     end
   end
 
+  # @return [SmartCore::Operation::Success, SmartCore::Operation::Failure]
+  #
   # @api public
   # @since 0.2.0
   def call
-    Success
+    Success()
   end
 
   private
