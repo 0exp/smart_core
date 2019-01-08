@@ -9,7 +9,7 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
   # @api public
   # @since 0.2.0
   def initialize(**result_options)
-    result_object_methods = methods
+    result_object_methods = methods # TODO: list protected instance methods manually
 
     # NOTE: prevent core result object method overlap
     result_options.each_key do |key|
