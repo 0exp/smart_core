@@ -31,7 +31,7 @@ class SmartCore::Operation::Attribute
     end
 
     @name = name
-    @options = options
+    @options = options # TODO: check for unsupported options (and fail if found)
   end
 
   # @return [Boolean]
