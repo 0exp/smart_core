@@ -58,6 +58,10 @@ class SmartCore::Operation
     # @api private
     # @since 0.2.0
     module DSLMethods
+      # TODO: support for .params(*parameter_names) api
+      # TODO: support for .options(*options) api
+      #   (or .options(**options) in { option_name => default_value, ... } attribute form)
+
       # @param param_name [String, Symbol]
       # @return [void]
       #
