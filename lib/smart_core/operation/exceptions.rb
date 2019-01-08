@@ -8,4 +8,8 @@ class SmartCore::Operation
   # @api public
   # @since 0.2.0
   IncorrectAttributeNameError = Class.new(Error)
+
+  # @api public
+  # @since 0.2.0
+  ResultMethodIntersectionError = Class.new(Error)
 end
