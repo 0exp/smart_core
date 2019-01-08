@@ -39,16 +39,16 @@ class SmartCore::Operation
     # @api private
     # @since 0.2.0
     module InitializationMethods
-      # @param attributes [Any]
+      # @param parameters [Any]
       # @param options [Hash<Symbol,Any>]
       # @param block [Proc]
       # @return [Any]
       #
       # @api public
       # @since 0.2.0
-      def new(*attributes, **options, &block)
+      def new(*parameters, **options, &block)
         allocate.tap do |object|
-          InstanceBuilder.call(object, self, attributes, options, block)
+          InstanceBuilder.call(object, self, parameters, options, block)
         end
       end
     end
@@ -61,13 +61,13 @@ class SmartCore::Operation
       #
       # @api public
       # @since 0.2.0
-      def param(param_name)
+      def param(param_name) # TODO: падать, если уже есть опция с таким именем
         parameter = SmartCore::Operation::Attribute.new(param_name)
         __params__ << parameter
         attr_reader parameter.name
       end
 
-      def option(option_name)
+      def option(option_name) # TODO: падать, если уже есть параметр с таким именем
         option = SmartCore::Operation::Attribute.new(option_name)
         __options__ << option
         attr_reader option.name

@@ -9,8 +9,15 @@ class SmartCore::Operation::Attribute
   # @since 0.2.0
   attr_reader :name
 
+  # @return [Hash<Symbol,Any>]
+  #
+  # @api private
+  # @since 0.2.0
+  attr_reader :options
+
   # @param name [String, Symbol]
-  # @param options [Hash]
+  # @param options [Hash<Symbol,Any>] Supported options:
+  #   - :default (see #default_value) (proc or object)
   # @return [void]
   #
   # @api private
@@ -24,6 +31,29 @@ class SmartCore::Operation::Attribute
     end
 
     @name = name
+    @options = options
+  end
+
+  # @return [Boolean]
+  #
+  # @api private
+  # @since 0.2.0
+  def has_default_value?
+    options.key?(:default)
+  end
+
+  # @return [Any]
+  #
+  # @raise [SmartCore::Operation::ArgumentError]
+  #
+  # @api private
+  # @since 0.2.0
+  def default_value
+    default_value = options.fetch(:default) do
+      raise(SmartCore::Operation::ArgumentError, 'Default value is not provided.')
+    end
+
+    default_value.is_a?(Proc) ? default_value.call : default_value
   end
 
   # @return [SmartCore::Operation::Attribute]
@@ -31,6 +61,6 @@ class SmartCore::Operation::Attribute
   # @api private
   # @since 0.2.0
   def dup
-    self.class.new(name)
+    self.class.new(name, **options)
   end
 end

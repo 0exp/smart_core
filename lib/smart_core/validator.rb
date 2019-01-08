@@ -30,14 +30,8 @@ class SmartCore::Validator
         object.instance_variable_set(:@__access_lock__, Mutex.new)
 
         attributes.each do |attribute|
-          attribute_name = attribute.name
-
-          attribute_value =
-            if options.key?(attribute_name)
-              options[attribute_name]
-            else
-              attribute.default_value
-            end
+          attribute_name  = attribute.name
+          attribute_value = options.fetch(attribute_name) { attribute.default_value }
 
           object.instance_variable_set("@#{attribute_name}", attribute_value)
         end
