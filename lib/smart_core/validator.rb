@@ -17,7 +17,7 @@ class SmartCore::Validator
 
   class << self
     # @param argumants [Any]
-    # @param options [Hash<Symbol, Object>]
+    # @param options [Hash<Symbol,Object>]
     # @param block [Proc]
     # @return [void]
     #
@@ -92,7 +92,7 @@ class SmartCore::Validator
     end
   end
 
-  # @return [Hash<Symbol, Object>]
+  # @return [Hash<Symbol,Object>]
   #
   # @api private
   # @since 0.1.0

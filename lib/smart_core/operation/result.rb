@@ -9,14 +9,14 @@ class SmartCore::Operation::Result
   # @since 0.2.0
   attr_reader :__result_attributes__
 
-  # @return [Hash<Symbol, Any>]
+  # @return [Hash<Symbol,Any>]
   #
   # @api private
   # @since 0.2.0
   attr_reader :__result_options__
 
   # @param result_attributes [Array<Any>]
-  # @param result_options [Hash<Symbol, Any>]
+  # @param result_options [Hash<Symbol,Any>]
   # @return [void]
   #
   # @api public

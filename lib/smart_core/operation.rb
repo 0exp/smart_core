@@ -16,7 +16,7 @@ class SmartCore::Operation
 
   class << self
     # @param arguments [Any]
-    # @param options [Hash<Symbil, Any>]
+    # @param options [Hash<Symbol,Any>]
     # @param block [Proc]
     # @return [Any]
     #
