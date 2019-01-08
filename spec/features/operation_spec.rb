@@ -30,5 +30,13 @@ describe SmartCore::Operation do
     expect(operation.e).to eq(123)
     expect(operation.d).to eq('lol')
     expect(operation.u).to eq(2)
+
+    result = operation.call
+    expect(result.success?).to eq(true)
+    expect(result.failure?).to eq(false)
+
+    result = SimpleOp.call('atata', 5.5, c: 22, e: '123', d: nil, u: 2)
+    expect(result.success?).to eq(true)
+    expect(result.failure?).to eq(false)
   end
 end
