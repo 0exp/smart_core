@@ -90,6 +90,14 @@ class SmartCore::Operation::InstanceBuilder
     operation_klass.__options__.each.reject(&:has_default_value?).map(&:name)
   end
 
+  # @return [Integer]
+  #
+  # @api private
+  # @since 0.2.0
+  def required_attributes_count
+    operation_klass.__params__.size
+  end
+
   # @return [void]
   #
   # @raise [SmartCore::Operation::AttributeError]
@@ -99,25 +107,30 @@ class SmartCore::Operation::InstanceBuilder
   # @api private
   # @since 0.2.0
   def prevent_parameters_incomparability
-    unless parameters.size == operation_klass.__params__.size
-      raise SmartCore::Operation::ParameterError
-    end
+    raise(
+      SmartCore::Operation::ParameterError,
+      "Wrong number of parameters " \
+      "(given #{parameters.size}, expected #{required_attributes_count})"
+    ) unless parameters.size == required_attributes_count
 
-    unless required_options.all? { |option| options.key?(option) }
-      raise SmartCore::Operation::OptionError
-    end
+    missing_options = required_options.reject { |option| options.key?(option) }
+
+    raise(
+      SmartCore::Operation::OptionError,
+      "Missing options: :#{missing_options.join(', :')}"
+    ) unless missing_options.empty?
   end
 
   # @return [void]
   #
   # @api private
   # @since 0.2.0
-  def initialize_paramteres
+  def initialize_parameters
     parameter_names = operation_klass.__params__.map(&:name)
-    parameter_pairs = parameter_names.zip(parameters)
+    parameter_pairs = Hash[parameter_names.zip(parameters)]
 
     parameter_pairs.each_pair do |parameter_name, parameter_value|
-      object.instance_variable_set("@#{parameter_name}", parameter_value)
+      operation_object.instance_variable_set("@#{parameter_name}", parameter_value)
     end
   end
 
@@ -130,7 +143,7 @@ class SmartCore::Operation::InstanceBuilder
       option_name  = option.name
       option_value = options.fetch(option_name) { option.default_value }
 
-      object.instance_variable_set("@#{option_name}", option_value)
+      operation_object.instance_variable_set("@#{option_name}", option_value)
     end
   end
 
@@ -139,6 +152,6 @@ class SmartCore::Operation::InstanceBuilder
   # @api private
   # @since 0.2.0
   def call_original_methods
-    object.send(:initialize, *parameters, **options, &block)
+    operation_object.send(:initialize, *parameters, **options, &block)
   end
 end

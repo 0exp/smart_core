@@ -10,9 +10,9 @@ class SmartCore::Operation
       #
       # @api private
       # @since 0.2.0
-      def included(base_klass)
+      def included(base_klass) # rubocop:disable Metrics/AbcSize
         base_klass.extend(DSLMethods)
-        base_klass.prepend(InitializationMethods)
+        base_klass.singleton_class.prepend(InitializationMethods)
 
         base_klass.instance_variable_set(:@__params__, AttributeSet.new)
         base_klass.instance_variable_set(:@__options__, AttributeSet.new)
@@ -24,6 +24,8 @@ class SmartCore::Operation
           # @api private
           # @since 0.2.0
           def inherited(child_klass)
+            child_klass.singleton_class.prepend(InitializationMethods)
+
             child_klass.instance_variable_set(:@__params__, AttributeSet.new)
             child_klass.instance_variable_set(:@__options__, AttributeSet.new)
 
@@ -67,8 +69,11 @@ class SmartCore::Operation
         attr_reader parameter.name
       end
 
-      def option(option_name) # TODO: падать, если уже есть параметр с таким именем
-        option = SmartCore::Operation::Attribute.new(option_name)
+      # @param option_name [String, Symbol]
+      # @param options [Hash<Symbol,Any>]
+      # @return [void]
+      def option(option_name, **options) # TODO: падать, если уже есть параметр с таким именем
+        option = SmartCore::Operation::Attribute.new(option_name, **options)
         __options__ << option
         attr_reader option.name
       end

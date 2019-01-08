@@ -54,6 +54,14 @@ class SmartCore::Operation::AttributeSet
     end
   end
 
+  # @return [Integer]
+  #
+  # @api private
+  # @since 0.2.0
+  def size
+    thread_safe { attributes.size }
+  end
+
   # @return [Enumerable]
   #
   # @api private

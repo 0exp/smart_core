@@ -49,7 +49,7 @@ class SmartCore::Operation
   #
   # @api public
   # @since 0.2.0
-  def Success(**result_data)
+  def Success(**result_data) # rubocop:disable Naming/MethodName
     SmartCore::Operation::Success.new(**result_data)
   end
 
@@ -58,7 +58,7 @@ class SmartCore::Operation
   #
   # @api public
   # @since 0.2.0
-  def Failure(*errors)
+  def Failure(*errors) # rubocop:disable Naming/MethodName
     SmartCore::Operation::Failure.new(*errors)
   end
 end
