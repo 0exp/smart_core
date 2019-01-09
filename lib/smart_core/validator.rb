@@ -11,6 +11,7 @@ class SmartCore::Validator
   require_relative 'validator/invoker'
   require_relative 'validator/commands'
   require_relative 'validator/dsl'
+  require_relative 'validator/instance_builder'
 
   # @since 0.1.0
   extend DSL
@@ -25,18 +26,7 @@ class SmartCore::Validator
     # @since 0.1.0
     def new(*arguments, **options, &block)
       allocate.tap do |object|
-        object.instance_variable_set(:@__validation_errors__, ErrorSet.new)
-        object.instance_variable_set(:@__invokation_lock__, Mutex.new)
-        object.instance_variable_set(:@__access_lock__, Mutex.new)
-
-        attributes.each do |attribute|
-          attribute_name  = attribute.name
-          attribute_value = options.fetch(attribute_name) { attribute.default_value }
-
-          object.instance_variable_set("@#{attribute_name}", attribute_value)
-        end
-
-        object.send(:initialize, *arguments, **options, &block)
+        InstanceBuilder.call(object, self, arguments, options, block)
       end
     end
   end
