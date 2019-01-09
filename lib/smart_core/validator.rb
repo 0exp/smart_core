@@ -17,7 +17,7 @@ class SmartCore::Validator
   extend DSL
 
   class << self
-    # @param argumants [Any]
+    # @param arguments [Any]
     # @param options [Hash<Symbol,Object>]
     # @param block [Proc]
     # @return [void]
