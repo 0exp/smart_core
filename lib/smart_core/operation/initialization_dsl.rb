@@ -73,6 +73,15 @@ class SmartCore::Operation
         attr_reader parameter.name
       end
 
+      # @param param_names [Array<String, Symbol>]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.2.0
+      def params(*param_names)
+        # TODO: implement
+      end
+
       # @param option_name [String, Symbol]
       # @param options [Hash<Symbol,Any>]
       # @return [void]
@@ -80,6 +89,15 @@ class SmartCore::Operation
         option = SmartCore::Operation::Attribute.new(option_name, **options)
         __options__ << option
         attr_reader option.name
+      end
+
+      # @param option_names [Array<String, Symbol>]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.2.0
+      def options(*option_names)
+        # TODO: implement
       end
 
       # @return [SmartCore::Operation::AttributeSet]
