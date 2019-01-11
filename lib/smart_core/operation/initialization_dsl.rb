@@ -76,7 +76,7 @@ class SmartCore::Operation
       # @param param_names [Array<String, Symbol>]
       # @return [void]
       #
-      # @api private
+      # @api public
       # @since 0.2.0
       def params(*param_names)
         # TODO: implement
@@ -85,6 +85,9 @@ class SmartCore::Operation
       # @param option_name [String, Symbol]
       # @param options [Hash<Symbol,Any>]
       # @return [void]
+      #
+      # @api public
+      # @since 0.2.0
       def option(option_name, **options) # TODO: падать, если уже есть параметр с таким именем
         option = SmartCore::Operation::Attribute.new(option_name, **options)
         __options__ << option
@@ -94,7 +97,7 @@ class SmartCore::Operation
       # @param option_names [Array<String, Symbol>]
       # @return [void]
       #
-      # @api private
+      # @api public
       # @since 0.2.0
       def options(*option_names)
         # TODO: implement
