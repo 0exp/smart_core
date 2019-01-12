@@ -65,8 +65,7 @@ class SmartCore::Operation
       # @since 0.2.0
       def param(param_name) # TODO: падать, если уже есть опция с таким именем
         parameter = SmartCore::Operation::Attribute.new(param_name)
-        __params__ << parameter
-        attr_reader parameter.name
+        __append_param__(parameter)
       end
 
       # @param param_names [Array<String, Symbol>]
@@ -75,7 +74,11 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def params(*param_names)
-        # TODO: implement
+        parameters = param_names.map do |param_name|
+          SmartCore::Operation::Attribute.new(param_name)
+        end
+
+        parameters.each { |parameter| __append_param__(parameter) }
       end
 
       # @param option_name [String, Symbol]
@@ -86,8 +89,7 @@ class SmartCore::Operation
       # @since 0.2.0
       def option(option_name, **options) # TODO: падать, если уже есть параметр с таким именем
         option = SmartCore::Operation::Attribute.new(option_name, **options)
-        __options__ << option
-        attr_reader option.name
+        __append_option__(option)
       end
 
       # @param option_names [Array<String, Symbol>]
@@ -96,7 +98,11 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def options(*option_names)
-        # TODO: implement
+        options = option_names.map do |option_name|
+          SmartCore::Operation::Attribute.new(option_name)
+        end
+
+        options.each { |option| __append_option__(option) }
       end
 
       # @return [SmartCore::Operation::AttributeSet]
@@ -107,12 +113,32 @@ class SmartCore::Operation
         @__params__
       end
 
+      # @param parameter [SmartCore::Operation::Attribute]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.2.0
+      def __append_param__(parameter)
+        __params__ << parameter
+        attr_reader parameter.name
+      end
+
       # @return [SmartCore::Operation::AttributeSet]
       #
       # @api private
       # @since 0.2.0
       def __options__
         @__options__
+      end
+
+      # @param option [SmartCore::Operation::Attribute]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.2.0
+      def __append_option__(option)
+        __options__ << option
+        attr_reader option.name
       end
     end
   end
