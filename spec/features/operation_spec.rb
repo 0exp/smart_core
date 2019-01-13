@@ -38,5 +38,16 @@ describe SmartCore::Operation do
     result = SimpleOp.call('atata', 5.5, c: 22, e: '123', d: nil, u: 2)
     expect(result.success?).to eq(true)
     expect(result.failure?).to eq(false)
+
+    class InheritedOp < SimpleOp
+      def call
+        Success(a: 10, b: '20', c: { d: :e })
+      end
+    end
+
+    result = InheritedOp.call(10, 20, c: 1, e: 2)
+    expect(result.a).to eq(10)
+    expect(result.b).to eq('20')
+    expect(result.c).to eq({ d: :e })
   end
 end
