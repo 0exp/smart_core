@@ -63,7 +63,9 @@ class SmartCore::Operation
       #
       # @api public
       # @since 0.2.0
-      def param(param_name) # TODO: падать, если уже есть опция с таким именем
+      def param(param_name)
+        # TODO: use __prevent_attribute_name_intersections__(param_name)
+
         parameter = SmartCore::Operation::Attribute.new(param_name)
         __append_param__(parameter)
       end
@@ -87,7 +89,9 @@ class SmartCore::Operation
       #
       # @api public
       # @since 0.2.0
-      def option(option_name, **options) # TODO: падать, если уже есть параметр с таким именем
+      def option(option_name, **options)
+        # TODO: use __prevent_attribute_name_intersections__(option_name)
+
         option = SmartCore::Operation::Attribute.new(option_name, **options)
         __append_option__(option)
       end
@@ -139,6 +143,17 @@ class SmartCore::Operation
       def __append_option__(option)
         __options__ << option
         attr_reader option.name
+      end
+
+      # @param attribute_name [Symbol, String]
+      # @return [void]
+      #
+      # @raise [???]
+      #
+      # @api private
+      # @since 0.2.0
+      def __prevent_attribute_name_intersections__(attribute_name)
+        # TODO: implement
       end
     end
   end
