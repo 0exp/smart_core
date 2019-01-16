@@ -58,15 +58,18 @@ class SmartCore::Operation
     # @api private
     # @since 0.2.0
     module DSLMethods
+      # TODO:
+      #   - dry validation methods
+      #   - dry factory methods
+
       # @param param_name [String, Symbol]
       # @return [void]
       #
       # @api public
       # @since 0.2.0
       def param(param_name)
-        # TODO: use __prevent_attribute_name_intersections__(param_name)
-
         parameter = SmartCore::Operation::Attribute.new(param_name)
+        __prevent_intersection_with_option__(parameter)
         __append_param__(parameter)
       end
 
@@ -77,7 +80,9 @@ class SmartCore::Operation
       # @since 0.2.0
       def params(*param_names)
         parameters = param_names.map do |param_name|
-          SmartCore::Operation::Attribute.new(param_name)
+          SmartCore::Operation::Attribute.new(param_name).tap do |parameter|
+            __prevent_intersection_with_option__(parameter)
+          end
         end
 
         parameters.each { |parameter| __append_param__(parameter) }
@@ -90,9 +95,8 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def option(option_name, **options)
-        # TODO: use __prevent_attribute_name_intersections__(option_name)
-
         option = SmartCore::Operation::Attribute.new(option_name, **options)
+        __prevent_intersection_with_param__(option)
         __append_option__(option)
       end
 
@@ -103,7 +107,9 @@ class SmartCore::Operation
       # @since 0.2.0
       def options(*option_names)
         options = option_names.map do |option_name|
-          SmartCore::Operation::Attribute.new(option_name)
+          SmartCore::Operation::Attribute.new(option_name).tap do |option|
+            __prevent_intersection_with_param__(option)
+          end
         end
 
         options.each { |option| __append_option__(option) }
@@ -145,14 +151,25 @@ class SmartCore::Operation
         attr_reader option.name
       end
 
-      # @param attribute_name [Symbol, String]
+      # @param option [SmartCore::Operation::Attribute]
       # @return [void]
       #
       # @raise [???]
       #
       # @api private
       # @since 0.2.0
-      def __prevent_attribute_name_intersections__(attribute_name)
+      def __prevent_intersection_with_param__(option)
+        # TODO: implement
+      end
+
+      # @param parameter [SmartCore::Operation::Attribute]
+      # @return [void]
+      #
+      # @raise [???]
+      #
+      # @api private
+      # @since 0.2.0
+      def __prevent_intersection_with_option__(parameter)
         # TODO: implement
       end
     end
