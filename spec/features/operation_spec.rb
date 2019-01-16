@@ -40,12 +40,19 @@ describe SmartCore::Operation do
     expect(result.failure?).to eq(false)
 
     class InheritedOp < SimpleOp
+      param :s
+      option :z
+
       def call
         Success(a: 10, b: '20', c: { d: :e })
       end
     end
 
-    result = InheritedOp.call(10, 20, c: 1, e: 2)
+    service = InheritedOp.new(10, 20, 'kek', c: 1, e: 2, z: 500)
+    expect(service.s).to eq('kek')
+    expect(service.z).to eq(500)
+
+    result = service.call
     expect(result.a).to eq(10)
     expect(result.b).to eq('20')
     expect(result.c).to eq({ d: :e })

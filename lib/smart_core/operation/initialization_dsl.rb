@@ -14,6 +14,7 @@ class SmartCore::Operation
         base_klass.extend(DSLMethods)
         base_klass.singleton_class.prepend(InitializationMethods)
 
+        base_klass.instance_variable_set(:@__attr_definer__, AttributeDefiner.new(base_klass))
         base_klass.instance_variable_set(:@__params__, AttributeSet.new)
         base_klass.instance_variable_set(:@__options__, AttributeSet.new)
 
@@ -26,6 +27,7 @@ class SmartCore::Operation
           def inherited(child_klass)
             child_klass.singleton_class.prepend(InitializationMethods)
 
+            child_klass.instance_variable_set(:@__attr_definer__, AttributeDefiner.new(child_klass))
             child_klass.instance_variable_set(:@__params__, AttributeSet.new)
             child_klass.instance_variable_set(:@__options__, AttributeSet.new)
 
@@ -64,7 +66,7 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def param(param_name)
-        AttributeDefiner.define_param(self, param_name)
+        __attr_definer__.define_param(param_name)
       end
 
       # @param param_names [Array<String, Symbol>]
@@ -73,7 +75,7 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def params(*param_names)
-        AttributeDefiner.define_params(self, *param_names)
+        __attr_definer__.define_params(*param_names)
       end
 
       # @param option_name [String, Symbol]
@@ -83,7 +85,7 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def option(option_name, **options)
-        AttributeDefiner.define_option(self, option_name, **options)
+        __attr_definer__.define_option(option_name, **options)
       end
 
       # @param option_names [Array<String, Symbol>]
@@ -92,7 +94,7 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def options(*option_names)
-        AttributeDefiner.define_options(self, *options_names)
+        __attr_definer__.define_options(*options_names)
       end
 
       # @return [SmartCore::Operation::AttributeSet]
@@ -109,6 +111,14 @@ class SmartCore::Operation
       # @since 0.2.0
       def __options__
         @__options__
+      end
+
+      # @return [SmartCore::Operation::AttributeDefiner]
+      #
+      # @api private
+      # @since 0.2.0
+      def __attr_definer__
+        @__attr_definer__
       end
     end
   end
