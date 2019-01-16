@@ -132,7 +132,7 @@ class SmartCore::Operation::AttributeDefiner
   # @since 0.2.0
   def append_parameter(parameter)
     operation_klass.__params__ << parameter
-    operation_klass.attr_reader parameter.name
+    operation_klass.send(:attr_reader, parameter.name)
   end
 
   # @param option [SmartCore::Operation::Attribute]
@@ -142,7 +142,7 @@ class SmartCore::Operation::AttributeDefiner
   # @since 0.2.0
   def append_option(option)
     operation_klass.__options__ << option
-    operation_klass.attr_reader option.name
+    operation_klass.send(:attr_reader, option.name)
   end
 
   # @param parameter [SmartCore::Operation::Attribute]
