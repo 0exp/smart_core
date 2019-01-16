@@ -10,6 +10,7 @@ class SmartCore::Operation
   require_relative 'operation/success'
   require_relative 'operation/failure'
   require_relative 'operation/instance_builder'
+  require_relative 'operation/attribute_definer'
   require_relative 'operation/initialization_dsl'
 
   # @since 0.2.0
