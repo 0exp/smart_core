@@ -40,6 +40,15 @@ class SmartCore::Operation::AttributeSet
     thread_safe { attributes.merge!(attribute_set.dup.attributes) }
   end
 
+  # @param attribute [SmartCore::Operation::Attribute]
+  # @return [Boolean]
+  #
+  # @api private
+  # @since 0.2.0
+  def conflicts_with?(attribute)
+    thread_safe { attributes.key?(attribute.name) }
+  end
+
   # @return [SmartCore::Operation::AttributeSet]
   #
   # @api private
