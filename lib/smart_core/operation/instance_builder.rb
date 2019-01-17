@@ -8,13 +8,12 @@ class SmartCore::Operation::InstanceBuilder
     # @param operation_klass [Class<SmartCore::Operation>]
     # @param parameters [Array<Any>]
     # @param options [Hash<Symbol,Any>]
-    # @param block [Proc]
     # @return [SmartCore::Operation]
     #
     # @api private
     # @since 0.2.0
-    def call(operation_object, operation_klass, parameters, options, block)
-      new(operation_object, operation_klass, parameters, options, block).call
+    def call(operation_object, operation_klass, parameters, options)
+      new(operation_object, operation_klass, parameters, options).call
     end
   end
 
@@ -22,17 +21,15 @@ class SmartCore::Operation::InstanceBuilder
   # @param operation_klass [Class<SmartCore::Operation>]
   # @param parameters [Array<Any>]
   # @param options [Hash<Symbol,Any>]
-  # @param block [Proc]
   # @return [void]
   #
   # @api private
   # @since 0.2.0
-  def initialize(operation_object, operation_klass, parameters, options, block)
+  def initialize(operation_object, operation_klass, parameters, options)
     @operation_object = operation_object
     @operation_klass = operation_klass
     @parameters = parameters
     @options = options
-    @block = block
   end
 
   # @return [SmartCore::Operation]
@@ -73,12 +70,6 @@ class SmartCore::Operation::InstanceBuilder
   # @api private
   # @since 0.2.0
   attr_reader :options
-
-  # @return [Proc]
-  #
-  # @api private
-  # @since 0.2.0
-  attr_reader :block
 
   # An array of the required option attribute names (parameters without default values)
   #
@@ -152,6 +143,6 @@ class SmartCore::Operation::InstanceBuilder
   # @api private
   # @since 0.2.0
   def call_original_methods
-    operation_object.send(:initialize, *parameters, **options, &block)
+    operation_object.send(:initialize, *parameters, **options)
   end
 end

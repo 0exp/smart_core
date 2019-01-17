@@ -45,14 +45,13 @@ class SmartCore::Operation
     module InitializationMethods
       # @param parameters [Any]
       # @param options [Hash<Symbol,Any>]
-      # @param block [Proc]
       # @return [Any]
       #
       # @api public
       # @since 0.2.0
-      def new(*parameters, **options, &block)
+      def new(*parameters, **options)
         allocate.tap do |object|
-          InstanceBuilder.call(object, self, parameters, options, block)
+          InstanceBuilder.call(object, self, parameters, options)
         end
       end
     end
