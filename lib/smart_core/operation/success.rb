@@ -29,11 +29,12 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
     end
   end
 
+  # @yield [nil]
   # @return [Boolean]
   #
   # @api public
   # @since 0.2.0
   def success?
-    true
+    true.tap { yield if block_given? }
   end
 end

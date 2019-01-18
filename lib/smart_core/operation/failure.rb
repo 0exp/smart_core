@@ -18,11 +18,12 @@ class SmartCore::Operation::Failure < SmartCore::Operation::Result
     super(*errors)
   end
 
+  # @yield [nil]
   # @return [Boolean]
   #
   # @api public
   # @since 0.2.0
   def failure?
-    true
+    true.tap { yield if block_given? }
   end
 end

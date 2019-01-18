@@ -42,6 +42,7 @@ class SmartCore::Operation::InstanceBuilder
       initialize_parameters
       initialize_options
       call_original_methods
+      make_operation_caller_yieldable
     end
   end
 
@@ -144,5 +145,17 @@ class SmartCore::Operation::InstanceBuilder
   # @since 0.2.0
   def call_original_methods
     operation_object.send(:initialize, *parameters, **options)
+  end
+
+  # @return [void]
+  #
+  # @api private
+  # @since 0.2.0
+  def make_operation_caller_yieldable
+    operation_object.singleton_class.prepend(Module.new do
+      def call
+        super.tap { |result| yield(result) if block_given? }
+      end
+    end)
   end
 end

@@ -56,5 +56,10 @@ describe SmartCore::Operation do
     expect(result.a).to eq(10)
     expect(result.b).to eq('20')
     expect(result.c).to eq({ d: :e })
+
+    service.call do |result|
+      result.success? { "SUCCESS!" }
+      result.failure? { "FAILURE!" }
+    end
   end
 end

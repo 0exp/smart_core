@@ -25,7 +25,7 @@ class SmartCore::Operation
     # @api public
     # @since 0.2.0
     def call(*arguments, **options, &block)
-      new(*arguments, **options, &block).call
+      new(*arguments, **options).call(&block)
     end
   end
 
@@ -33,7 +33,7 @@ class SmartCore::Operation
   #
   # @api private
   # @since 0.2.0
-  def initialize(*, **, &block); end
+  def initialize(*, **); end
 
   # @return [SmartCore::Operation::Success, SmartCore::Operation::Failure]
   #
