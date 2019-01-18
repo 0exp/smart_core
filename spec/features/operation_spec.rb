@@ -58,8 +58,8 @@ describe SmartCore::Operation do
     expect(result.c).to eq({ d: :e })
 
     service.call do |result|
-      result.success? { "SUCCESS!" }
-      result.failure? { "FAILURE!" }
+      result.success? { |res| res.a }
+      result.failure? { |res| res.errors }
     end
 
     class MegaOp < SmartCore::Operation

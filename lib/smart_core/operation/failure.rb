@@ -24,6 +24,6 @@ class SmartCore::Operation::Failure < SmartCore::Operation::Result
   # @api public
   # @since 0.2.0
   def failure?
-    true.tap { yield if block_given? }
+    true.tap { yield(self) if block_given? }
   end
 end
