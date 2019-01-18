@@ -93,7 +93,7 @@ class SmartCore::Operation
       # @api public
       # @since 0.2.0
       def options(*option_names)
-        __attr_definer__.define_options(*options_names)
+        __attr_definer__.define_options(*option_names)
       end
 
       # @return [SmartCore::Operation::AttributeSet]

@@ -61,5 +61,19 @@ describe SmartCore::Operation do
       result.success? { "SUCCESS!" }
       result.failure? { "FAILURE!" }
     end
+
+    class MegaOp < SmartCore::Operation
+      params :a, :b, :c
+      options :kek, :pek, :cheburek
+    end
+
+    service = MegaOp.new(1, 2, 3, kek: 4, pek: 5, cheburek: 6)
+
+    expect(service.a).to eq(1)
+    expect(service.b).to eq(2)
+    expect(service.c).to eq(3)
+    expect(service.kek).to eq(4)
+    expect(service.pek).to eq(5)
+    expect(service.cheburek).to eq(6)
   end
 end
