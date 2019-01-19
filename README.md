@@ -5,7 +5,11 @@ In active development.
 #### Completed abstractions:
 
 - **Operation Object** (aka `Service Object`) (`SmartCore::Operation`)
-  - in active development (`master`);
+  - attribute definition DSL (`param`, `option`, `params`, `options`);
+  - yieldable result object abstraction (`Success`, 'Failure`);
+  - yieldable `#call` (and `.call`);
+  - inheritance works as expected `:)`;
+  - no dependencies;
 
 - **Validation Object** (`SmartCore::Validator`)
   - support for nested validations;
