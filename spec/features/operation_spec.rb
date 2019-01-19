@@ -1,79 +1,146 @@
 # frozen_string_literal: true
 
 describe SmartCore::Operation do
-  specify 'smoke test' do
-    class SimpleOp < SmartCore::Operation
-      param :a
-      param :b
+  describe 'attribute definition DSL' do
+    specify 'single attribute definition' do
+      class SingleAttrOp < SmartCore::Operation
+        param :email
+        param :password
 
-      option :c
-      option :e
-      option :d, default: 'lol'
-      option :u, default: -> { 1 + 1 }
+        option :active
+        option :admin, default: false
+        option :age, default: -> { 10 + 15 }
+      end
+
+      service = SingleAttrOp.new('kek@pek.tv', '123', active: true)
+
+      # params
+      expect(service.email).to eq('kek@pek.tv')
+      expect(service.password).to eq('123')
+
+      # options
+      expect(service.active).to eq(true)
+      expect(service.admin).to eq(false)
+      expect(service.age).to eq(25)
     end
 
-    # rubocop:disable Metrics/LineLength
-    expect { SimpleOp.new }.to raise_error(SmartCore::Operation::ParameterError)
-    expect { SimpleOp.new(1) }.to raise_error(SmartCore::Operation::ParameterError)
-    expect { SimpleOp.new(1, 'test') }.to raise_error(SmartCore::Operation::OptionError)
-    expect { SimpleOp.new(1, 'test', c: 5.5) }.to raise_error(SmartCore::Operation::OptionError)
-    expect { SimpleOp.new(1, 'test', e: 20) }.to raise_error(SmartCore::Operation::OptionError)
-    expect { SimpleOp.new('test', c: 22, e: 3.5) }.to raise_error(SmartCore::Operation::ParameterError)
-    expect { SimpleOp.new('kek', 55, c: 'test', e: 2.1) }.not_to raise_error
-    # rubocop:enable Metrics/LineLength
+    specify 'multiple attribute definition' do
+      class MultipleAttrOp < SmartCore::Operation
+        params :email, :password
+        options :active, :admin, :age
+      end
 
-    operation = SimpleOp.new('kek', 5.5, c: 'chebu', e: 123)
+      service = MultipleAttrOp.new('kek@spec.mek', 'u403tjt', active: false, admin: true, age: 15)
 
-    expect(operation.a).to eq('kek')
-    expect(operation.b).to eq(5.5)
-    expect(operation.c).to eq('chebu')
-    expect(operation.e).to eq(123)
-    expect(operation.d).to eq('lol')
-    expect(operation.u).to eq(2)
+      # params
+      expect(service.email).to eq('kek@spec.mek')
+      expect(service.password).to eq('u403tjt')
 
-    result = operation.call
-    expect(result.success?).to eq(true)
-    expect(result.failure?).to eq(false)
+      # options
+      expect(service.active).to eq(false)
+      expect(service.admin).to eq(true)
+      expect(service.age).to eq(15)
+    end
 
-    result = SimpleOp.call('atata', 5.5, c: 22, e: '123', d: nil, u: 2)
-    expect(result.success?).to eq(true)
-    expect(result.failure?).to eq(false)
+    specify 'mixed attribute definition' do
+      class MixedAttrOp < SmartCore::Operation
+        param :email
+        params :password, :nickname
 
-    class InheritedOp < SimpleOp
-      param :s
-      option :z
+        option :admin, default: false
+        options :age, :active
+      end
 
-      def call
-        Success(a: 10, b: '20', c: { d: :e })
+      service = MixedAttrOp.new('a@b.com', 'test', '0exp', age: 22, active: false)
+
+      # params
+      expect(service.email).to eq('a@b.com')
+      expect(service.password).to eq('test')
+      expect(service.nickname).to eq('0exp')
+
+      # options
+      expect(service.age).to eq(22)
+      expect(service.active).to eq(false)
+      expect(service.admin).to eq(false)
+    end
+
+    specify 'fails on param<->option intersection' do
+      expect do
+        Class.new(SmartCore::Operation) do
+          param :email
+          option :email
+        end
+      end.to raise_error(SmartCore::Operation::ParamOverlapError)
+
+      expect do
+        Class.new(SmartCore::Operation) do
+          option :email
+          param :email
+        end
+      end.to raise_error(SmartCore::Operation::OptionOverlapError)
+
+      expect do
+        Class.new(SmartCore::Operation) do
+          params :email, :password
+          options :nickname, :password
+        end
+      end.to raise_error(SmartCore::Operation::ParamOverlapError)
+
+      expect do
+        Class.new(SmartCore::Operation) do
+          options :nickname, :password
+          params :email, :password
+        end.to raise_error(SmartCore::Operation::OptionOverlapError)
       end
     end
 
-    service = InheritedOp.new(10, 20, 'kek', c: 1, e: 2, z: 500)
-    expect(service.s).to eq('kek')
-    expect(service.z).to eq(500)
+    specify 'fails when the required attribute is not passed' do
+      class SimpleOp < SmartCore::Operation
+        param :nickname # required
+        param :password # required
 
-    result = service.call
-    expect(result.a).to eq(10)
-    expect(result.b).to eq('20')
-    expect(result.c).to eq({ d: :e })
+        option :active # required
+        option :admin, default: false
+        option :age, default: -> { 1 + 2 }
+      end
 
-    service.call do |result|
-      result.success? { |res| res.a }
-      result.failure? { |res| res.errors }
+      # rubocop:disable Metrics/LineLength
+      expect { SimpleOp.new }.to raise_error(SmartCore::Operation::ParameterError)
+      expect { SimpleOp.new('0exp') }.to raise_error(SmartCore::Operation::ParameterError)
+      expect { SimpleOp.new('0exp', 'test') }.to raise_error(SmartCore::Operation::OptionError)
+      expect { SimpleOp.new(active: false) }.to raise_error(SmartCore::Operation::ParameterError)
+      expect { SimpleOp.new('0exp', 'test', active: false) }.not_to raise_error
+      expect { SimpleOp.new('0exp', 'test', active: true, admin: true) }.not_to raise_error
+      expect { SimpleOp.new('0exp', 'test', active: true, admin: false, age: 1) }.not_to raise_error
+      # rubocop:enable Metrics/LineLength
     end
 
-    class MegaOp < SmartCore::Operation
-      params :a, :b, :c
-      options :kek, :pek, :cheburek
+    specify 'inheritance works as expected :)' do
+      class BaseOp < SmartCore::Operation
+        params :nickname, :email
+        option :active
+      end
+
+      class ChildOp < BaseOp
+        params :password
+        option :admin, default: false
+      end
+
+      service = ChildOp.new('0exp', '0exp@0exp.0exp', 'test', active: false)
+      # child op
+      expect(service.nickname).to eq('0exp')
+      expect(service.email).to eq('0exp@0exp.0exp')
+      expect(service.password).to eq('test')
+      expect(service.active).to eq(false)
+      expect(service.admin).to eq(false)
+
+      service = BaseOp.new('kek', 'pek@cheburek.ru', active: true)
+      # base op
+      expect(service.nickname).to eq('kek')
+      expect(service.email).to eq('pek@cheburek.ru')
+      expect(service.active).to eq(true)
+      expect { service.password }.to raise_error(NoMethodError)
+      expect { service.admin }.to raise_error(NoMethodError)
     end
-
-    service = MegaOp.new(1, 2, 3, kek: 4, pek: 5, cheburek: 6)
-
-    expect(service.a).to eq(1)
-    expect(service.b).to eq(2)
-    expect(service.c).to eq(3)
-    expect(service.kek).to eq(4)
-    expect(service.pek).to eq(5)
-    expect(service.cheburek).to eq(6)
   end
 end

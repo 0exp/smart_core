@@ -15,7 +15,7 @@ class SmartCore::Operation
 
   # @api public
   # @since 0.2.0
-  DefinedParamOverlapError = Class.new(ParameterError)
+  ParamOverlapError = Class.new(ParameterError)
 
   # @api public
   # @since 0.2.0
@@ -23,7 +23,7 @@ class SmartCore::Operation
 
   # @api public
   # @since 0.2.0
-  DefinedOptionOverlapError = Class.new(OptionError)
+  OptionOverlapError = Class.new(OptionError)
 
   # @api public
   # @since 0.2.0

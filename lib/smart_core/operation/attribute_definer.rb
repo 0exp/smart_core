@@ -120,14 +120,14 @@ class SmartCore::Operation::AttributeDefiner
   # @param parameter [SmartCore::Operation::Attribute]
   # @return [void]
   #
-  # @raise [SmartCore::Operation::DefinedOptionOverlapError]
+  # @raise [SmartCore::Operation::OptionOverlapError]
   #
   # @api private
   # @since 0.2.0
   def prevent_intersection_with_already_defined_option(parameter)
     if operation_klass.__options__.conflicts_with?(parameter)
       raise(
-        SmartCore::Operation::DefinedOptionOverlapError,
+        SmartCore::Operation::OptionOverlapError,
         "You have already defined option with :#{parameter.name} name"
       )
     end
@@ -136,14 +136,14 @@ class SmartCore::Operation::AttributeDefiner
   # @param option [SmartCore::Operation::Attribute]
   # @return [void]
   #
-  # @raise [SmartCore::Operation::DefinedParamOverlapError]
+  # @raise [SmartCore::Operation::ParamOverlapError]
   #
   # @api private
   # @since 0.2.0
   def prevent_intersection_with_already_defined_param(option)
     if operation_klass.__params__.conflicts_with?(option)
       raise(
-        SmartCore::Operation::DefinedParamOverlapError,
+        SmartCore::Operation::ParamOverlapError,
         "You have already defined param with :#{option.name} name"
       )
     end
