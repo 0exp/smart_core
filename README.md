@@ -26,7 +26,7 @@ require 'smart_core'
 
 - **Operation Object** (aka `Service Object`) (`SmartCore::Operation`)
   - attribute definition DSL (`param`, `option`, `params`, `options`);
-  - yieldable result object abstraction (`Success`, `Failure`);
+  - yieldable result object abstraction (`Success`, `Failure`, `#success?`, `#failure?`);
   - yieldable `#call` (and `.call`);
   - inheritance works as expected `:)`;
   - no dependencies;
@@ -40,18 +40,18 @@ require 'smart_core'
 
 ---
 
-#### Validation Object
-
-```ruby
-class Validator < SmartCore::Validator
-  # soon...
-end
-```
-
 #### Operation Object
 
 ```ruby
 class Service < SmartCore::Operation
+  # soon...
+end
+```
+
+#### Validation Object
+
+```ruby
+class Validator < SmartCore::Validator
   # soon...
 end
 ```
