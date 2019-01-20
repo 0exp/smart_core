@@ -24,14 +24,14 @@ require 'smart_core'
 
 #### Completed abstractions:
 
-- **Operation Object** (aka `Service Object`) (`SmartCore::Operation`)
+- [**Operation Object**](#operation-object) (aka `Service Object`) (`SmartCore::Operation`)
   - attribute definition DSL (`param`, `option`, `params`, `options`);
   - yieldable result object abstraction (`Success`, `Failure`, `#success?`, `#failure?`);
   - yieldable `#call` (and `.call`);
   - inheritance works as expected `:)`;
   - no dependencies;
 
-- **Validation Object** (`SmartCore::Validator`)
+- [**Validation Object**](#validation-object) (`SmartCore::Validator`)
   - support for nested validations;
   - inheritance works as expected `:)`;
   - command-style DSL;
