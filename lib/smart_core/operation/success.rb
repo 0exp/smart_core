@@ -9,24 +9,9 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
   # @api public
   # @since 0.2.0
   def initialize(**result_options)
-    result_object_methods = methods # TODO: list protected instance methods manually
-
-    # NOTE: prevent core result object method overlap
-    result_options.each_key do |key|
-      raise(
-        ResultMethodIntersectionError,
-        'Result keys can not overlap core result object methods.'
-      ) if result_object_methods.include?(key)
-    end
-
+    __prevent_method_overlapping__(result_options)
     super(**result_options) # NOTE: initialize result object
-
-    # NOTE: define virtual attibute accessors for the result data
-    result_options.each_key do |result_attribute_name|
-      define_singleton_method(result_attribute_name) do
-        __result_options__[result_attribute_name]
-      end
-    end
+    __define_virtual_result_data_accessors__(result_options)
   end
 
   # @yield [nil]
@@ -37,4 +22,50 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
   def success?
     true.tap { yield(self) if block_given? }
   end
+
+  private
+
+  # @param result_options [Hash<Symbol,Any>]
+  # @return [void]
+  #
+  # @raise [SmartCore::Operation::IncompatibleResultKeyError]
+  # @raise [SmartCore::Operation::ResultMethodIntersectionError]
+  #
+  # @api private
+  # @since 0.2.0
+  def __prevent_method_overlapping__(result_options)
+    overlappings = result_options.each_key.each_with_object([]) do |key, overlappings|
+      overlappings << key if self.class.__core_methods__.include?(key)
+    end
+
+    raise(
+      SmartCore::Operation::ResultMethodIntersectionError,
+      "Result keys can not overlap core methods " \
+      "(overlapping keys: #{overlappings.join(', ')})."
+    ) if overlappings.any?
+  end
+
+  # @param result_options [Hash<Symbol,Any>]
+  # @return [void]
+  #
+  # @api private
+  # @since 0.2.0
+  def __define_virtual_result_data_accessors__(result_options)
+    result_options.each_key do |result_attribute_name|
+      define_singleton_method(result_attribute_name) do
+        __result_options__[result_attribute_name]
+      end
+    end
+  end
+
+  core_methods = (
+    instance_methods(false) | private_instance_methods(false) |
+    superclass.instance_methods(false) | superclass.private_instance_methods(false)
+  ).freeze
+
+  # @return [Array<Symbol>]
+  #
+  # @api private
+  # @since 0.2.0
+  define_singleton_method(:__core_methods__) { core_methods }
 end

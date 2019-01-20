@@ -32,4 +32,8 @@ class SmartCore::Operation
   # @api public
   # @since 0.2.0
   ResultMethodIntersectionError = Class.new(Error)
+
+  # @api public
+  # @since 0.2.0
+  IncompatibleResultObjectKeyError = Class.new(Error)
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe SmartCore::Operation do
-  describe 'attribute definition DSL' do
+  describe 'attribute definition DSL and service instantiation' do
     specify 'single attribute definition' do
       class SingleAttrOp < SmartCore::Operation
         param :email
@@ -115,6 +115,32 @@ describe SmartCore::Operation do
       # rubocop:enable Metrics/LineLength
     end
 
+    specify 'fails with non-string / non-symbol keys (incorrect attribute keys)' do
+      expect do
+        Class.new(SmartCore::Operation) do
+          param 123
+        end
+      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+
+      expect do
+        Class.new(SmartCore::Operation) do
+          option Object.new
+        end
+      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+
+      expect do
+        Class.new(SmartCore::Operation) do
+          params :a, :b, 555
+        end
+      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+
+      expect do
+        Class.new(SmartCore::Operation) do
+          options :a, :b, {}
+        end
+      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+    end
+
     specify 'inheritance works as expected :)' do
       class BaseOp < SmartCore::Operation
         params :nickname, :email
@@ -141,6 +167,158 @@ describe SmartCore::Operation do
       expect(service.active).to eq(true)
       expect { service.password }.to raise_error(NoMethodError)
       expect { service.admin }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe 'invokation and results' do
+    before do
+      stub_const('UserRegService', Class.new(SmartCore::Operation) do
+        params :email, :password
+        options :active, :role
+
+        option :test_fail, default: false
+
+        def call
+          if test_fail
+            Failure(:empty_password, :already_registerd)
+          else
+            Success(user_id: 123_456, tested: true)
+          end
+        end
+      end)
+    end
+
+    describe 'invokation result object' do
+      specify 'successful result' do
+        result = UserRegService.call('test@test.test', 'test', active: false, role: :xakep)
+
+        expect(result).is_a?(SmartCore::Operation::Success)
+        # result status
+        expect(result.success?).to eq(true)
+        expect(result.failure?).to eq(false)
+        # result state
+        expect(result.user_id).to eq(123_456)
+        expect(result.tested).to eq(true)
+      end
+
+      specify 'failing result' do
+        result = UserRegService.call('a@b.c', 'pek', active: true, role: :pek, test_fail: true)
+
+        expect(result).is_a?(SmartCore::Operation::Failure)
+        # result status
+        expect(result.success?).to eq(false)
+        expect(result.failure?).to eq(true)
+        # result state
+        expect(result.errors).to contain_exactly(:empty_password, :already_registerd)
+      end
+
+      specify 'yieldable result' do
+        succ_results = []
+        fail_results = []
+
+        # successful result => result.success?(&block) is invoked
+        UserRegService.call('a@b.c', '12345', active: true, role: :kek) do |result|
+          result.success? { succ_results << :first_succ_invoked } # this logic should be invoked
+          result.failure? { fail_results << :first_fail_invoked }
+        end
+
+        # failure result => result.failure?(&block) is invoked
+        UserRegService.call('a@b.c', '12345', active: true, role: :kek, test_fail: true) do |result|
+          result.success? { succ_results << :second_succ_invoked }
+          result.failure? { fail_results << :second_fail_invoked } # this logic should be invoked
+        end
+
+        expect(succ_results).to contain_exactly(:first_succ_invoked) # only the first
+        expect(fail_results).to contain_exactly(:second_fail_invoked) # only the second
+      end
+
+      specify 'successful by default' do
+        result = Class.new(SmartCore::Operation).call
+
+        expect(result.success?).to eq(true)
+      end
+
+      specify "fails when Success-result's keys are incorrect (non symbolic)" do
+        class SuccMethodOverlapOp < SmartCore::Operation
+          def call
+            Success(success?: rand)
+          end
+        end
+        expect { SuccMethodOverlapOp.call }.to raise_error(
+          SmartCore::Operation::ResultMethodIntersectionError
+        )
+
+        class FailMethodOverlapOp < SmartCore::Operation
+          def call
+            Success(failure?: rand)
+          end
+        end
+        expect { FailMethodOverlapOp.call }.to raise_error(
+          SmartCore::Operation::ResultMethodIntersectionError
+        )
+
+        class StringKeyOpError < SmartCore::Operation
+          def call
+            Success('success?' => rand, 'failure?' => rand)
+          end
+        end
+        expect { StringKeyOpError.call }.to raise_error(ArgumentError)
+
+        class AnyObjResultKeyOp < SmartCore::Operation
+          def call
+            Success(Object => 1, 55 => 2)
+          end
+        end
+        expect { AnyObjResultKeyOp.call }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe '#call & .call behavior' do
+      # rubocop:disable Metrics/LineLength
+      specify '#call & .call' do
+        class_call_res = UserRegService.call('kek@pek.tv', 'test', active: true, role: :admin)
+        instance_call_res = UserRegService.new('kek@pek.tv', 'test', active: false, role: :kek).call
+
+        expect(class_call_res.success?).to eq(true)
+        expect(instance_call_res.success?).to eq(true)
+        expect(class_call_res.failure?).to eq(false)
+        expect(instance_call_res.failure?).to eq(false)
+
+        class_call_res = UserRegService.call('kek@pek.tv', 'test', active: true, role: :admin, test_fail: true)
+        instance_call_res = UserRegService.new('kek@pek.tv', 'test', active: false, role: :kek, test_fail: true).call
+
+        expect(class_call_res.success?).to eq(false)
+        expect(instance_call_res.success?).to eq(false)
+        expect(class_call_res.failure?).to eq(true)
+        expect(instance_call_res.failure?).to eq(true)
+      end
+      # rubocop:enable Metrics/LineLength
+    end
+
+    specify 'inheritance' do
+      class BaseService < SmartCore::Operation
+        options :nick, :pass
+
+        def call
+          Success(service: :base)
+        end
+      end
+
+      class SubService < BaseService
+        options :email, :name
+
+        def call
+          Success(service: :sub)
+        end
+      end
+
+      result = SubService.call(nick: '0exp', pass: '123', email: 'a@b.c', name: 'pek')
+      expect(result.success?).to eq(true)
+      expect(result.service).to eq(:sub)
+
+      result = BaseService.call(nick: '0exp', pass: '555')
+      expect(result.success?).to eq(true)
+      expect(result.service).to eq(:base)
     end
   end
 end
