@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.3.0] - 2019-01-20
 ### Added
 - **Operation**
   - New result object type: `Fatal` (`SmartCore::Operation::Fatal`, `#Fatal`)
