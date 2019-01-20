@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- Service object abstraction (`SmartCore::Operation`);
+- **Service object** abstraction (`SmartCore::Operation`);
 - **Validator**
   - Support for `&block` attribute at object instantiation;
 
