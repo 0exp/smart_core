@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.2.0] - 2019-01-20
 ### Added
 - **Service object** abstraction (`SmartCore::Operation`);
 - **Validator**
