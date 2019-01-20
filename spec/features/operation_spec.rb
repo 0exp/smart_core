@@ -90,8 +90,8 @@ describe SmartCore::Operation do
         Class.new(SmartCore::Operation) do
           options :nickname, :password
           params :email, :password
-        end.to raise_error(SmartCore::Operation::OptionOverlapError)
-      end
+        end
+      end.to raise_error(SmartCore::Operation::OptionOverlapError)
     end
 
     specify 'fails when the required attribute is not passed' do
@@ -104,7 +104,6 @@ describe SmartCore::Operation do
         option :age, default: -> { 1 + 2 }
       end
 
-      # rubocop:disable Metrics/LineLength
       expect { SimpleOp.new }.to raise_error(SmartCore::Operation::ParameterError)
       expect { SimpleOp.new('0exp') }.to raise_error(SmartCore::Operation::ParameterError)
       expect { SimpleOp.new('0exp', 'test') }.to raise_error(SmartCore::Operation::OptionError)
@@ -112,7 +111,6 @@ describe SmartCore::Operation do
       expect { SimpleOp.new('0exp', 'test', active: false) }.not_to raise_error
       expect { SimpleOp.new('0exp', 'test', active: true, admin: true) }.not_to raise_error
       expect { SimpleOp.new('0exp', 'test', active: true, admin: false, age: 1) }.not_to raise_error
-      # rubocop:enable Metrics/LineLength
     end
 
     specify 'fails with non-string / non-symbol keys (incorrect attribute keys)' do
@@ -233,8 +231,7 @@ describe SmartCore::Operation do
       end
 
       specify 'successful by default' do
-        result = Class.new(SmartCore::Operation).call
-
+        result = Class.new(described_class).call
         expect(result.success?).to eq(true)
       end
 

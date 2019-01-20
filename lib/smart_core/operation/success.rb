@@ -34,8 +34,8 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
   # @api private
   # @since 0.2.0
   def __prevent_method_overlapping__(result_options)
-    overlappings = result_options.each_key.each_with_object([]) do |key, overlappings|
-      overlappings << key if self.class.__core_methods__.include?(key)
+    overlappings = result_options.each_key.each_with_object([]) do |key, overlap|
+      overlap << key if self.class.__core_methods__.include?(key)
     end
 
     raise(
