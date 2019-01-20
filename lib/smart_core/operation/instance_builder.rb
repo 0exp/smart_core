@@ -155,6 +155,9 @@ class SmartCore::Operation::InstanceBuilder
     operation_object.singleton_class.prepend(Module.new do
       def call
         super.tap { |result| yield(result) if block_given? }
+      rescue SmartCore::Operation::FatalError => error
+        # NOTE: returns SmartCore::Operation::Fatal instance
+        error.__operation_result__.tap { |result| yield(result) if block_given? }
       end
     end)
   end

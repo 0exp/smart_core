@@ -210,6 +210,32 @@ describe SmartCore::Operation do
         expect(result.errors).to contain_exactly(:empty_password, :already_registerd)
       end
 
+      specify 'fatal result (and yieldable result object behavior)' do
+        class MaFatalService < SmartCore::Operation
+          option :result_interceptor, default: -> { [] }
+
+          def call
+            result_interceptor << :before_fatal # reached code
+            Fatal(:fatal_error, :lol)
+            result_interceptor << :after_fatal # not reached code
+          end
+        end
+
+        result_interceptor = []
+        result = MaFatalService.call(result_interceptor: result_interceptor)
+        expect(result).to be_a(SmartCore::Operation::Fatal)
+        expect(result.errors).to contain_exactly(:fatal_error, :lol)
+        expect(result_interceptor).to contain_exactly(:before_fatal)
+
+        yield_interceptor = []
+        MaFatalService.call do |result|
+          result.success? { yield_interceptor << :success_result }
+          result.failure? { yield_interceptor << :failure_result }
+          result.fatal?   { yield_interceptor << :fatal_result }
+        end
+        expect(yield_interceptor).to contain_exactly(:failure_result, :fatal_result)
+      end
+
       specify 'yieldable result' do
         succ_results = []
         fail_results = []

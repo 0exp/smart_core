@@ -9,6 +9,7 @@ class SmartCore::Operation
   require_relative 'operation/result'
   require_relative 'operation/success'
   require_relative 'operation/failure'
+  require_relative 'operation/fatal'
   require_relative 'operation/instance_builder'
   require_relative 'operation/attribute_definer'
   require_relative 'operation/initialization_dsl'
@@ -35,7 +36,9 @@ class SmartCore::Operation
   # @since 0.2.0
   def initialize(*, **); end
 
-  # @return [SmartCore::Operation::Success, SmartCore::Operation::Failure]
+  # @return [SmartCore::Operation::Success]
+  # @return [SmartCore::Operation::Failure]
+  # @return [SmartCore::Operation::Fatal]
   #
   # @api public
   # @since 0.2.0
@@ -61,5 +64,16 @@ class SmartCore::Operation
   # @since 0.2.0
   def Failure(*errors) # rubocop:disable Naming/MethodName
     SmartCore::Operation::Failure.new(*errors)
+  end
+
+  # @param errors [Array<Symbol|Any>]
+  # @return [SmartCore::Operation::Fatal]
+  #
+  # @raise [SmartCore::Operation::FatalError]
+  #
+  # @api public
+  # @since 0.2.0
+  def Fatal(*errors) # rubocop:disable Naming/MethodName
+    raise SmartCore::Operation::Fatal.new(*errors)
   end
 end

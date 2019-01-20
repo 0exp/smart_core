@@ -26,7 +26,7 @@ require 'smart_core'
 
 - [**Operation Object**](#operation-object) (aka `Service Object`) (`SmartCore::Operation`)
   - attribute definition DSL (`param`, `option`, `params`, `options`);
-  - yieldable result object abstraction (`Success`, `Failure`, `#success?`, `#failure?`);
+  - yieldable result object abstraction (`Success`, `Failure`, `Fatal`, `#success?`, `#failure?`, `#fatal?`);
   - yieldable `#call` (and `.call`);
   - inheritance works as expected `:)`;
   - no dependencies;

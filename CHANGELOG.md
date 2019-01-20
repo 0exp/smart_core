@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- **Operation**
+  - New result object type: `Fatal` (`SmartCore::Operation::Fatal`, `#Fatal`)
+    - stops the operation execution flow and returns
+      `SmartCore::Operation::Fatal` result immidietly;
+    - has `Failure`-like instantiation behavior and internal state (`#failure?`, `#fatal?`, `#errors`);
+
 ## [0.2.0] - 2019-01-20
 ### Added
 - **Service object** abstraction (`SmartCore::Operation`);
