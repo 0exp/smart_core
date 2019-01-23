@@ -34,6 +34,8 @@ require 'smart_core'
 - [**Validation Object**](#validation-object) (`SmartCore::Validator`)
   - support for nested validations;
   - inheritance works as expected `:)`;
+  - `#error` - adds an error code;
+  - `#fatal` - adds an error code and stops the current method execution flow;
   - command-style DSL;
   - thread-safe;
   - no dependencies;

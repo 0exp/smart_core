@@ -47,6 +47,48 @@ describe SmartCore::Validator do
     expect(validator.errors).to contain_exactly(:invalid_token, :invalid_nickname)
   end
 
+  specify '#fatal error interceptor stops concrete validation method flow' do
+    class ValidatorWithFatals < SmartCore::Validator
+      validate :check_a do # no-fatal, no-error
+        validate :check_b # fatal, error
+      end
+
+      validate :check_c do # fatal
+        validat :check_d # no-fatal
+      end
+
+      private
+
+      def check_a; end # reached method
+
+      def check_b # reached method
+        error(:check_b_before_fatal) # reached code
+        fatal(:fatal_b) # reached code
+        error(:check_b_after_fatal) # non-reached cocde
+      end
+
+      def check_c # reached method
+        fatal(:fatal_c) # reached code
+        error(:check_c_after_fatal) # non-reached code
+      end
+
+      def check_d # non-reached method (check_c fails wit hfatal)
+        error(:check_d_before_fatal) # non-reached code
+        fatal(:fatal_d) # non-reached code
+        error(:check_d_after_fatal) # non-reached code
+      end
+    end
+
+    validator = ValidatorWithFatals.new
+
+    expect(validator.errors).to eq([])
+    expect(validator.valid?).to eq(false)
+
+    # check_b (:check_b_after_fatal is not reached)
+    # check_c (:check_c_after_fatal is not reached)
+    expect(validator.errors).to contain_exactly(:check_b_before_fatal, :fatal_b, :fatal_c)
+  end
+
   specify 'incorrect error code type => fails with exception' do
     class ValidatorWithIncorrectErrorCode < SmartCore::Validator
       validate :project_consistency

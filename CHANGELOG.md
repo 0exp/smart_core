@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- **Valdiator**
+  - `#fatal` - an `#error`-like method that appends validation error code and stops current method execution flow;
+
 ## [0.3.0] - 2019-01-20
 ### Added
 - **Operation**
