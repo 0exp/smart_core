@@ -21,7 +21,9 @@ class SmartCore::Operation
     # @param arguments [Any]
     # @param options [Hash<Symbol,Any>]
     # @param block [Proc]
-    # @return [SmartCore::Operation::Success, SmartCore::Operation::Failure]
+    # @return [SmartCore::Operation::Success]
+    # @return [SmartCore::Operation::Failure]
+    # @return [SmartCore::Operation::Fatal]
     #
     # @api public
     # @since 0.2.0
@@ -39,6 +41,7 @@ class SmartCore::Operation
   # @return [SmartCore::Operation::Success]
   # @return [SmartCore::Operation::Failure]
   # @return [SmartCore::Operation::Fatal]
+  # @return [Any]
   #
   # @api public
   # @since 0.2.0
