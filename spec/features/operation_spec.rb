@@ -228,7 +228,7 @@ describe SmartCore::Operation do
         expect(result_interceptor).to contain_exactly(:before_fatal)
 
         yield_interceptor = []
-        MaFatalService.call do |result|
+        MaFatalService.call do |result| # rubocop:disable Lint/ShadowingOuterLocalVariable
           result.success? { yield_interceptor << :success_result }
           result.failure? { yield_interceptor << :failure_result }
           result.fatal?   { yield_interceptor << :fatal_result }

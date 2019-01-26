@@ -13,3 +13,7 @@ AllCops:
     - Gemfile
     - Rakefile
     - smart_core.gemspec
+
+# NOTE: support for oldes ruby versions
+Style/RedundantBegin:
+  Enabled: false
