@@ -24,6 +24,7 @@ require 'smart_core'
 
 #### Completed abstractions:
 
+- [**Initialization DSL**](#initialization-dsl) (`SmartCore::Initializer`)
 - [**Operation Object**](#operation-object) (aka `Service Object`) (`SmartCore::Operation`)
   - attribute definition DSL (`param`, `option`, `params`, `options`);
   - yieldable result object abstraction (`Success`, `Failure`, `Fatal`, `#success?`, `#failure?`, `#fatal?`);
@@ -41,6 +42,16 @@ require 'smart_core'
   - no dependencies;
 
 ---
+
+#### Initialization DSL
+
+```ruby
+class Structure
+  include SmartCore::Initializer
+
+  # soon...
+end
+```
 
 #### Operation Object
 
