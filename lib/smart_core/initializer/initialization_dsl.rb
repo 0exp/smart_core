@@ -60,12 +60,13 @@ module SmartCore::Initializer
     # @since 0.5.0
     module DSLMethods
       # @param param_name [String, Symbol]
+      # @param options [Hash<Symbol,Any>]
       # @return [void]
       #
       # @api public
       # @since 0.5.0
-      def param(param_name)
-        __attr_definer__.define_param(param_name)
+      def param(param_name, **options)
+        __attr_definer__.define_param(param_name, **options)
       end
 
       # @param param_names [Array<String, Symbol>]

@@ -3,11 +3,11 @@
 module SmartCore::Initializer
   # @api public
   # @since 0.5.0
-  Error = Class.new(StandardError)
+  Error = Class.new(SmartCore::Error)
 
   # @api public
   # @since 0.5.0
-  ArgumentError = Class.new(::ArgumentError)
+  ArgumentError = Class.new(SmartCore::ArgumentError)
 
   # @api public
   # @since 0.5.0

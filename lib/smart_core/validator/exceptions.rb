@@ -3,7 +3,7 @@
 class SmartCore::Validator
   # @api public
   # @since 0.1.0
-  Error = Class.new(StandardError)
+  Error = Class.new(SmartCore::Error)
 
   # @api public
   # @since 0.1.0

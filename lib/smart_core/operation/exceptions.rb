@@ -3,7 +3,7 @@
 class SmartCore::Operation
   # @api public
   # @since 0.2.0
-  Error = Class.new(StandardError)
+  Error = Class.new(SmartCore::Error)
 
   # @api public
   # @since 0.3.0
@@ -27,7 +27,7 @@ class SmartCore::Operation
 
   # @api public
   # @since 0.2.0
-  ArgumentError = Class.new(::ArgumentError)
+  ArgumentError = Class.new(::SmartCore::ArgumentError)
 
   # @api public
   # @since 0.2.0
