@@ -15,7 +15,7 @@ class SmartCore::Operation
   require_relative 'operation/initialization_dsl'
 
   # @since 0.2.0
-  include InitializationDSL
+  include InitializationDSL # TODO: use SmartCore::Initializer
 
   class << self
     # @param arguments [Any]
