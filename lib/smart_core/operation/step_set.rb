@@ -2,11 +2,11 @@
 
 # @api private
 # @since 0.5.0
-class SmartCore::Operation::ActionStepSet
+class SmartCore::Operation::StepSet
   # @since 0.5.0
   include Enumerable
 
-  # @return [Array<SmartCore:::Operation::ActionStep>]
+  # @return [Array<SmartCore:::Operation::Step>]
   #
   # @api private
   # @since 0.5.0
@@ -21,7 +21,7 @@ class SmartCore::Operation::ActionStepSet
     @access_lock = Mutex.new
   end
 
-  # @param step [SmartCore::Operation::ActionStep]
+  # @param step [SmartCore::Operation::Step]
   # @return [void]
   #
   # @api private
@@ -31,16 +31,16 @@ class SmartCore::Operation::ActionStepSet
   end
   alias_method :<<, :add_step
 
-  # @param action_step_set [SmartCore::Operation::ActionStepStep]
+  # @param step_set [SmartCore::Operation::Step]
   # @return [void]
   #
   # @api private
   # @sinec 0.5.0
-  def concat(action_step_set)
-    thread_safe { steps.concat(action_step_set.dup.steps) }
+  def concat(step_set)
+    thread_safe { steps.concat(step_set.dup.steps) }
   end
 
-  # @retun [SmartCore::Operation::ActionStepSet]
+  # @retun [SmartCore::Operation::StepSet]
   #
   # @api private
   # @since 0.5.0

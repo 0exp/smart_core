@@ -6,6 +6,8 @@ class SmartCore::Operation
   require_relative 'operation/exceptions'
   require_relative 'operation/attribute'
   require_relative 'operation/attribute_set'
+  require_relative 'operation/step'
+  require_relative 'operation/step_set'
   require_relative 'operation/result'
   require_relative 'operation/success'
   require_relative 'operation/failure'
@@ -13,8 +15,6 @@ class SmartCore::Operation
   require_relative 'operation/instance_builder'
   require_relative 'operation/attribute_definer'
   require_relative 'operation/initialization_dsl'
-  require_relative 'operation/step'
-  require_relative 'operation/step_set'
 
   # @since 0.2.0
   include InitializationDSL

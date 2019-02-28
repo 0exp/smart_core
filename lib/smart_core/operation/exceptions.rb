@@ -50,6 +50,10 @@ class SmartCore::Operation
   IncorrectAttributeNameError = Class.new(Error)
 
   # @api public
+  # @since 0.5.0
+  IncorrectStepNameError = Class.new(Error)
+
+  # @api public
   # @since 0.2.0
   ResultMethodIntersectionError = Class.new(Error)
 

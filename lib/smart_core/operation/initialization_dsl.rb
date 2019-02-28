@@ -17,6 +17,7 @@ class SmartCore::Operation
         base_klass.instance_variable_set(:@__attr_definer__, AttributeDefiner.new(base_klass))
         base_klass.instance_variable_set(:@__params__, AttributeSet.new)
         base_klass.instance_variable_set(:@__options__, AttributeSet.new)
+        base_klass.instance_variable_set(:@__steps__, StepSet.new)
 
         base_klass.singleton_class.prepend(Module.new do
           # @param child_klass [Class]
@@ -30,9 +31,11 @@ class SmartCore::Operation
             child_klass.instance_variable_set(:@__attr_definer__, AttributeDefiner.new(child_klass))
             child_klass.instance_variable_set(:@__params__, AttributeSet.new)
             child_klass.instance_variable_set(:@__options__, AttributeSet.new)
+            child_klass.instance_variable_set(:@__steps__, StepSet.new)
 
             child_klass.__params__.concat(__params__)
             child_klass.__options__.concat(__options__)
+            child_klass.__steps__.concat(__steps__)
 
             super(child_klass)
           end
@@ -118,6 +121,14 @@ class SmartCore::Operation
       # @since 0.2.0
       def __attr_definer__
         @__attr_definer__
+      end
+
+      # @return [SmartCore::Operation::StepSet]
+      #
+      # @api private
+      # @since 0.5.0
+      def __steps__
+        @__steps__
       end
     end
   end
