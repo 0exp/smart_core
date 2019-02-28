@@ -30,7 +30,7 @@ class SmartCore::Operation::Attribute
       )
     end
 
-    @name = name
+    @name = name.to_sym
     @options = options # TODO: check for unsupported options (and fail if found)
   end
 
