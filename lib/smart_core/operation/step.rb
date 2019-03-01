@@ -16,19 +16,20 @@ class SmartCore::Operation::Step
   attr_reader :options
 
   # @param method_name [String, Symbol]
+  # @param options [Hash<Symbol,Any>]
   # @return [void]
   #
   # @api private
   # @since 0.5.0
   def initialize(method_name, **options)
-    unless name.is_a?(Symbol) || name.is_a?(String)
+    unless method_name.is_a?(Symbol) || method_name.is_a?(String)
       raise(
         SmartCore::Operation::IncorrectStepNameError,
-        'Attribute name should be a symbol or a string'
+        'Step name should be a symbol or a string'
       )
     end
 
-    @method_name = method_name
+    @method_name = method_name.to_sym
     @options = options # TODO: support for another operations
   end
 
