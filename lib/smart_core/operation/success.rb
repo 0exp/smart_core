@@ -20,8 +20,23 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
   # @api public
   # @since 0.2.0
   def success?
+    # TODO: проверять аттрибуты прока и в зависимости от того, что там передано:
+    #   - сплатить (если передано как **result)
+    #   - экспортить (если одтельные кварги)
+    #   - передавать объект резалта
     true.tap { yield(self) if block_given? }
   end
+
+  # Support for operations like `result.success? { |**result| ...result-as-a-hash... }`
+  #
+  # @return [Hash]
+  #
+  # @api public
+  # @since 0.5.0
+  def to_h
+    __result_options__.dup
+  end
+  alias_method :to_hash, :to_h
 
   private
 
