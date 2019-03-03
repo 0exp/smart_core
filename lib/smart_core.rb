@@ -6,6 +6,7 @@ module SmartCore
   require_relative 'smart_core/version'
   require_relative 'smart_core/exceptions'
   require_relative 'smart_core/initializer'
+  require_relative 'smart_core/container'
   require_relative 'smart_core/validator'
   require_relative 'smart_core/operation'
 end
