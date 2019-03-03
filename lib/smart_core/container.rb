@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+# @api public
+# @since 0.5.0
 class SmartCore::Container
+  require_relative 'container/registry'
+  require_relative 'container/resolver'
+  require_relative 'container/definition_dsl'
+
   # TODO:
   #
   #  namespace :test do
