@@ -20,10 +20,6 @@ class SmartCore::Operation::Success < SmartCore::Operation::Result
   # @api public
   # @since 0.2.0
   def success?
-    # TODO: проверять аттрибуты прока и в зависимости от того, что там передано:
-    #   - сплатить (если передано как **result)
-    #   - экспортить (если одтельные кварги)
-    #   - передавать объект резалта
     true.tap { yield(self) if block_given? }
   end
 
