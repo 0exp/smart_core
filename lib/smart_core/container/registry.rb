@@ -6,12 +6,6 @@ class SmartCore::Container::Registry
   require_relative 'registry/dependency'
   require_relative 'registry/compatability'
 
-  # @return [Hash<Symbol,Any>]
-  #
-  # @api private
-  # @since 0.5.0
-  attr_reader :registry
-
   # @return [void]
   #
   # @api private
@@ -51,6 +45,12 @@ class SmartCore::Container::Registry
   end
 
   private
+
+  # @return [Hash<Symbol,Any>]
+  #
+  # @api private
+  # @since 0.5.0
+  attr_reader :registry
 
   # @param block [Proc]
   # @return [Any]
