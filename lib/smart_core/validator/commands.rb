@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# @api private
+# @since 0.1.0
 module SmartCore::Validator::Commands
   require_relative 'commands/base'
   require_relative 'commands/work_with_nesteds_mixin'

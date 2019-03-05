@@ -17,6 +17,7 @@ class SmartCore::Container::Dependency
   # @api private
   # @since 0.5.0
   def call
+    # TODO: add memoization abilities
     object.call
   end
 
