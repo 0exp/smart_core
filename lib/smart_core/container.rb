@@ -27,6 +27,26 @@ class SmartCore::Container
     @registry = RegistryBuilder.build(self.class.__commands__)
   end
 
+  # @param dependency_name [String, Symbol]
+  # @param dependency_definition [Block]
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def register(dependency_name, &dependency_definition)
+    registry.register(dependency_name, &dependency_definition)
+  end
+
+  # @param namespace_name [String, Symbol]
+  # @param dependency_definitions [Block]
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def namespace(namespace_name, &dependency_definitions)
+    registry.namespace(namespace_name, &dependency_definitions)
+  end
+
   # @param dependency_path [String, Symbol]
   # @return [Any]
   #

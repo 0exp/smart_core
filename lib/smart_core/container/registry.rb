@@ -64,7 +64,7 @@ class SmartCore::Container::Registry
   rescue KeyError
     raise(
       SmartCore::Container::UnexistentDependencyError,
-      "Dependencny with '#{dependency_path}' name does not exist!"
+      "Dependencny with '#{name}' name does not exist!"
     )
   end
 
