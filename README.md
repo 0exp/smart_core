@@ -24,6 +24,7 @@ require 'smart_core'
 
 #### Completed abstractions:
 
+- [**Dependency Container**](#dependency-container) (`SmartCore::Container`)
 - [**Initialization DSL**](#initialization-dsl) (`SmartCore::Initializer`)
 - [**Operation Object**](#operation-object) (aka `Service Object`) (`SmartCore::Operation`)
   - attribute definition DSL (`param`, `option`, `params`, `options`);
@@ -42,6 +43,14 @@ require 'smart_core'
   - no dependencies;
 
 ---
+
+#### Dependency Container
+
+```ruby
+class Container < SmartCore::Container
+  # sooon...
+end
+```
 
 #### Initialization DSL
 

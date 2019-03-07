@@ -12,97 +12,140 @@ class SmartCore::Container::Registry
     @registry = {}
   end
 
+  # @param dependency_path [String, Symbol]
+  # @return [SmartCore::Container::Namespace, SmartCore::Container::Dependnecy]
+  #
+  # @api private
+  # @since 0.5.0
+  def resolve(dependency_path)
+    thread_safe { fetch_dependency(dependency_path) }
+  end
+
   # @param name [String, Symbol]
-  # @param registry_definitions [Proc]
+  # @param dependency_definition [Block]
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def namespace(name, registry_definitions)
-    thread_safe do
-      dependency_key = Compatability.indifferently_accessable_dependency_name(name)
-
-      if has_dependency?(dependency_key)
-        existing_dependency = fetch_dependency(dependency_key)
-
-        case existing_dependency
-        when SmartCore::Container::Namespace
-          existing_dependency.instance_eval(&registry_definitions)
-        when SmartCore::Container::Dependency
-          raise 'you have already registered dependency with given name'
-        end
-      else
-        sub_registry = self.class.new.tap do |registry|
-          registry.instance_eval(&registry_definitions)
-        end
-
-        add_dependency(dependency_key, sub_registry)
-      end
-    end
+  def register(name, &dependency_definition)
+    thread_safe { append_dependency(name, dependency_definition) }
   end
 
-  # @param dependency_key [String, Symbol]
-  # @param dependency [Proc, #call]
+  # @param name [String, Symbol]
+  # @param dependency_definitions [Block]
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def register(dependency_key, dependency)
-    thread_safe do
-      dependency = Compatability.indifferently_accessable_dependency(dependency)
-      dependency_key = Compatability.indifferently_accessable_dependency_name(dependency_key)
-
-      add_dependency(dependency_key, dependency)
-    end
-  end
-
-  # @param dependency_name [String, Symbol]
-  # @return [SmartCore::Container::Registry::Dependency]
-  #
-  # @api private
-  # @since 0.5.0
-  def resolve(dependency_name)
-    thread_safe do
-      dependency_key = Compatability.indifferently_accessable_dependency_name(dependency_name)
-
-      fetch_dependency()(dependency_key)
-    end
+  def namespace(name, &dependency_definitions)
+    thread_safe { append_namespace(name, dependency_definitions) }
   end
 
   private
 
-  # @return [Hash<Symbol,Any>]
+  # @return [Mutex]
+  #
+  # @api private
+  # @since 0.5.0
+  attr_reader :access_lock
+
+  # @return [Hash<Symbol,SmartCore::Container::Dependency|SmartCore::Container::Namespace>]
   #
   # @api private
   # @since 0.5.0
   attr_reader :registry
 
-  # @Param dependency_name [String, Symbol]
+  # @paramm dependency_path [String, Symbol]
+  # @return [SmartCore::Container::Namespace,]
+  def fetch_dependency(dependency_path)
+    # TODO: rabbit style dependnecy path
+    name = indifferently_accessable_name(dependency_path)
+    registry.fetch(name)
+  rescue KeyError
+    raise(
+      SmartCore::Container::UnexistentDependencyError,
+      "Dependencny with '#{dependency_path}' name does not exist!"
+    )
+  end
+
+  # @param dependency_name [String, Symbol]
+  # @param dependency_definition [Proc]
+  # @return [void]
+  #
+  # @raise [SmartCore::Container::NamespaceOverlapError]
+  #
+  # @api private
+  # @since 0.5.0
+  def append_dependency(dependency_name, dependency_definition)
+    name = indifferently_accessable_name(dependency_name)
+
+    raise(
+      SmartCore::Container::NamespaceOverlapError,
+      "Trying to overlap already registered namespace with #{name} name!"
+    ) if has_namespace?(name)
+
+    dependency = SmartCore::Container::Dependency.new(dependency_definition)
+    registry[name] = dependency
+  end
+
+  # @param namespace_name [String, Symbol]
+  # @param dependency_definitions [Proc]
+  # @return [void]
+  #
+  # @raise [SmartCore::Container::DependencyOverlapError]
+  #
+  # @api private
+  # @since 0.5.0
+  def append_namespace(namespace_name, dependency_definitions)
+    name = indifferently_accessable_name(namespace_name)
+
+    raise(
+      SmartCore::Container::DependencyOverlapError,
+      "Trying to overlap already registered dependency with #{name} name!"
+    ) if has_dependency?(name)
+
+    if has_namespace?(name)
+      registry.fetch(name).tap do |namespace|
+        namespace.append_definitions(dependency_definitions)
+      end
+    else
+      SmartCore::Container::Namespace.new.tap do |namespace|
+        namespace.append_definitions(dependency_definitions)
+        registry[name] = namespace
+      end
+    end
+  end
+
+  # @param name [String, Symbol]
   # @return [Boolean]
   #
   # @api private
   # @since 0.5.0
-  def has_dependency?(dependency_name)
-    registry.key?(dependency_name)
+  def has_namespace?(name)
+    name = indifferently_accessable_name(name) # TODO: mb this line is totally useless. m?
+    registry.key?(name) && registry.fetch(name).is_a?(SmartCore::Container::Namespace)
   end
 
-  # @param key [Symbol]
-  # @param object [SmartCore::Container::Dependency]
+  # @param name [String, Symbol]
+  # @return [Boolean]
+  #
+  # @api private
+  # @since 0.5.0
+  def has_dependency?(name)
+    name = indifferently_accessable_name(name) # TODO: mb this line is totally useless. m?
+    registry.key?(name) && registry.fetch(name).is_a?(SmartCore::Container::Dependency)
+  end
+
+  # @param name [String, Symbol]
   # @return [void]
   #
-  # @api private
-  # @since 0.5.0
-  def add_dependency(key, object)
-    registry[key] = object
-  end
-
-  # @param key [Symbol]
-  # @return [SmartCore::Container::Dependency]
+  # @see [SmartCore::Container::KeyGuard]
   #
   # @api private
   # @since 0.5.0
-  def fetch_dependency(key)
-    registry.fetch(key)
+  def indifferently_accessable_name(name)
+    SmartCore::Container::KeyGuard.prevent_incomparabilities!(name)
+    name.to_s
   end
 
   # @param block [Proc]
@@ -110,7 +153,7 @@ class SmartCore::Container::Registry
   #
   # @api private
   # @since 0.5.0
-  def thread_safe
+  def thread_safe(&block)
     @access_lock.synchronize(&block)
   end
 end

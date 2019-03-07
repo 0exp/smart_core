@@ -2,30 +2,38 @@
 
 # @api private
 # @since 0.5.0
-class SmartCore::Container::Namespace
-  # @param inner_definitions [Proc]
+class SmartCore::Container::Namespace < SmartCore::Container::Entity
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def initialize(inner_definitions)
-    @inner_definitions = inner_definitions
+  def initialize
+    @container = Class.new(SmartCore::Container)
   end
 
-  # @return [Pro]
+  # @param dependency_definitions [Proc]
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def append_definitions(dependency_definitions)
+    container.instance_eval(&dependency_definitions)
+  end
+
+  # @return [SmartCore::Container]
   #
   # @api private
   # @since 0.5.0
   def call
     # TODO: add memoization abilities
-    inner_definitions.call
+    container.new
   end
 
   private
 
-  # @return [Any]
+  # @return [Class<SmartCore::Container>]
   #
   # @api private
   # @since 0.5.0
-  attr_reader :inner_definitions
+  attr_reader :container
 end

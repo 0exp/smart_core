@@ -4,26 +4,36 @@ module SmartCore::Container::Commands
   # @api private
   # @since 0.5.0
   class Namespace < Base
-    # @param name [String, Symbol]
+    # @param namespace_name [String, Symbol]
     # @param dependency_definitions [Proc]
     # @return [void]
     #
+    # @see [SmartCore::Container::KeyGuard]
+    #
     # @api private
     # @since 0.5.0
-    def initialize(name, dependency_definitions)
-      @name = name
+    def initialize(namespace_name, dependency_definitions)
+      SmartCore::Container::KeyGuard.prevent_incomparabilities!(namespace_name)
+
+      @namespace_name = namespace_name.to_s
       @dependency_definitions = dependency_definitions
     end
 
-    # @param container [SmartCore::Container]
+    # @param registry [SmartCore::Container::Registry]
     # @return [void]
     #
     # @api private
     # @since 0.5.0
-    def call(container)
-      # TODO: падаем, если перекрываем существующую зависомость
-      # TODO: расширяем нэймспэйс, если пытается перезарегать существующий неймспейс
-      container.register(name, dependency_definitions)
+    def call(registry)
+      registry.namespace(namespace_name, &dependency_definitions)
+    end
+
+    # @return [SmartCore::Container::Commands::Namespace]
+    #
+    # @api private
+    # @since 0.5.0
+    def dup
+      self.class.new(namespace_name, dependency_definitions)
     end
 
     private
@@ -32,7 +42,7 @@ module SmartCore::Container::Commands
     #
     # @api private
     # @since 0.5.0
-    attr_reader :name
+    attr_reader :namespace_name
 
     # @return [Proc]
     #
