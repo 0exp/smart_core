@@ -2,14 +2,14 @@
 
 # @api private
 # @since 0.5.0
-class SmartCore::Container::Dependency
-  # @param object [Any]
+class SmartCore::Container::Dependency < SmartCore::Container::Entity
+  # @param dependency_definition [Proc]
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def initialize(object)
-    @object = object
+  def initialize(dependency_definition)
+    @dependency_definition = dependency_definition
   end
 
   # @return [Any]
@@ -18,14 +18,14 @@ class SmartCore::Container::Dependency
   # @since 0.5.0
   def call
     # TODO: add memoization abilities
-    object.call
+    dependency_definition.call
   end
 
   private
 
-  # @return [Any]
+  # @return [Proc]
   #
   # @api private
   # @since 0.5.0
-  attr_reader :object
+  attr_reader :dependency_definition
 end

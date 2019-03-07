@@ -44,7 +44,21 @@ class SmartCore::Container::CommandSet
   # @api private
   # @since 0.5.0
   def concat(command_set)
-    thread_safe { commands.concat(command_set.commands) }
+    thread_safe { commands.concat(command_set.dup.commands) }
+  end
+
+  # @return [SmartCore::Operation::AttributeSet]
+  #
+  # @api private
+  # @since 0.2.0
+  def dup
+    thread_safe do
+      self.class.new.tap do |duplicate|
+        commands.each do |command|
+          duplicate.add_command(command.dup)
+        end
+      end
+    end
   end
 
   # @return [void]

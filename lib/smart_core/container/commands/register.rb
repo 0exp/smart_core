@@ -5,39 +5,49 @@ module SmartCore::Container::Commands
   # @since 0.5.0
   class Register < Base
     # @param dependency_name [String, Symbol]
-    # @param dependency [Proc, #call]
+    # @param dependency_definition [Proc]
     # @return [void]
+    #
+    # @see [SmartCore::Container::KeyGuard]
     #
     # @api private
     # @since 0.5.0
-    def initialize(dependency_name, dependency)
-      @dependency_name = dependency_name
-      @dependency = dependency
+    def initialize(dependency_name, dependency_definition)
+      SmartCore::Container::KeyGuard.prevent_incomparabilities!(dependency_name)
+
+      @dependency_name = dependency_name.to_s
+      @dependency_definition = dependency_definition
     end
 
-    # @param container [SmartCore::Container]
+    # @param registry [SmartCore::Container::Registry]
     # @return [void]
     #
     # @api private
     # @since 0.5.0
-    def call(container)
-      # TODO: падаем, если перекрываем нэймспэйс
-      # TODO: не падаем, если пытаемся перерзарегать существуюущую зависимость
-      container.register(dependency_name, dependency)
+    def call(registry)
+      registry.register(dependency_name, &dependency_definition)
+    end
+
+    # @return [SmartCore::Container::Commands::Register]
+    #
+    # @api private
+    # @since 0.5.0
+    def dup
+      self.class.new(dependency_name, dependency_definition)
     end
 
     private
-
-    # @return [Proc, #call]
-    #
-    # @api private
-    # @since 0.5.0
-    attr_reader :dependency
 
     # @return [String, Symbol]
     #
     # @api private
     # @since 0.5.0
     attr_reader :dependency_name
+
+    # @return [Proc]
+    #
+    # @api private
+    # @since 0.5.0
+    attr_reader :dependency_definition
   end
 end
