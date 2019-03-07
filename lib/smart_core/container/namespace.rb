@@ -9,6 +9,8 @@ class SmartCore::Container::Namespace < SmartCore::Container::Entity
   # @since 0.5.0
   def initialize
     @container = Class.new(SmartCore::Container)
+    @container_instance = nil
+    @access_lock = Mutex.new
   end
 
   # @param dependency_definitions [Proc]
@@ -25,8 +27,7 @@ class SmartCore::Container::Namespace < SmartCore::Container::Entity
   # @api private
   # @since 0.5.0
   def call
-    # TODO: add memoization abilities
-    container.new
+    thread_safe { @container_instance ||= container.new }
   end
 
   private
@@ -36,4 +37,13 @@ class SmartCore::Container::Namespace < SmartCore::Container::Entity
   # @api private
   # @since 0.5.0
   attr_reader :container
+
+  # @param block [Proc]
+  # @return [Any]
+  #
+  # @api private
+  # @since 0.5.0
+  def thread_safe(&block)
+    @access_lock.synchronize(&block)
+  end
 end
