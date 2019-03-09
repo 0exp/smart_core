@@ -30,7 +30,7 @@ describe SmartCore::Container do
     class AnyObject
       include SmartCore::Container::Mixin
 
-      define_dependencies do
+      dependencies do
         namespace :kek do
           register(:pek) { "test" }
           register(:fek) { 2 }
@@ -39,7 +39,7 @@ describe SmartCore::Container do
     end
 
     class SuperAnyObject < AnyObject
-      define_dependencies do
+      dependencies do
         namespace :kek do
           register(:pek) { "super_test" }
           register(:chmek) { nil }

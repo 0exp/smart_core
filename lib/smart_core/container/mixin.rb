@@ -49,7 +49,7 @@ module SmartCore::Container::Mixin
     #
     # @api public
     # @since 0.5.0
-    def define_dependencies(&block)
+    def dependencies(&block)
       @__smart_core_container_definition_lock__.synchronize do
         @__smart_core_container_klass__.instance_eval(&block) if block_given?
       end
