@@ -22,13 +22,16 @@ class SmartCore::Container::Registry
   end
 
   # @param name [String, Symbol]
+  # @param options [Hash<Symbol,Any>]
   # @param dependency_definition [Block]
   # @return [void]
   #
+  # @todo option list
+  #
   # @api private
   # @since 0.5.0
-  def register(name, &dependency_definition)
-    thread_safe { append_dependency(name, dependency_definition) }
+  def register(name, **options, &dependency_definition)
+    thread_safe { append_dependency(name, dependency_definition, **options) }
   end
 
   # @param name [String, Symbol]
@@ -70,13 +73,15 @@ class SmartCore::Container::Registry
 
   # @param dependency_name [String, Symbol]
   # @param dependency_definition [Proc]
+  # @param options [Hash<Symbol,Any>]
   # @return [void]
   #
+  # @todo option list
   # @raise [SmartCore::Container::NamespaceOverlapError]
   #
   # @api private
   # @since 0.5.0
-  def append_dependency(dependency_name, dependency_definition)
+  def append_dependency(dependency_name, dependency_definition, **options)
     name = indifferently_accessable_name(dependency_name)
 
     raise(
@@ -84,7 +89,7 @@ class SmartCore::Container::Registry
       "Trying to overlap already registered namespace with #{name} name!"
     ) if has_namespace?(name)
 
-    dependency = SmartCore::Container::Dependency.new(dependency_definition)
+    dependency = SmartCore::Container::DependencyBuilder.build(dependency_definition, **options)
     registry[name] = dependency
   end
 

@@ -49,14 +49,17 @@ module SmartCore::Container::DefinitionDSL
     end
 
     # @param dependency_name [String, Symbol]
+    # @param options [Hash<Symbol,Any>]
     # @param dependency_definition [Proc]
     # @return [void]
     #
+    # @todo option list
+    #
     # @api public
     # @since 0.5.0
-    def register(dependency_name, &dependency_definition)
+    def register(dependency_name, **options, &dependency_definition)
       __commands__ << SmartCore::Container::Commands::Register.new(
-        dependency_name, dependency_definition
+        dependency_name, dependency_definition, **options
       )
     end
   end

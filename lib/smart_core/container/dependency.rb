@@ -7,6 +7,8 @@ class SmartCore::Container::Dependency < SmartCore::Container::Entity
   # @param options [Hash<Symbol,Any>]
   # @return [void]
   #
+  # @todo option list
+  #
   # @api private
   # @since 0.5.0
   def initialize(dependency_definition, **options)
@@ -19,7 +21,6 @@ class SmartCore::Container::Dependency < SmartCore::Container::Entity
   # @api private
   # @since 0.5.0
   def call
-    # TODO: support for memoization
     thread_safe { dependency_definition.call }
   end
 
@@ -30,12 +31,6 @@ class SmartCore::Container::Dependency < SmartCore::Container::Entity
   # @api private
   # @since 0.5.0
   attr_reader :dependency_definition
-
-  # @return [Boolean]
-  #
-  # @api private
-  # @since 0.5.0
-  attr_reader :memoize
 
   # @param block [Proc]
   # @return [Any]

@@ -9,7 +9,9 @@ class SmartCore::Container
   require_relative 'container/key_guard'
   require_relative 'container/entity'
   require_relative 'container/dependency'
+  require_relative 'container/memoized_dependency'
   require_relative 'container/namespace'
+  require_relative 'container/dependency_builder'
   require_relative 'container/registry'
   require_relative 'container/definition_dsl'
   require_relative 'container/registry_builder'
@@ -28,13 +30,16 @@ class SmartCore::Container
   end
 
   # @param dependency_name [String, Symbol]
+  # @param options [Hash<Symbol,Any>]
   # @param dependency_definition [Block]
   # @return [void]
   #
+  # @todo option list
+  #
   # @api private
   # @since 0.5.0
-  def register(dependency_name, &dependency_definition)
-    registry.register(dependency_name, &dependency_definition)
+  def register(dependency_name, **options, &dependency_definition)
+    registry.register(dependency_name, **options, &dependency_definition)
   end
 
   # @param namespace_name [String, Symbol]
