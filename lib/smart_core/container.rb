@@ -18,6 +18,8 @@ class SmartCore::Container
   require_relative 'container/dependency_resolver'
   require_relative 'container/mixin'
 
+  # TODO: support for #freeze!
+
   # @since 0.5.0
   include DefinitionDSL
 
@@ -26,7 +28,8 @@ class SmartCore::Container
   # @api public
   # @since 0.5.0
   def initialize
-    @registry = RegistryBuilder.build(self.class.__commands__)
+    build_registry
+    @access_lock = Mutex.new
   end
 
   # @param dependency_name [String, Symbol]
@@ -39,7 +42,9 @@ class SmartCore::Container
   # @api private
   # @since 0.5.0
   def register(dependency_name, **options, &dependency_definition)
-    registry.register(dependency_name, **options, &dependency_definition)
+    thread_safe do
+      registry.register(dependency_name, **options, &dependency_definition)
+    end
   end
 
   # @param namespace_name [String, Symbol]
@@ -49,7 +54,9 @@ class SmartCore::Container
   # @api private
   # @since 0.5.0
   def namespace(namespace_name, &dependency_definitions)
-    registry.namespace(namespace_name, &dependency_definitions)
+    thread_safe do
+      registry.namespace(namespace_name, &dependency_definitions)
+    end
   end
 
   # @param dependency_path [String, Symbol]
@@ -58,7 +65,17 @@ class SmartCore::Container
   # @api public
   # @since 0.5.0
   def resolve(dependency_path)
-    DependencyResolver.resolve(registry, dependency_path)
+    thread_safe do
+      DependencyResolver.resolve(registry, dependency_path)
+    end
+  end
+
+  # @return [void]
+  #
+  # @api public
+  # @since 0.5.0
+  def reload!
+    thread_safe { build_registry }
   end
 
   private
@@ -68,4 +85,21 @@ class SmartCore::Container
   # @api private
   # @since 0.5.0
   attr_reader :registry
+
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def build_registry
+    @registry = RegistryBuilder.build(self.class.__commands__)
+  end
+
+  # @param block [Proc]
+  # @return [Any]
+  #
+  # @api private
+  # @since 0.5.0
+  def thread_safe(&block)
+    @access_lock.synchronize(&block)
+  end
 end

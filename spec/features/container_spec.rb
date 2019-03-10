@@ -4,7 +4,7 @@ describe SmartCore::Container do
   specify do
     class Container < SmartCore::Container
       namespace :kek do
-        register(:pek) { 123 + 123 }
+        register(:pek, memoize: true) { 123 + 123 }
         register(:check) { 555 }
       end
     end
@@ -17,6 +17,7 @@ describe SmartCore::Container do
       namespace :kek do
         namespace :bek do
           register(:lol) { "lol" }
+          register(:rand, memoize: true) { rand(5000) }
         end
       end
     end
@@ -26,6 +27,13 @@ describe SmartCore::Container do
     expect(sub_container.resolve(:kek).resolve(:bek).resolve(:lol)).to eq("lol")
     expect(sub_container.resolve(:kek).resolve(:pek)).to eq(246)
     expect(sub_container.resolve(:kek).resolve(:check)).to eq(555)
+
+    memoized_value = sub_container.resolve(:kek).resolve(:bek).resolve(:rand)
+    expect(sub_container.resolve(:kek).resolve(:bek).resolve(:rand)).to eq(memoized_value)
+
+    # RELOAD 8-O
+    sub_container.reload!
+    expect(sub_container.resolve(:kek).resolve(:bek).resolve(:rand)).not_to eq(memoized_value)
 
     class AnyObject
       include SmartCore::Container::Mixin
