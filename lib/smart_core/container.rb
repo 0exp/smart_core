@@ -19,6 +19,8 @@ class SmartCore::Container
   require_relative 'container/mixin'
 
   # TODO: support for #freeze!
+  # TODO: container composition
+  # TODO: #merge / #merge!
 
   # @since 0.5.0
   include DefinitionDSL
