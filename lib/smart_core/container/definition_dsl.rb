@@ -11,7 +11,7 @@ module SmartCore::Container::DefinitionDSL
     # @since 0.5.0
     def included(base_klass)
       base_klass.instance_variable_set(:@__commands__, SmartCore::Container::CommandSet.new)
-      base_klass.singleton_class.attr_reader :__commands__
+      base_klass.singleton_class.send(:attr_reader, :__commands__)
       base_klass.extend(ClassMethods)
       base_klass.singleton_class.prepend(ClassInheritance)
     end
