@@ -25,14 +25,22 @@ require 'smart_core'
 #### Completed abstractions:
 
 - [**Dependency Container**](#dependency-container) (`SmartCore::Container`)
+  - realized as an instance;
+  - an ability to use as a mixin `SmartCore::Container::Mixin` (shared container instance between class and it's instances);
+  - inheritance works as expected `:)`;
+  - thread safe;
+  - no external dependencies;
 - [**Initialization DSL**](#initialization-dsl) (`SmartCore::Initializer`)
+  - support for positional attributes;
+  - support for options with default values;
+  - exceptional behaviour;
+  - no external dependencies;
 - [**Operation Object**](#operation-object) (aka `Service Object`) (`SmartCore::Operation`)
   - attribute definition DSL (`param`, `option`, `params`, `options`);
   - yieldable result object abstraction (`Success`, `Failure`, `Fatal`, `#success?`, `#failure?`, `#fatal?`);
   - yieldable `#call` (and `.call`);
   - inheritance works as expected `:)`;
-  - no dependencies;
-
+  - no external dependencies;
 - [**Validation Object**](#validation-object) (`SmartCore::Validator`)
   - support for nested validations;
   - inheritance works as expected `:)`;
@@ -40,7 +48,7 @@ require 'smart_core'
   - `#fatal` - adds an error code and stops the current method execution flow;
   - command-style DSL;
   - thread-safe;
-  - no dependencies;
+  - no external dependencies;
 
 ---
 
@@ -48,8 +56,23 @@ require 'smart_core'
 
 ```ruby
 class Container < SmartCore::Container
-  # sooon...
+  namespace :serialization do
+    register(:json) { JsonSerializer }
+    register(:hash) { HashSerializer }
+  end
+
+  register(:random) { SecureRandom }
+
+  # soon...
 end
+
+container = Container.new
+container.resolve(:serialization).resolve(:json) # => JsonSerializer
+container.register(:random) { Random.new }
+container.resolve(:random) # => #<Random:0x00007f89d486b680>
+
+# soon: container.resolve('serialization.json')
+# soon: container.register('serialization.json') { ... }
 ```
 
 #### Initialization DSL
@@ -58,8 +81,16 @@ end
 class Structure
   include SmartCore::Initializer
 
+  param :password
+  param :nickname
+
+  option :admin,     default: false
+  option :timestamp, default: -> { Time.now }
+
   # soon...
 end
+
+Structure.new('test123', '0exp', admin: true)
 ```
 
 #### Operation Object
