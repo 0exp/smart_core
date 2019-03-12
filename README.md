@@ -30,7 +30,11 @@ require 'smart_core'
   - inheritance works as expected `:)`;
   - thread safe;
   - no external dependencies;
+- [**Dependency Injection**](#dependency-injection) (`SmartCore::Injector`)
+  - wowowowowowowow :O
 - [**Initialization DSL**](#initialization-dsl) (`SmartCore::Initializer`)
+  - define smart constructors `:)`;
+  - attribute definition DSL (`param`, `option`, `params`, `options`);
   - support for positional attributes;
   - support for options with default values;
   - exceptional behaviour;

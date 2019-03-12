@@ -29,7 +29,7 @@ module SmartCore::Container::DefinitionDSL
       child_klass.instance_variable_set(:@__commands__, SmartCore::Container::CommandSet.new)
       child_klass.__commands__.concat(__commands__)
       child_klass.singleton_class.prepend(ClassInheritance)
-      super(child_klass)
+      super
     end
   end
 
