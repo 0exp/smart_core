@@ -4,8 +4,6 @@
 # @since 0.2.0
 class SmartCore::Operation
   require_relative 'operation/exceptions'
-  require_relative 'operation/attribute'
-  require_relative 'operation/attribute_set'
   require_relative 'operation/step'
   require_relative 'operation/step_set'
   require_relative 'operation/result'
@@ -13,11 +11,14 @@ class SmartCore::Operation
   require_relative 'operation/failure'
   require_relative 'operation/fatal'
   require_relative 'operation/instance_builder'
-  require_relative 'operation/attribute_definer'
-  require_relative 'operation/initialization_dsl'
 
-  # @since 0.2.0
-  include InitializationDSL
+  # @since 0.5.0
+  include SmartCore::Initializer
+
+  # @since 0.5.0
+  extend_initialization_flow do |operation|
+    SmartCore::Operation::InstanceBuilder.call(operation)
+  end
 
   class << self
     # @param arguments [Any]
