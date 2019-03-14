@@ -70,28 +70,28 @@ describe SmartCore::Operation do
           param :email
           option :email
         end
-      end.to raise_error(SmartCore::Operation::ParamOverlapError)
+      end.to raise_error(SmartCore::Initializer::ParamOverlapError)
 
       expect do
         Class.new(SmartCore::Operation) do
           option :email
           param :email
         end
-      end.to raise_error(SmartCore::Operation::OptionOverlapError)
+      end.to raise_error(SmartCore::Initializer::OptionOverlapError)
 
       expect do
         Class.new(SmartCore::Operation) do
           params :email, :password
           options :nickname, :password
         end
-      end.to raise_error(SmartCore::Operation::ParamOverlapError)
+      end.to raise_error(SmartCore::Initializer::ParamOverlapError)
 
       expect do
         Class.new(SmartCore::Operation) do
           options :nickname, :password
           params :email, :password
         end
-      end.to raise_error(SmartCore::Operation::OptionOverlapError)
+      end.to raise_error(SmartCore::Initializer::OptionOverlapError)
     end
 
     specify 'fails when the required attribute is not passed' do
@@ -104,10 +104,10 @@ describe SmartCore::Operation do
         option :age, default: -> { 1 + 2 }
       end
 
-      expect { SimpleOp.new }.to raise_error(SmartCore::Operation::ParameterError)
-      expect { SimpleOp.new('0exp') }.to raise_error(SmartCore::Operation::ParameterError)
-      expect { SimpleOp.new('0exp', 'test') }.to raise_error(SmartCore::Operation::OptionError)
-      expect { SimpleOp.new(active: false) }.to raise_error(SmartCore::Operation::ParameterError)
+      expect { SimpleOp.new }.to raise_error(SmartCore::Initializer::ParameterError)
+      expect { SimpleOp.new('0exp') }.to raise_error(SmartCore::Initializer::ParameterError)
+      expect { SimpleOp.new('0exp', 'test') }.to raise_error(SmartCore::Initializer::OptionError)
+      expect { SimpleOp.new(active: false) }.to raise_error(SmartCore::Initializer::ParameterError)
       expect { SimpleOp.new('0exp', 'test', active: false) }.not_to raise_error
       expect { SimpleOp.new('0exp', 'test', active: true, admin: true) }.not_to raise_error
       expect { SimpleOp.new('0exp', 'test', active: true, admin: false, age: 1) }.not_to raise_error
@@ -118,25 +118,25 @@ describe SmartCore::Operation do
         Class.new(SmartCore::Operation) do
           param 123
         end
-      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+      end.to raise_error(SmartCore::Initializer::IncorrectAttributeNameError)
 
       expect do
         Class.new(SmartCore::Operation) do
           option Object.new
         end
-      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+      end.to raise_error(SmartCore::Initializer::IncorrectAttributeNameError)
 
       expect do
         Class.new(SmartCore::Operation) do
           params :a, :b, 555
         end
-      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+      end.to raise_error(SmartCore::Initializer::IncorrectAttributeNameError)
 
       expect do
         Class.new(SmartCore::Operation) do
           options :a, :b, {}
         end
-      end.to raise_error(SmartCore::Operation::IncorrectAttributeNameError)
+      end.to raise_error(SmartCore::Initializer::IncorrectAttributeNameError)
     end
 
     specify 'inheritance works as expected :)' do

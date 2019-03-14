@@ -42,6 +42,7 @@ class SmartCore::Initializer::InstanceBuilder
       initialize_parameters
       initialize_options
       call_original_methods
+      invoke_additional_initialization_steps
     end
   end
 
@@ -135,6 +136,16 @@ class SmartCore::Initializer::InstanceBuilder
       option_value = options.fetch(option_name) { option.default_value }
 
       processed_object.instance_variable_set("@#{option_name}", option_value)
+    end
+  end
+
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def invoke_additional_initialization_steps
+    processed_klass.__initialization_extensions__.each do |extension|
+      extension.call(processed_object)
     end
   end
 

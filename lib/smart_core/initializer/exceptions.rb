@@ -24,4 +24,8 @@ module SmartCore::Initializer
   # @api public
   # @since 0.5.0
   OptionOverlapError = Class.new(OptionError)
+
+  # @api public
+  # @since 0.5.0
+  IncorrectAttributeNameError = Class.new(Error)
 end

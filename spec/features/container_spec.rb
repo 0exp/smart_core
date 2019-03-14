@@ -16,7 +16,7 @@ describe SmartCore::Container do
     class SubContainer < Container
       namespace :kek do
         namespace :bek do
-          register(:lol) { "lol" }
+          register(:lol) { 'lol' }
           register(:rand, memoize: true) { rand(5000) }
         end
       end
@@ -24,7 +24,7 @@ describe SmartCore::Container do
 
     sub_container = SubContainer.new
 
-    expect(sub_container.resolve(:kek).resolve(:bek).resolve(:lol)).to eq("lol")
+    expect(sub_container.resolve(:kek).resolve(:bek).resolve(:lol)).to eq('lol')
     expect(sub_container.resolve(:kek).resolve(:pek)).to eq(246)
     expect(sub_container.resolve(:kek).resolve(:check)).to eq(555)
 
@@ -40,7 +40,7 @@ describe SmartCore::Container do
 
       dependencies do
         namespace :kek do
-          register(:pek) { "test" }
+          register(:pek) { 'test' }
           register(:fek) { 2 }
         end
       end
@@ -49,7 +49,7 @@ describe SmartCore::Container do
     class SuperAnyObject < AnyObject
       dependencies do
         namespace :kek do
-          register(:pek) { "super_test" }
+          register(:pek) { 'super_test' }
           register(:chmek) { nil }
         end
       end
@@ -58,11 +58,11 @@ describe SmartCore::Container do
     any_object = AnyObject.new
     super_any_object = SuperAnyObject.new
 
-    expect(any_object.container.resolve(:kek).resolve(:pek)).to eq("test")
-    expect(AnyObject.container.resolve(:kek).resolve(:pek)).to eq("test")
+    expect(any_object.container.resolve(:kek).resolve(:pek)).to eq('test')
+    expect(AnyObject.container.resolve(:kek).resolve(:pek)).to eq('test')
 
-    expect(super_any_object.container.resolve(:kek).resolve(:pek)).to eq("super_test")
-    expect(SuperAnyObject.container.resolve(:kek).resolve(:pek)).to eq("super_test")
+    expect(super_any_object.container.resolve(:kek).resolve(:pek)).to eq('super_test')
+    expect(SuperAnyObject.container.resolve(:kek).resolve(:pek)).to eq('super_test')
 
     expect(super_any_object.container.resolve(:kek).resolve(:fek)).to eq(2)
     expect(SuperAnyObject.container.resolve(:kek).resolve(:fek)).to eq(2)

@@ -7,6 +7,9 @@ module SmartCore::Initializer
   require_relative 'initializer/attribute'
   require_relative 'initializer/attribute_set'
   require_relative 'initializer/attribute_definer'
+  require_relative 'initializer/extension'
+  require_relative 'initializer/extension_set'
+  require_relative 'initializer/extension_definer'
   require_relative 'initializer/instance_builder'
   require_relative 'initializer/initialization_dsl'
 

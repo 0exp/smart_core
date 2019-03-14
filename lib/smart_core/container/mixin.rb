@@ -9,11 +9,13 @@ module SmartCore::Container::Mixin
     #
     # @api private
     # @since 0.5.0
-    def included(base_klass) # rubocop:disable Metrics/LineLength
+    def included(base_klass)
+      # rubocop:disable Metrics/LineLength
       base_klass.instance_variable_set(:@__smart_core_container_access_lock__, Mutex.new)
       base_klass.instance_variable_set(:@__smart_core_container_definition_lock__, Mutex.new)
       base_klass.instance_variable_set(:@__smart_core_container_klass__, Class.new(SmartCore::Container))
       base_klass.instance_variable_set(:@__smart_core_container__, nil)
+      # rubocop:enable Metrics/LineLength
 
       base_klass.extend(ClassMethods)
       base_klass.include(InstanceMethods)
@@ -29,7 +31,7 @@ module SmartCore::Container::Mixin
     #
     # @api private
     # @since 0.5.0
-    def inherited(child_klass) # rubocop:disable Metrics/LineLength
+    def inherited(child_klass)
       inherited_container_klass = Class.new(@__smart_core_container_klass__)
 
       child_klass.instance_variable_set(:@__smart_core_container_access_lock__, Mutex.new)

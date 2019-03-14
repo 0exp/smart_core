@@ -11,12 +11,17 @@ module SmartCore::Initializer
       # @api private
       # @since 0.5.0
       def included(base_klass) # rubocop:disable Metrics/AbcSize
-        base_klass.extend(DSLMethods)
-        base_klass.singleton_class.prepend(InitializationMethods)
-
+        # rubocop:disable Metrics/LineLength
+        base_klass.instance_variable_set(:@__initialization_extension_definer__, ExtensionDefiner.new(base_klass))
+        base_klass.instance_variable_set(:@__initialization_extensions__, ExtensionSet.new)
         base_klass.instance_variable_set(:@__attr_definer__, AttributeDefiner.new(base_klass))
         base_klass.instance_variable_set(:@__params__, AttributeSet.new)
         base_klass.instance_variable_set(:@__options__, AttributeSet.new)
+        # rubocop:enable Metrics/LineLength
+
+        base_klass.extend(ClassMethods)
+        base_klass.extend(DSLMethods)
+        base_klass.singleton_class.prepend(InitializationMethods)
 
         base_klass.singleton_class.prepend(Module.new do
           # @param child_klass [Class]
@@ -24,13 +29,18 @@ module SmartCore::Initializer
           #
           # @api private
           # @since 0.5.0
-          def inherited(child_klass)
-            child_klass.singleton_class.prepend(InitializationMethods)
-
+          def inherited(child_klass) # rubocop:disable Metrics/AbcSize
+            # rubocop:disable Metrics/LineLength
+            child_klass.instance_variable_set(:@__initialization_extension_definer__, ExtensionDefiner.new(child_klass))
+            child_klass.instance_variable_set(:@__initialization_extensions__, ExtensionSet.new)
             child_klass.instance_variable_set(:@__attr_definer__, AttributeDefiner.new(child_klass))
             child_klass.instance_variable_set(:@__params__, AttributeSet.new)
             child_klass.instance_variable_set(:@__options__, AttributeSet.new)
+            # rubocop:enable Metrics/LineLength
 
+            child_klass.singleton_class.prepend(InitializationMethods)
+
+            child_klass.__initialization_extensions__.concat(__initialization_extensions__)
             child_klass.__params__.concat(__params__)
             child_klass.__options__.concat(__options__)
 
@@ -53,6 +63,50 @@ module SmartCore::Initializer
         allocate.tap do |object|
           InstanceBuilder.call(object, self, parameters, options)
         end
+      end
+    end
+
+    # @api private
+    # @since 0.5.0
+    module ClassMethods
+      # @return [SmartCore::Initializer::AttributeSet]
+      #
+      # @api private
+      # @since 0.5.0
+      def __params__
+        @__params__
+      end
+
+      # @return [SmartCore::Initializer::AttributeSet]
+      #
+      # @api private
+      # @since 0.5.0
+      def __options__
+        @__options__
+      end
+
+      # @return [SmartCore::Initializer::AttributeDefiner]
+      #
+      # @api private
+      # @since 0.5.0
+      def __attr_definer__
+        @__attr_definer__
+      end
+
+      # @return [SmartCore::Initializer::ExtensionSet]
+      #
+      # @api private
+      # @since 0.5.0
+      def __initialization_extensions__
+        @__initialization_extensions__
+      end
+
+      # @return [SmartCore::Initializer::ExtensionDefiner]
+      #
+      # @api private
+      # @since 0.5.0
+      def __initialization_extension_definer__
+        @__initialization_extension_definer__
       end
     end
 
@@ -97,28 +151,13 @@ module SmartCore::Initializer
         __attr_definer__.define_options(*option_names)
       end
 
-      # @return [SmartCore::Initializer::AttributeSet]
+      # @param block [Proc]
+      # @return [void]
       #
-      # @api private
+      # @api public
       # @since 0.5.0
-      def __params__
-        @__params__
-      end
-
-      # @return [SmartCore::Initializer::AttributeSet]
-      #
-      # @api private
-      # @since 0.5.0
-      def __options__
-        @__options__
-      end
-
-      # @return [SmartCore::Initializer::AttributeDefiner]
-      #
-      # @api private
-      # @since 0.5.0
-      def __attr_definer__
-        @__attr_definer__
+      def extend_initialization_flow(&block)
+        __initialization_extension_definer__.append_extension(block)
       end
     end
   end
