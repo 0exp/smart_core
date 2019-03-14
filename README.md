@@ -77,6 +77,24 @@ container.resolve(:random) # => #<Random:0x00007f89d486b680>
 
 # soon: container.resolve('serialization.json')
 # soon: container.register('serialization.json') { ... }
+
+class SimpleService
+  include SmartCore::Container::Mixin
+
+  define_dependencies do
+    register(:randomizer) { Random.new }
+  end
+
+  def call
+    container.resolve(:randomizer).rand
+  end
+end
+
+SimpleService.container # => #<SmartCore::Container:0x1111111111111111>
+service = SimpleService.new
+service.container # => (same) #<SmartCore::Container:0x1111111111111111>
+
+service.call # => 0.5397305740865393
 ```
 
 #### Initialization DSL
