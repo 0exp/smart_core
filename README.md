@@ -35,6 +35,7 @@ require 'smart_core'
 - [**Initialization DSL**](#initialization-dsl) (`SmartCore::Initializer`)
   - defines smart and robust constructors `:)`;
   - attribute definition DSL (`param`, `option`, `params`, `options`);
+  - support for type annotations and type checking;
   - support for positional attributes;
   - support for options with default values;
   - exceptional behaviour;
@@ -103,16 +104,28 @@ service.call # => 0.5397305740865393
 class Structure
   include SmartCore::Initializer
 
-  param :password
-  param :nickname
+  param :password, :string # NOTE: type is optional
+  param :nickname, :string
 
-  option :admin,     default: false
+  option :admin, :boolean, default: false
   option :timestamp, default: -> { Time.now }
 
   # soon...
 end
 
 Structure.new('test123', '0exp', admin: true)
+
+SmartCore::Initializer.register_type(:time) do |value|
+  value.is_a?(Time) || value.is_a?(Date)
+end
+
+class AnotherStructure
+  include SmartCore::Initializer
+
+  param :registration_time, :time
+end
+
+AnotherStructure.new('no_time') # => SmartCore::Initializer::ArgumentError
 ```
 
 #### Operation Object
