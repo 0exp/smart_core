@@ -1,6 +1,22 @@
 # frozen_string_literal: true
 
 describe SmartCore::Operation do
+  specify do
+    class MegaKruto < SmartCore::Operation
+      param :email, :string
+      param :age, :integer
+
+      option :kek, :string
+      option :pek, :string, default: 123
+    end
+
+    expect { MegaKruto.new(1, 'test', kek: '1', pek: '7') }.to raise_error(SmartCore::Initializer::ArgumentError)
+    expect { MegaKruto.new('1', '1', kek: '2', pek: '7') }.to raise_error(SmartCore::Initializer::ArgumentError)
+    expect { MegaKruto.new('1', 1, kek: 1, pek: '7') }.to raise_error(SmartCore::Initializer::ArgumentError)
+    expect { MegaKruto.new('1', 1, kek: '1') }.to raise_error(SmartCore::Initializer::ArgumentError)
+    expect { MegaKruto.new('1', 1, kek: '1', pek: '7') }.not_to raise_error
+  end
+
   describe 'attribute definition DSL and service instantiation' do
     specify 'single attribute definition' do
       class SingleAttrOp < SmartCore::Operation

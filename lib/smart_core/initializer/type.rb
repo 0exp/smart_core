@@ -17,11 +17,11 @@ class SmartCore::Initializer::Type
   # @since 0.5.0
   def initialize(name, checker)
     unless name.is_a?(String) || name.is_a?(Symbol)
-      raise(SmartCore::Initializer::ArgumentError, "Type name should be a symbol or a string")
+      raise(SmartCore::Initializer::ArgumentError, 'Type name should be a symbol or a string')
     end
 
     unless checker.is_a?(Proc)
-      raise(SmartCore::Initializer::ArgumentError, "Checker should be a proc")
+      raise(SmartCore::Initializer::ArgumentError, 'Checker should be a proc')
     end
 
     @name = name.to_sym
