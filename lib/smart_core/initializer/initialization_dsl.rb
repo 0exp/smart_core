@@ -119,8 +119,8 @@ module SmartCore::Initializer
       #
       # @api public
       # @since 0.5.0
-      def param(param_name, **options)
-        __attr_definer__.define_param(param_name, **options)
+      def param(param_name, type = :any, **options)
+        __attr_definer__.define_param(param_name, type, **options)
       end
 
       # @param param_names [Array<String, Symbol>]
@@ -138,8 +138,8 @@ module SmartCore::Initializer
       #
       # @api public
       # @since 0.5.0
-      def option(option_name, **options)
-        __attr_definer__.define_option(option_name, **options)
+      def option(option_name, type = :any, **options)
+        __attr_definer__.define_option(option_name, type, **options)
       end
 
       # @param option_names [Array<String, Symbol>]

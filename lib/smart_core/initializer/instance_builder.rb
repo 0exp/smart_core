@@ -118,11 +118,12 @@ class SmartCore::Initializer::InstanceBuilder
   # @api private
   # @since 0.5.0
   def initialize_parameters
-    parameter_names = processed_klass.__params__.map(&:name)
-    parameter_pairs = Hash[parameter_names.zip(parameters)]
+    parameter_objects = processed_klass.__params__
+    parameter_pairs   = Hash[parameter_objects.zip(parameters)]
 
-    parameter_pairs.each_pair do |parameter_name, parameter_value|
-      processed_object.instance_variable_set("@#{parameter_name}", parameter_value)
+    parameter_pairs.each_pair do |parameter_object, parameter_value|
+      parameter_object.validate_value_type!(parameter_value)
+      processed_object.instance_variable_set("@#{parameter_object.name}", parameter_value)
     end
   end
 
@@ -133,7 +134,9 @@ class SmartCore::Initializer::InstanceBuilder
   def initialize_options
     processed_klass.__options__.each do |option|
       option_name  = option.name
-      option_value = options.fetch(option_name) { option.default_value }
+      option_value = options.fetch(option_name) { option.default_value }.tap do |value|
+        option.validate_value_type!(value)
+      end
 
       processed_object.instance_variable_set("@#{option_name}", option_value)
     end

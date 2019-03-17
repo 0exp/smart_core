@@ -73,4 +73,6 @@ module SmartCore::Initializer
   register_type(:big_decimal) { |value| value.is_a?(BigDecimal) }
   # @since 0.5.0
   register_type(:class) { |value| value.is_a?(Class) }
+  # @since 0.5.0
+  register_type(:any) { true }
 end

@@ -14,13 +14,14 @@ class SmartCore::Initializer::AttributeDefiner
   end
 
   # @param param_name [Symbol, String]
+  # @param param_type [String, Symbol]
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def define_param(param_name)
+  def define_param(param_name, param_type = :any)
     thread_safe do
-      parameter = build_attribute(param_name)
+      parameter = build_attribute(param_name, param_type)
       prevent_intersection_with_already_defined_option(parameter)
       append_parameter(parameter)
     end
@@ -44,13 +45,14 @@ class SmartCore::Initializer::AttributeDefiner
   end
 
   # @param option_name [Symbol, String]
+  # @param option_type [String, Symbol]
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def define_option(option_name, **options)
+  def define_option(option_name, option_type = :any, **options)
     thread_safe do
-      option = build_attribute(option_name, **options)
+      option = build_attribute(option_name, option_type, **options)
       prevent_intersection_with_already_defined_param(option)
       append_option(option)
     end
@@ -82,13 +84,18 @@ class SmartCore::Initializer::AttributeDefiner
   attr_reader :processed_klass
 
   # @param attribute_name [Symbol, String]
+  # @param attribute_type [String, Symbol]
   # @param attribute_options [Hash<Symbol,Any>]
   # @return [SmartCore::Initializer::Attribute]
   #
   # @api private
   # @since 0.5.0
-  def build_attribute(attribute_name, **attribute_options)
-    SmartCore::Initializer::Attribute.new(attribute_name, **attribute_options)
+  def build_attribute(attribute_name, attribute_type = :any, **attribute_options)
+    SmartCore::Initializer::Attribute.new(
+      attribute_name,
+      attribute_type,
+      **attribute_options
+    )
   end
 
   # @param parameter [SmartCore::Initializer::Attribute]

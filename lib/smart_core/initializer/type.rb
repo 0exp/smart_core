@@ -38,4 +38,12 @@ class SmartCore::Initializer::Type
   def comparable?(value)
     checker.call(value)
   end
+
+  private
+
+  # @return [Proc]
+  #
+  # @api private
+  # @since 0.5.0
+  attr_reader :checker
 end
