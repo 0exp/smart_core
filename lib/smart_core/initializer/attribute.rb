@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: refactor options (describe options explicitly0
+
 # @api private
 # @since 0.5.0
 class SmartCore::Initializer::Attribute
@@ -25,6 +27,7 @@ class SmartCore::Initializer::Attribute
   # @param type [String, Symbol] (see SmartCore::Initializer::TypeSet, SmartCore::Initializer::Type)
   # @param options [HAsh<Symbol,Any>] Supported options:
   #   - :default (see #default_value) (proc or object)
+  #   - :privacy - :private, :protected, :public (:public is used by default)
   # @return [void]
   #
   # @api private
