@@ -19,7 +19,7 @@ class SmartCore::Initializer::AttributeDefiner
   #
   # @api private
   # @since 0.5.0
-  def define_param(param_name, param_type = :any)
+  def define_param(param_name, param_type = :__any__)
     thread_safe do
       parameter = build_attribute(param_name, param_type)
       prevent_intersection_with_already_defined_option(parameter)
@@ -50,7 +50,7 @@ class SmartCore::Initializer::AttributeDefiner
   #
   # @api private
   # @since 0.5.0
-  def define_option(option_name, option_type = :any, **options)
+  def define_option(option_name, option_type = :__any__, **options)
     thread_safe do
       option = build_attribute(option_name, option_type, **options)
       prevent_intersection_with_already_defined_param(option)
@@ -90,7 +90,7 @@ class SmartCore::Initializer::AttributeDefiner
   #
   # @api private
   # @since 0.5.0
-  def build_attribute(attribute_name, attribute_type = :any, **attribute_options)
+  def build_attribute(attribute_name, attribute_type = :__any__, **attribute_options)
     SmartCore::Initializer::Attribute.new(
       attribute_name,
       attribute_type,

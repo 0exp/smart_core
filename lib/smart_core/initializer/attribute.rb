@@ -32,7 +32,7 @@ class SmartCore::Initializer::Attribute
   #
   # @api private
   # @since 0.5.0
-  def initialize(name, type = :any, **options)
+  def initialize(name, type = :__any__, **options)
     unless name.is_a?(Symbol) || name.is_a?(String)
       raise(
         SmartCore::Initializer::IncorrectAttributeNameError,
