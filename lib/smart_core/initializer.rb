@@ -16,6 +16,7 @@ module SmartCore::Initializer
   require_relative 'initializer/initialization_dsl'
 
   @__type_set__ = SmartCore::Initializer::TypeSet.new
+  # TODO: convertable attributes and converters (in typeset manner)
 
   class << self
     # @param child_klass [Class]
