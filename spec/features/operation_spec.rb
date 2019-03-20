@@ -18,7 +18,10 @@ describe SmartCore::Operation do
 
     service = MegaKruto.new('1', 1, kek: '1', pek: '7')
 
-    binding.pry
+    expect(service.email).to eq('1')
+    expect { service.age }.to raise_error(NoMethodError)
+    expect { service.kek }.to raise_error(NoMethodError)
+    expect(service.pek).to eq('7')
   end
 
   describe 'attribute definition DSL and service instantiation' do
