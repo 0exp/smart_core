@@ -19,9 +19,9 @@ class SmartCore::Initializer::AttributeDefiner
   #
   # @api private
   # @since 0.5.0
-  def define_param(param_name, param_type = :__any__)
+  def define_param(param_name, param_type = :__any__, **options)
     thread_safe do
-      parameter = build_attribute(param_name, param_type)
+      parameter = build_attribute(param_name, param_type, **options)
       prevent_intersection_with_already_defined_option(parameter)
       append_parameter(parameter)
     end
@@ -91,10 +91,8 @@ class SmartCore::Initializer::AttributeDefiner
   # @api private
   # @since 0.5.0
   def build_attribute(attribute_name, attribute_type = :__any__, **attribute_options)
-    SmartCore::Initializer::Attribute.new(
-      attribute_name,
-      attribute_type,
-      **attribute_options
+    SmartCore::Initializer::Attribute::Builder.build(
+      attribute_name, type: attribute_type, **attribute_options
     )
   end
 
@@ -106,6 +104,7 @@ class SmartCore::Initializer::AttributeDefiner
   def append_parameter(parameter)
     processed_klass.__params__ << parameter
     processed_klass.send(:attr_reader, parameter.name)
+    processed_klass.send(parameter.privacy, parameter.name)
   end
 
   # @param option [SmartCore::Initializer::Attribute]
@@ -116,6 +115,7 @@ class SmartCore::Initializer::AttributeDefiner
   def append_option(option)
     processed_klass.__options__ << option
     processed_klass.send(:attr_reader, option.name)
+    processed_klass.send(option.privacy, option.name)
   end
 
   # @param parameter [SmartCore::Initializer::Attribute]

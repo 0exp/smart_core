@@ -12,6 +12,15 @@ class SmartCore::Initializer::TypeSet
   end
 
   # @param name [String, Symbol]
+  # @return [Boolean]
+  #
+  # @api private
+  # @since 0.5.0
+  def has_type?(name)
+    types.key?(name)
+  end
+
+  # @param name [String, Symbol]
   # @param checker [Proc]
   # @return [void]
   #

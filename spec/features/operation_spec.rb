@@ -3,10 +3,10 @@
 describe SmartCore::Operation do
   specify do
     class MegaKruto < SmartCore::Operation
-      param :email, :string
-      param :age, :integer
+      param :email, :string, privacy: :default
+      param :age, :integer, privacy: :private
 
-      option :kek, :string
+      option :kek, :string, privacy: :protected
       option :pek, :string, default: 123
     end
 
@@ -15,6 +15,10 @@ describe SmartCore::Operation do
     expect { MegaKruto.new('1', 1, kek: 1, pek: '7') }.to raise_error(SmartCore::Initializer::ArgumentError)
     expect { MegaKruto.new('1', 1, kek: '1') }.to raise_error(SmartCore::Initializer::ArgumentError)
     expect { MegaKruto.new('1', 1, kek: '1', pek: '7') }.not_to raise_error
+
+    service = MegaKruto.new('1', 1, kek: '1', pek: '7')
+
+    binding.pry
   end
 
   describe 'attribute definition DSL and service instantiation' do

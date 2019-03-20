@@ -1,10 +1,21 @@
 # frozen_string_literal: true
 
-# TODO: refactor options (describe options explicitly0
-
 # @api private
 # @since 0.5.0
 class SmartCore::Initializer::Attribute
+  require_relative 'attribute/builder'
+
+  # @return [Hash<Symbol,Symbol>]
+  #
+  # @api private
+  # @since 0.5.0
+  PRIVACY_MODES = {
+    private:   :private,
+    protected: :protected,
+    public:    :public,
+    default:   :public,
+  }.freeze
+
   # @return [Symbol]
   #
   # @api private
@@ -17,6 +28,12 @@ class SmartCore::Initializer::Attribute
   # @since 0.5.0
   attr_reader :type
 
+  # @return [Symbol]
+  #
+  # @api private
+  # @since 0.5.0
+  attr_reader :privacy
+
   # @return [Hash<Symbol,Any>]
   #
   # @api private
@@ -24,25 +41,19 @@ class SmartCore::Initializer::Attribute
   attr_reader :options
 
   # @param name [String, Symbol]
-  # @param type [String, Symbol] (see SmartCore::Initializer::TypeSet, SmartCore::Initializer::Type)
+  # @param type [Symbol] (see SmartCore::Initializer::TypeSet, SmartCore::Initializer::Type)
+  # @param privacy [Symbol
   # @param options [HAsh<Symbol,Any>] Supported options:
   #   - :default (see #default_value) (proc or object)
-  #   - :privacy - :private, :protected, :public (:public is used by default)
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def initialize(name, type = :__any__, **options)
-    unless name.is_a?(Symbol) || name.is_a?(String)
-      raise(
-        SmartCore::Initializer::IncorrectAttributeNameError,
-        'Attribute name should be a symbol or a string'
-      )
-    end
-
+  def initialize(name, type, privacy, **options)
     @name = name
     @type = type
-    @options = options # TODO: check for unsupported options (and fail if found)
+    @privacy = privacy
+    @options = options
   end
 
   # @return [Boolean]
@@ -86,6 +97,6 @@ class SmartCore::Initializer::Attribute
   # @api private
   # @since 0.5.0
   def dup
-    self.class.new(name, **options)
+    self.class.new(name, type, privacy, **options)
   end
 end

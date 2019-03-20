@@ -38,6 +38,7 @@ require 'smart_core'
   - support for type annotations and type checking;
   - support for positional attributes;
   - support for options with default values;
+  - support for privacy declarations for attribute readers;
   - exceptional behaviour;
   - no external dependencies;
 - [**Operation Object**](#operation-object) (aka `Service Object`) (`SmartCore::Operation`)
@@ -105,9 +106,9 @@ class Structure
   include SmartCore::Initializer
 
   param :password, :string # NOTE: type is optional
-  param :nickname, :string
+  param :nickname, :string, privacy: :protected
 
-  option :admin, :boolean, default: false
+  option :admin, :boolean, default: false, privacy: :private
   option :timestamp, default: -> { Time.now }
 
   # soon...
