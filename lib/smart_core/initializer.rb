@@ -14,6 +14,7 @@ module SmartCore::Initializer
   require_relative 'initializer/type'
   require_relative 'initializer/type_set'
   require_relative 'initializer/initialization_dsl'
+  require_relative 'initializer/instance_attribute_accessing'
 
   @__type_set__ = SmartCore::Initializer::TypeSet.new
   # TODO: convertable attributes and converters (in typeset manner)
@@ -26,6 +27,7 @@ module SmartCore::Initializer
     # @since 0.5.0
     def included(child_klass)
       child_klass.include(InitializationDSL)
+      child_klass.include(InstanceAttributeAccessing)
     end
 
     # @param name [String, Symbol]

@@ -38,7 +38,7 @@ require 'smart_core'
   - support for type annotations and type checking;
   - support for positional attributes;
   - support for options with default values;
-  - support for privacy declarations for attribute readers;
+  - support for visibility declarations for attribute readers;
   - exceptional behaviour;
   - no external dependencies;
 - [**Operation Object**](#operation-object) (aka `Service Object`) (`SmartCore::Operation`)

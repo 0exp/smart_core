@@ -10,6 +10,7 @@ describe SmartCore::Operation do
       option :pek, :string, default: 123
     end
 
+    # type checking
     expect { MegaKruto.new(1, 'test', kek: '1', pek: '7') }.to raise_error(SmartCore::Initializer::ArgumentError)
     expect { MegaKruto.new('1', '1', kek: '2', pek: '7') }.to raise_error(SmartCore::Initializer::ArgumentError)
     expect { MegaKruto.new('1', 1, kek: 1, pek: '7') }.to raise_error(SmartCore::Initializer::ArgumentError)
@@ -18,10 +19,16 @@ describe SmartCore::Operation do
 
     service = MegaKruto.new('1', 1, kek: '1', pek: '7')
 
+    # attribute visibility
     expect(service.email).to eq('1')
     expect { service.age }.to raise_error(NoMethodError)
     expect { service.kek }.to raise_error(NoMethodError)
     expect(service.pek).to eq('7')
+
+    # parameter accessing
+    expect(service.params).to match(email: '1', age: 1)
+    expect(service.options).to match(kek: '1', pek: '7')
+    expect(service.attributes).to match(email: '1', age: 1, kek: '1', pek: '7')
   end
 
   describe 'attribute definition DSL and service instantiation' do
