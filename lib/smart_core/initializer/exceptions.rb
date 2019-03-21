@@ -31,5 +31,13 @@ module SmartCore::Initializer
 
   # @api public
   # @since 0.5.0
+  UnregisteredTypeError = Class.new(Error)
+
+  # @api public
+  # @since 0.5.0
+  UnsupportedAttributePrivacyError = Class.new(Error)
+
+  # @api public
+  # @since 0.5.0
   TypeError = Class.new(ArgumentError)
 end
