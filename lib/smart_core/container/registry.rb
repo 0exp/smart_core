@@ -12,6 +12,22 @@ class SmartCore::Container::Registry
     @registry = {}
   end
 
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def freeze
+    thread_safe { freeze_state }
+  end
+
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def frozen?
+    thread_safe { state_frozen? }
+  end
+
   # @param dependency_path [String, Symbol]
   # @return [SmartCore::Container::Namespace, SmartCore::Container::Dependnecy]
   #
@@ -31,7 +47,14 @@ class SmartCore::Container::Registry
   # @api private
   # @since 0.5.0
   def register(name, **options, &dependency_definition)
-    thread_safe { append_dependency(name, dependency_definition, **options) }
+    thread_safe do
+      raise(
+        SmartCore::Container::FrozenRegistryError,
+        'Can not modify frozen registry'
+      ) if state_frozen?
+
+      append_dependency(name, dependency_definition, **options)
+    end
   end
 
   # @param name [String, Symbol]
@@ -41,7 +64,14 @@ class SmartCore::Container::Registry
   # @api private
   # @since 0.5.0
   def namespace(name, &dependency_definitions)
-    thread_safe { append_namespace(name, dependency_definitions) }
+    thread_safe do
+      raise(
+        SmartCore::Container::FrozenRegistryError,
+        'Can not modify frozen registry'
+      ) if state_frozen?
+
+      append_namespace(name, dependency_definitions)
+    end
   end
 
   private
@@ -57,6 +87,22 @@ class SmartCore::Container::Registry
   # @api private
   # @since 0.5.0
   attr_reader :registry
+
+  # @return [Boolean]
+  #
+  # @api private
+  # @since 0.5.0
+  def state_frozen?
+    registry.frozen?
+  end
+
+  # @return [void]
+  #
+  # @api private
+  # @since 0.5.0
+  def freeze_state
+    registry.freeze
+  end
 
   # @paramm dependency_path [String, Symbol]
   # @return [SmartCore::Container::Namespace,]

@@ -18,7 +18,6 @@ class SmartCore::Container
   require_relative 'container/dependency_resolver'
   require_relative 'container/mixin'
 
-  # TODO: support for #freeze!
   # TODO: container composition
   # TODO: #merge / #merge!
 
@@ -41,7 +40,7 @@ class SmartCore::Container
   #
   # @todo option list
   #
-  # @api private
+  # @api public
   # @since 0.5.0
   def register(dependency_name, **options, &dependency_definition)
     thread_safe do
@@ -49,11 +48,27 @@ class SmartCore::Container
     end
   end
 
+  # @return [void]
+  #
+  # @api public
+  # @since 0.5.0
+  def freeze
+    thread_safe { registry.freeze }
+  end
+
+  # @return [Boolean]
+  #
+  # @api public
+  # @since 0.5.0
+  def frozen?
+    thread_safe { registry.frozen? }
+  end
+
   # @param namespace_name [String, Symbol]
   # @param dependency_definitions [Block]
   # @return [void]
   #
-  # @api private
+  # @api public
   # @since 0.5.0
   def namespace(namespace_name, &dependency_definitions)
     thread_safe do

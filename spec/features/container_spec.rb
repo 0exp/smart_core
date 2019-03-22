@@ -76,5 +76,13 @@ describe SmartCore::Container do
     expect { AnyObject.container.resolve(:kek).resolve(:chmek) }.to raise_error(
       SmartCore::Container::UnexistentDependencyError
     )
+
+    expect(sub_container.frozen?).to eq(false)
+    sub_container.freeze
+    expect(sub_container.frozen?).to eq(true)
+
+    expect { sub_container.register(:keka) { 123 } }.to raise_error(
+      SmartCore::Container::FrozenRegistryError
+    )
   end
 end
