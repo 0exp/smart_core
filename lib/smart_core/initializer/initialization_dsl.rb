@@ -52,19 +52,6 @@ module SmartCore::Initializer
 
     # @api private
     # @since 0.5.0
-    module InstanceAcessors
-      def parameters
-      end
-
-      def options
-      end
-
-      def attributes
-      end
-    end
-
-    # @api private
-    # @since 0.5.0
     module InitializationMethods
       # @param parameters [Any]
       # @param options [Hash<Symbol,Any>]
