@@ -129,7 +129,7 @@ class SmartCore::Initializer::AttributeDefiner
     if processed_klass.__options__.conflicts_with?(parameter)
       raise(
         SmartCore::Initializer::OptionOverlapError,
-        "You have already defined option with :#{parameter.name} name"
+        "You have already defined option with name :#{parameter.name}"
       )
     end
   end
@@ -145,7 +145,7 @@ class SmartCore::Initializer::AttributeDefiner
     if processed_klass.__params__.conflicts_with?(option)
       raise(
         SmartCore::Initializer::ParamOverlapError,
-        "You have already defined param with :#{option.name} name"
+        "You have already defined param with name :#{option.name}"
       )
     end
   end

@@ -35,12 +35,6 @@ class SmartCore::Operation
     end
   end
 
-  # @return [void]
-  #
-  # @api private
-  # @since 0.2.0
-  def initialize(*, **); end
-
   # @return [SmartCore::Operation::Success]
   # @return [SmartCore::Operation::Failure]
   # @return [SmartCore::Operation::Fatal]

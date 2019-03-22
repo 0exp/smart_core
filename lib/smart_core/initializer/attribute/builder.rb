@@ -50,11 +50,11 @@ class SmartCore::Initializer::Attribute
       # @api private
       # @since 0.5.0
       def represent_name_attr(name)
-        name.tap do |attribute|
+        name.tap do |value|
           raise(
             SmartCore::Initializer::IncorrectAttributeNameError,
             'Attribute name should be a symbol or a string'
-          ) unless attribute.is_a?(Symbol) || attribute.is_a?(String)
+          ) unless value.is_a?(Symbol) || value.is_a?(String)
         end
       end
 
@@ -64,11 +64,11 @@ class SmartCore::Initializer::Attribute
       # @api private
       # @since 0.5.0
       def represent_type_attr(type)
-        type.tap do |attribute|
+        type.tap do |value|
           raise(
             SmartCore::Initializer::UnregisteredTypeError,
-            "#{attribute} type is not registered!"
-          ) unless SmartCore::Initializer.types.has_type?(attribute)
+            "type :#{value} is not registered!"
+          ) unless SmartCore::Initializer.types.has_type?(value)
         end
       end
     end

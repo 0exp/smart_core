@@ -39,7 +39,7 @@ class SmartCore::Initializer::TypeSet
   def resolve(name)
     types.fetch(name.to_sym)
   rescue KeyError
-    raise SmartCore::Initializer::UnregisteredTypeError, "#{name} type is not registered!"
+    raise SmartCore::Initializer::UnregisteredTypeError, "type :#{name} is not registered!"
   end
 
   private

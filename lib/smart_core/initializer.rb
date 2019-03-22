@@ -58,6 +58,12 @@ module SmartCore::Initializer
     end
   end
 
+  # @return [void]
+  #
+  # @api public
+  # @since 0.5.0
+  def initialize(*, **); end
+
   # @since 0.5.0
   register_type(:array) { |value| value.is_a?(Array) }
   # @since 0.5.0

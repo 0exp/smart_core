@@ -74,7 +74,8 @@ class SmartCore::Initializer::Attribute
 
     raise(
       SmartCore::Initializer::ArgumentError,
-      "Incorrect type of <#{name}> (requires: :#{type_checker.name})"
+      "Incorrect type of <#{name}> attribute " \
+      "(given: #{value.class}, expected: :#{type_checker.name})"
     ) unless type_checker.comparable?(value)
   end
 
