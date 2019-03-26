@@ -132,7 +132,7 @@ class SmartCore::Container::Registry
 
     raise(
       SmartCore::Container::NamespaceOverlapError,
-      "Trying to overlap already registered namespace with #{name} name!"
+      "Trying to overlap already registered :#{name} namespace with :#{name} dependency!"
     ) if has_namespace?(name)
 
     dependency = SmartCore::Container::DependencyBuilder.build(dependency_definition, **options)
@@ -152,7 +152,7 @@ class SmartCore::Container::Registry
 
     raise(
       SmartCore::Container::DependencyOverlapError,
-      "Trying to overlap already registered dependency with #{name} name!"
+      "Trying to overlap already registered :#{name} dependency with :#{name} namespace!"
     ) if has_dependency?(name)
 
     if has_namespace?(name)
