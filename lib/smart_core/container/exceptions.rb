@@ -22,14 +22,6 @@ class SmartCore::Container
   UnexistentDependencyError = Class.new(Error)
 
   # @api public
-  # @since 0.1.0
-  FrozenRegistryError = begin # rubocop:disable Naming/ConstantName
-    # :nocov:
-    if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.5.0')
-      Class.new(::FrozenError)
-    else
-      Class.new(::RuntimeError)
-    end
-    # :nocov:
-  end
+  # @since 0.5.0
+  FrozenRegistryError = Class.new(SmartCore::FrozenError)
 end
