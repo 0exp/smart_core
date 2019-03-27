@@ -10,8 +10,8 @@ module SmartCore::Container::DependencyBuilder
     #
     # @api private
     # @since 0.5.0
-    def build(dependency_definition, **options)
-      memoize = options.fetch(:memoize) { false }
+    def build(dependency_definition, memoize: false, **options)
+      # @todo: raise an error if memoize is not a boolean
 
       if memoize
         build_memoized_dependency(dependency_definition, **options)
