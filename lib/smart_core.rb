@@ -10,4 +10,5 @@ module SmartCore
   require_relative 'smart_core/injector'
   require_relative 'smart_core/validator'
   require_relative 'smart_core/operation'
+  require_relative 'smart_core/schema'
 end
