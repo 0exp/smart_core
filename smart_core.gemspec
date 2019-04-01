@@ -24,10 +24,10 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec|features)/}) }
   end
 
-  spec.add_development_dependency 'coveralls',        '~> 0.8.22'
-  spec.add_development_dependency 'simplecov',        '~> 0.16.1'
-  spec.add_development_dependency 'armitage-rubocop', '~> 0.24.0'
-  spec.add_development_dependency 'rspec',            '~> 3.8.0'
+  spec.add_development_dependency 'coveralls',        '~> 0.8'
+  spec.add_development_dependency 'simplecov',        '~> 0.16'
+  spec.add_development_dependency 'armitage-rubocop', '~> 0.24'
+  spec.add_development_dependency 'rspec',            '~> 3.8'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
