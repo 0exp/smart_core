@@ -24,4 +24,8 @@ class SmartCore::Container
   # @api public
   # @since 0.5.0
   FrozenRegistryError = Class.new(SmartCore::FrozenError)
+
+  # @api private
+  # @since 0.5.0
+  IncompatibleDependencyTree = Class.new(Error)
 end

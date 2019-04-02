@@ -13,9 +13,10 @@ class SmartCore::Container
   require_relative 'container/namespace'
   require_relative 'container/dependency_builder'
   require_relative 'container/registry'
-  require_relative 'container/definition_dsl'
   require_relative 'container/registry_builder'
+  require_relative 'container/dependency_compatability'
   require_relative 'container/dependency_resolver'
+  require_relative 'container/definition_dsl'
   require_relative 'container/mixin'
 
   # TODO: container composition
