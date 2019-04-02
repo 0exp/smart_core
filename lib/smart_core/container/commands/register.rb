@@ -22,11 +22,11 @@ module SmartCore::Container::Commands
     # @api private
     # @since 0.5.0
     def initialize(dependency_name, dependency_definition, **options)
-      SmartCore::Container::KeyGuard.prevent_incomparabilities!(dependency_name)
-
-      @options = options
-      @dependency_name = dependency_name.to_s
-      @dependency_definition = dependency_definition
+      SmartCore::Container::KeyGuard.indifferently_accessable_key(dependency_name).tap do |name|
+        @dependency_name = name
+        @options = options
+        @dependency_definition = dependency_definition
+      end
     end
 
     # @param registry [SmartCore::Container::Registry]

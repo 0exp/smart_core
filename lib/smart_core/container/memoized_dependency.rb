@@ -3,6 +3,7 @@
 # @api private
 # @since 0.5.0
 class SmartCore::Container::MemoizedDependency < SmartCore::Container::Dependency
+  # @param external_name [String]
   # @param dependency_definition [Proc]
   # @param options [Hash<Symbol,Any>]
   # @return [void]
@@ -12,7 +13,7 @@ class SmartCore::Container::MemoizedDependency < SmartCore::Container::Dependenc
   #
   # @api private
   # @since 0.5.0
-  def initialize(dependency_definition, **options)
+  def initialize(external_name, dependency_definition, **options)
     @memoized_call = nil
     super
   end

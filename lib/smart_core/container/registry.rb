@@ -3,6 +3,9 @@
 # @api private
 # @since 0.5.0
 class SmartCore::Container::Registry
+  # @since 0.5.0
+  include Enumerable
+
   # @return [void]
   #
   # @api private
@@ -74,6 +77,25 @@ class SmartCore::Container::Registry
     end
   end
 
+  # @param block [Block]
+  # @return [Enumerable]
+  #
+  # @api private
+  # @since 0.5.0
+  def each(&block)
+    thread_safe do
+      block_given? ? registry.each_value(&block) ? registry.each_value
+    end
+  end
+
+  # @return [Hash<Symbol,Any>]
+  #
+  # @api private
+  # @since 0.5.0
+  def to_h
+    # TODO: implement :)
+  end
+
   private
 
   # @return [Mutex]
@@ -82,7 +104,7 @@ class SmartCore::Container::Registry
   # @since 0.5.0
   attr_reader :access_lock
 
-  # @return [Hash<Symbol,SmartCore::Container::Dependency|SmartCore::Container::Namespace>]
+  # @return [Hash<Symbol,SmartCore::Container::Dependency/SmartCore::Container::Namespace>]
   #
   # @api private
   # @since 0.5.0
@@ -105,7 +127,10 @@ class SmartCore::Container::Registry
   end
 
   # @paramm dependency_path [String, Symbol]
-  # @return [SmartCore::Container::Namespace,]
+  # @return [SmartCore::Container::Namespace, SmartCore::Container::Dependency]
+  #
+  # @api private
+  # @since 0.5.0
   def fetch_dependency(dependency_path)
     # TODO: rabbit style dependnecy path
     name = indifferently_accessable_name(dependency_path)
@@ -135,7 +160,10 @@ class SmartCore::Container::Registry
       "Trying to overlap already registered :#{name} namespace with :#{name} dependency!"
     ) if has_namespace?(name)
 
-    dependency = SmartCore::Container::DependencyBuilder.build(dependency_definition, **options)
+    dependency = SmartCore::Container::DependencyBuilder.build(
+      name, dependency_definition, **options
+    )
+
     registry[name] = dependency
   end
 
@@ -160,7 +188,7 @@ class SmartCore::Container::Registry
         namespace.append_definitions(dependency_definitions)
       end
     else
-      SmartCore::Container::Namespace.new.tap do |namespace|
+      SmartCore::Container::Namespace.new(name).tap do |namespace|
         namespace.append_definitions(dependency_definitions)
         registry[name] = namespace
       end
@@ -195,8 +223,7 @@ class SmartCore::Container::Registry
   # @api private
   # @since 0.5.0
   def indifferently_accessable_name(name)
-    SmartCore::Container::KeyGuard.prevent_incomparabilities!(name)
-    name.to_s
+    SmartCore::Container::KeyGuard.indifferently_accessable_key(name)
   end
 
   # @param block [Proc]

@@ -17,5 +17,15 @@ module SmartCore::Container::KeyGuard
         'Namespace/Dependency name should be a symbol or a string'
       ) unless key.is_a?(String) || key.is_a?(Symbol)
     end
+
+    # @param key [Symbol, String]
+    # @return [String]
+    #
+    # @api private
+    # @since 0.5.0
+    def indifferently_accessable_key(key)
+      prevent_incomparabilities!(key)
+      key.to_s
+    end
   end
 end

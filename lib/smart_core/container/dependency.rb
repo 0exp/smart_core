@@ -11,9 +11,10 @@ class SmartCore::Container::Dependency < SmartCore::Container::Entity
   #
   # @api private
   # @since 0.5.0
-  def initialize(dependency_definition, **options)
+  def initialize(external_name, dependency_definition, **options)
     @dependency_definition = dependency_definition
     @access_lock = Mutex.new
+    super(external_name)
   end
 
   # @return [Any]
