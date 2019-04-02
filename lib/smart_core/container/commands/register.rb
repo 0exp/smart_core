@@ -4,6 +4,12 @@ module SmartCore::Container::Commands
   # @api private
   # @since 0.5.0
   class Register < Base
+    # @return [String, Symbol]
+    #
+    # @api private
+    # @since 0.5.0
+    attr_reader :dependency_name
+
     # @param dependency_name [String, Symbol]
     # @param options [Hash<Symbol,Any>]
     # @param dependency_definition [Proc]
@@ -41,12 +47,6 @@ module SmartCore::Container::Commands
     end
 
     private
-
-    # @return [String, Symbol]
-    #
-    # @api private
-    # @since 0.5.0
-    attr_reader :dependency_name
 
     # @return [Proc]
     #

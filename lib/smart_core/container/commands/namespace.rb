@@ -4,6 +4,12 @@ module SmartCore::Container::Commands
   # @api private
   # @since 0.5.0
   class Namespace < Base
+    # @return [String, Symbol]
+    #
+    # @api private
+    # @since 0.5.0
+    attr_reader :namespace_name
+
     # @param namespace_name [String, Symbol]
     # @param dependency_definitions [Proc]
     # @return [void]
@@ -37,12 +43,6 @@ module SmartCore::Container::Commands
     end
 
     private
-
-    # @return [String, Symbol]
-    #
-    # @api private
-    # @since 0.5.0
-    attr_reader :namespace_name
 
     # @return [Proc]
     #
