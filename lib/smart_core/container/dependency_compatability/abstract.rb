@@ -13,9 +13,7 @@ class SmartCore::Container::DependencyCompatability::Abstract
     # @api private
     # @since 0.5.0
     def prevent_namespace_overlap!(dependency_root, dependency)
-      if potential_namespace_overlap?(dependency_root, dependency)
-        raise SmartCore::Container::NamespaceOverlapError
-      end
+      raise NoMethodError
     end
 
     # @param dependency_root [Any]
@@ -27,9 +25,7 @@ class SmartCore::Container::DependencyCompatability::Abstract
     # @api private
     # @since 0.5.0
     def prevent_dependency_overlap!(dependency_root, namespace)
-      if potential_dependency_overlap?(dependency_root, namespace)
-        raise SmartCore::Container::DependencyOverlapError
-      end
+      raise NoMethodError
     end
 
     # @param dependency_root [Any]
