@@ -8,8 +8,6 @@ class SmartCore::Container::DependencyCompatability::Abstract
     # @param dependency [Any]
     # @return [void]
     #
-    # @raise [SmartCore::Container::NamespaceOverlapError]
-    #
     # @api private
     # @since 0.5.0
     def prevent_namespace_overlap!(dependency_root, dependency)
@@ -19,8 +17,6 @@ class SmartCore::Container::DependencyCompatability::Abstract
     # @param dependency_root [Any]
     # @param namespace [Any]
     # @return [void]
-    #
-    # @raise [SmartCore::Container::DependencyOverlapError]
     #
     # @api private
     # @since 0.5.0

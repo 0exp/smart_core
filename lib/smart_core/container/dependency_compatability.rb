@@ -3,7 +3,7 @@
 # @api private
 # @since 0.5.0
 module SmartCore::Container::DependencyCompatability
-  require_relative 'dependency_compatability/abstract_checker'
-  require_relative 'dependency_compatability/command_set_checker'
-  require_relative 'dependency_compatability/registry_checker'
+  require_relative 'dependency_compatability/abstract'
+  require_relative 'dependency_compatability/command_set'
+  require_relative 'dependency_compatability/registry'
 end

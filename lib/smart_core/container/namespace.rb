@@ -9,7 +9,6 @@ class SmartCore::Container::Namespace < SmartCore::Container::Entity
   # @api private
   # @since 0.5.0
   def initialize(external_name)
-    @external_name = name
     @container = Class.new(SmartCore::Container)
     @container_instance = nil
     @access_lock = Mutex.new

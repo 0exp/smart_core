@@ -83,9 +83,7 @@ class SmartCore::Container::Registry
   # @api private
   # @since 0.5.0
   def each(&block)
-    thread_safe do
-      block_given? ? registry.each_value(&block) ? registry.each_value
-    end
+    thread_safe { block_given? ? registry.each_value(&block) : registry.each_value }
   end
 
   # @return [Hash<Symbol,Any>]
@@ -104,7 +102,7 @@ class SmartCore::Container::Registry
   # @since 0.5.0
   attr_reader :access_lock
 
-  # @return [Hash<Symbol,SmartCore::Container::Dependency/SmartCore::Container::Namespace>]
+  # @return [Hash<Symbol,SmartCore::Container::Entity>]
   #
   # @api private
   # @since 0.5.0
@@ -152,16 +150,15 @@ class SmartCore::Container::Registry
   #
   # @api private
   # @since 0.5.0
-  def append_dependency(dependency_name, dependency_definition, **options)
+  def append_dependency(dependency_name, dependency_definition, **options) # TODO: refactor
     name = indifferently_accessable_name(dependency_name)
-
-    raise(
-      SmartCore::Container::NamespaceOverlapError,
-      "Trying to overlap already registered :#{name} namespace with :#{name} dependency!"
-    ) if has_namespace?(name)
-
     dependency = SmartCore::Container::DependencyBuilder.build(
       name, dependency_definition, **options
+    )
+
+
+    SmartCore::Container::DependencyCompatability::Registry.prevent_namespace_overlap!(
+      self, dependency
     )
 
     registry[name] = dependency
@@ -175,24 +172,22 @@ class SmartCore::Container::Registry
   #
   # @api private
   # @since 0.5.0
-  def append_namespace(namespace_name, dependency_definitions)
+  def append_namespace(namespace_name, dependency_definitions) # TODO: refactor
     name = indifferently_accessable_name(namespace_name)
+    namespace = SmartCore::Container::Namespace.new(name)
 
-    raise(
-      SmartCore::Container::DependencyOverlapError,
-      "Trying to overlap already registered :#{name} dependency with :#{name} namespace!"
-    ) if has_dependency?(name)
+    SmartCore::Container::DependencyCompatability::Registry.prevent_dependency_overlap!(
+      self, namespace
+    )
 
-    if has_namespace?(name)
-      registry.fetch(name).tap do |namespace|
-        namespace.append_definitions(dependency_definitions)
-      end
-    else
-      SmartCore::Container::Namespace.new(name).tap do |namespace|
-        namespace.append_definitions(dependency_definitions)
-        registry[name] = namespace
-      end
+    namespace = begin
+      registry.fetch(name)
+    rescue KeyError
+      registry[name] = namespace
+      namespace
     end
+
+    namespace.append_definitions(dependency_definitions)
   end
 
   # @param name [String, Symbol]
@@ -232,6 +227,9 @@ class SmartCore::Container::Registry
   # @api private
   # @since 0.5.0
   def thread_safe(&block)
-    @access_lock.synchronize(&block)
+    # NOTE:
+    #   #owned => yield is a thread safe in our siuation cuz this logic can be invoked
+    #   here from the already owned access lock only
+    @access_lock.owned? ? yield : @access_lock.synchronize(&block)
   end
 end
