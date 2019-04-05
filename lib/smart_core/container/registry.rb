@@ -215,9 +215,6 @@ class SmartCore::Container
     # @api private
     # @since 0.5.0
     def thread_safe(&block)
-      # NOTE:
-      #   #owned => yield is a thread safe in our siuation cuz this logic can be invoked
-      #   here from the already owned access lock only
       @access_lock.owned? ? yield : @access_lock.synchronize(&block)
     end
   end
