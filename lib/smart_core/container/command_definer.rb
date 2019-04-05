@@ -23,7 +23,7 @@ class SmartCore::Container
     def append_namespace(namespace_name, dependency_definitions)
       thread_safe do
         command = build_namespace_command(namespace_name, dependency_definitions)
-        prevent_dependency_overlap(command)
+        prevent_dependency_overlap!(command)
         append_command(command)
       end
     end
@@ -38,7 +38,7 @@ class SmartCore::Container
     def append_register(dependency_name, dependency_definition, options)
       thread_safe do
         command = build_register_command(dependency_name, dependency_definition, options)
-        prevent_namespace_overlap(command)
+        prevent_namespace_overlap!(command)
         append_command(command)
       end
     end
@@ -51,10 +51,26 @@ class SmartCore::Container
     # @since 0.5.0
     attr_reader :container_klass
 
+    # @param namespace_name [String]
+    # @return [void]
+    #
+    # @api private
+    # @since 0.5.0
     def prevent_dependency_overlap(namespace_name)
+      DependencyCompatability::CommandSet.prevent_dependency_overlap!(
+        container_klass, namespace_name
+      )
     end
 
-    def prevent_command_overlap(dependency_name)
+    # @param dependency_name [String]
+    # @return [void]
+    #
+    # @api private
+    # @since 0.5.0
+    def prevent_namespace_overlap(dependency_name)
+      DependencyCompatability::CommandSet.prevent_namespace_overlap!(
+        container_klass, dependency_name
+      )
     end
 
     # @param namespace_name [String]

@@ -197,7 +197,9 @@ class SmartCore::Container
     # @api private
     # @since 0.5.0
     def prevent_namespace_overlap!(dependency_name)
-      DependencyCompatability::Registry.prevent_namespace_overlap!(self, dependency_name)
+      DependencyCompatability::Registry.prevent_namespace_overlap!(
+        self, dependency_name
+      )
     end
 
     # @param namespace_name [String]
@@ -206,7 +208,9 @@ class SmartCore::Container
     # @api private
     # @since 0.5.0
     def prevent_dependency_overlap!(namespace_name)
-      DependencyCompatability::Registry.prevent_dependency_overlap!(self, namespace_name)
+      DependencyCompatability::Registry.prevent_dependency_overlap!(
+        self, namespace_name
+      )
     end
 
     # @param block [Proc]
@@ -215,7 +219,7 @@ class SmartCore::Container
     # @api private
     # @since 0.5.0
     def thread_safe(&block)
-      @access_lock.owned? ? yield : @access_lock.synchronize(&block)
+      @access_lock.synchronize(&block)
     end
   end
 end
