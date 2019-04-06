@@ -24,6 +24,15 @@ require 'smart_core'
 
 #### Completed abstractions:
 
+- [**Schema**](#schema) (`SmartCore::Container`)
+ - parameters structure checker;
+ - support for required and optional parameters;
+ - support for strict and non-strict structures;
+ - definition dsl;
+ - realized as an instance;
+ - an ability tonuse as a mixin;
+ - thread-safe;
+ - no external dependencies;
 - [**Dependency Container**](#dependency-container) (`SmartCore::Container`)
   - realized as an instance;
   - an ability to use as a mixin `SmartCore::Container::Mixin` (shared container instance between class and it's instances);
