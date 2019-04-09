@@ -4,6 +4,7 @@
 # @since 0.2.0
 class SmartCore::Operation
   require_relative 'operation/exceptions'
+  require_relative 'operation/state'
   require_relative 'operation/step'
   require_relative 'operation/step_set'
   require_relative 'operation/result'
