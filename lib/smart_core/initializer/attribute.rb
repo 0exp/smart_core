@@ -13,7 +13,7 @@ class SmartCore::Initializer::Attribute
     private:   :private,
     protected: :protected,
     public:    :public,
-    default:   :public,
+    default:   :public
   }.freeze
 
   # @return [Symbol]
