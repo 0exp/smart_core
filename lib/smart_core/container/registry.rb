@@ -171,11 +171,13 @@ class SmartCore::Container
       namespace_name = indifferently_accessable_name(namespace_name)
       prevent_dependency_overlap!(namespace_name)
 
+      # rubocop:disable Layout/RescueEnsureAlignment
       namespace = begin
         registry.fetch(namespace_name)
       rescue KeyError
         registry[namespace_name] = SmartCore::Container::Namespace.new(namespace_name)
       end
+      # rubocop:enable Layout/RescueEnsureAlignment
 
       namespace.append_definitions(dependency_definitions)
     end
