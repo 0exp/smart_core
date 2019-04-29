@@ -123,7 +123,8 @@ class SmartCore::Initializer::InstanceBuilder
 
     parameter_pairs.each_pair do |parameter_object, parameter_value|
       parameter_object.validate_value_type!(parameter_value)
-      processed_object.instance_variable_set("@#{parameter_object.name}", parameter_value)
+      final_parameter_value = parameter_object.finalize(parameter_value, processed_object)
+      processed_object.instance_variable_set("@#{parameter_object.name}", final_parameter_value)
     end
   end
 
@@ -137,8 +138,9 @@ class SmartCore::Initializer::InstanceBuilder
       option_value = options.fetch(option_name) { option.default_value }.tap do |value|
         option.validate_value_type!(value)
       end
+      final_option_value = option.finalize(option_value, processed_object)
 
-      processed_object.instance_variable_set("@#{option_name}", option_value)
+      processed_object.instance_variable_set("@#{option_name}", final_option_value )
     end
   end
 

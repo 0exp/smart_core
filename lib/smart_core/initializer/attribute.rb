@@ -4,6 +4,7 @@
 # @since 0.5.0
 class SmartCore::Initializer::Attribute
   require_relative 'attribute/builder'
+  require_relative 'attribute/value_finalizer'
 
   # @return [Hash<Symbol,Symbol>]
   #
@@ -34,6 +35,13 @@ class SmartCore::Initializer::Attribute
   # @since 0.5.0
   attr_reader :privacy
 
+  # @return [SmartCore::Initializer::Attribute::ValueFinalizer::Lambda]
+  # @return [SmartCore::Initializer::Attribute::ValueFinalizer::Method]
+  #
+  # @api private
+  # @since 0.5.0
+  attr_reader :finalizer
+
   # @return [Hash<Symbol,Any>]
   #
   # @api private
@@ -43,16 +51,18 @@ class SmartCore::Initializer::Attribute
   # @param name [String, Symbol]
   # @param type [Symbol] (see SmartCore::Initializer::TypeSet, SmartCore::Initializer::Type)
   # @param privacy [Symbol
+  # @param finalizer [SmartCore::Initializer::Attribute::ValueFinalizer::Lambda/Method]
   # @param options [HAsh<Symbol,Any>] Supported options:
-  #   - :default (see #default_value) (proc or object)
+  #   - :default [Proc] see #default_value
   # @return [void]
   #
   # @api private
   # @since 0.5.0
-  def initialize(name, type, privacy, **options)
+  def initialize(name, type, privacy, finalizer, **options)
     @name = name
     @type = type
     @privacy = privacy
+    @finalizer = finalizer
     @options = options
   end
 
@@ -93,11 +103,21 @@ class SmartCore::Initializer::Attribute
     default_value.is_a?(Proc) ? default_value.call : default_value
   end
 
+  # @param value [Any]
+  # @param instance [Any]
+  # @return [Any]
+  #
+  # @api private
+  # @since 0.5.0
+  def finalize(value, instance)
+    finalizer.finalize(value, instance)
+  end
+
   # @return [SmartCore::Intializer::Attribute]
   #
   # @api private
   # @since 0.5.0
   def dup
-    self.class.new(name, type, privacy, **options)
+    self.class.new(name, type, privacy, finalizer, **options)
   end
 end

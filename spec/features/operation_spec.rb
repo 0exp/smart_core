@@ -31,6 +31,26 @@ describe SmartCore::Operation do
     expect(service.attributes).to match(email: '1', age: 1, kek: '1', pek: '7')
   end
 
+  specify 'finalizer smoke test' do
+    class SmokeFinalizer < SmartCore::Operation
+      param :kek, finalize: -> (value) { value.to_s }
+      option :pek, finalize: proc { 'fek' }
+      params :a, :b, :c
+      options :jek, :fek
+    end
+
+    service = SmokeFinalizer.new(1, 2, 3, 4, pek: nil, jek: '55', fek: 33)
+
+    expect(service.kek).to eq('1')
+    expect(service.pek).to eq('fek')
+    expect(service.a).to eq(2)
+    expect(service.b).to eq(3)
+    expect(service.c).to eq(4)
+
+    expect(service.jek).to eq('55')
+    expect(service.fek).to eq(33)
+  end
+
   describe 'attribute definition DSL and service instantiation' do
     specify 'single attribute definition' do
       class SingleAttrOp < SmartCore::Operation

@@ -11,6 +11,10 @@ module SmartCore::Initializer
 
   # @api public
   # @since 0.5.0
+  IncompatibleFinalizerTypeError = Class.new(ArgumentError)
+
+  # @api public
+  # @since 0.5.0
   ParameterError = Class.new(ArgumentError)
 
   # @api public

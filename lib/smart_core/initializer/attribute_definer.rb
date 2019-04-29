@@ -54,6 +54,7 @@ class SmartCore::Initializer::AttributeDefiner
     thread_safe do
       option = build_attribute(option_name, option_type, **options)
       prevent_intersection_with_already_defined_param(option)
+
       append_option(option)
     end
   end
