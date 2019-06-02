@@ -7,17 +7,17 @@ require 'smart_core/version'
 Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3.8'
 
-  spec.name          = 'smart_core'
-  spec.version       = SmartCore::VERSION
-  spec.authors       = ['Rustam Ibragimov']
-  spec.email         = ['iamdaiver@icloud.com']
-  spec.summary       = '(in active development) A set of common abstractions'
-  spec.description   = '(in active development) A set of common abstractions'
-  spec.homepage      = 'https://github.com/0exp/smart_core'
-  spec.license       = 'MIT'
+  spec.name        = 'smart_core'
+  spec.version     = SmartCore::VERSION
+  spec.authors     = ['Rustam Ibragimov']
+  spec.email       = ['iamdaiver@icloud.com']
+  spec.summary     = '(in active development) A set of common abstractions'
+  spec.description = '(in active development) A set of common abstractions'
+  spec.homepage    = 'https://github.com/0exp/smart_core'
+  spec.license     = 'MIT'
 
-  spec.bindir        = 'bin'
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir = 'bin'
+  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'coveralls',        '~> 0.8'
   spec.add_development_dependency 'simplecov',        '~> 0.16'
-  spec.add_development_dependency 'armitage-rubocop', '~> 0.27'
+  spec.add_development_dependency 'armitage-rubocop', '~> 0.70'
   spec.add_development_dependency 'rspec',            '~> 3.8'
 
   spec.add_development_dependency 'bundler'

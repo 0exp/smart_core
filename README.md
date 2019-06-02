@@ -24,11 +24,11 @@ require 'smart_core'
 
 #### Completed abstractions:
 
-- Service Object (Operation, Functional Object)
-- Initializer (DSL)
-- Validator
-- Dependency Container
-- (Soon) Schema
+- Service Object (Operation, Functional Object);
+- Initializer (DSL);
+- Validator (Validation Layer);
+- Dependency Container;
+- (Soon) Schema;
 
 ---
 

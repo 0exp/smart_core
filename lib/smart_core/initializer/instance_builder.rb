@@ -140,7 +140,7 @@ class SmartCore::Initializer::InstanceBuilder
       end
       final_option_value = option.finalize(option_value, processed_object)
 
-      processed_object.instance_variable_set("@#{option_name}", final_option_value )
+      processed_object.instance_variable_set("@#{option_name}", final_option_value)
     end
   end
 
