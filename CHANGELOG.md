@@ -1,9 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-### Added
-- soon :)
+## [0.5.0] - 2019-06-02
+### PRE-RELEASE
 
 ## [0.4.0] - 2019-01-27
 ### Added
