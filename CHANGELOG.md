@@ -3,10 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- **Initializer**
-- **Dependency Container**
-- **Dependency Injector**
-- **Schema**
+- soon :)
 
 ## [0.4.0] - 2019-01-27
 ### Added
