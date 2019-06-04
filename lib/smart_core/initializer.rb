@@ -84,6 +84,8 @@ module SmartCore::Initializer
   register_type(:class) { |value| value.is_a?(Class) }
   # @since 0.5.0
   register_type(:boolean) { |value| value.is_a?(TrueClass) || value.is_a?(FalseClass) }
+  # @since 0.5.1
+  register_type(:symbol) { |value| value.is_a?(Symbol) }
   # @since 0.5.0
   register_type(:__any__) { true }
 end
