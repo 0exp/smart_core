@@ -72,6 +72,17 @@ describe SmartCore::Operation do
     expect(service.fek).to eq(3)
     expect(service.cho).to eq('mega_blast')
     expect(service.pho).to eq('22')
+
+    class ContextSmokeFinalizer < SmartCore::Operation
+      option :kek, finalize: -> (value) { noramlize(value) }
+
+      def noramlize(value)
+        "#{value}_normalized"
+      end
+    end
+
+    service = ContextSmokeFinalizer.new(kek: 123)
+    expect(service.kek).to eq('123_normalized')
   end
 
   describe 'attribute definition DSL and service instantiation' do

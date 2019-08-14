@@ -19,7 +19,7 @@ class SmartCore::Initializer::Attribute::ValueFinalizer::Lambda
   # @api private
   # @since 0.5.0
   def finalize(value, instance)
-    finalizer.call(value)
+    instance.instance_exec(value, &finalizer)
   end
 
   private
