@@ -41,4 +41,12 @@ class SmartCore::Operation::Result
   def failure?
     false
   end
+
+  # @return [Boolean]
+  #
+  # @api public
+  # @since 0.6.0
+  def custom?
+    false
+  end
 end

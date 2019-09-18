@@ -11,6 +11,7 @@ class SmartCore::Operation
   require_relative 'operation/success'
   require_relative 'operation/failure'
   require_relative 'operation/fatal'
+  require_relative 'operation/custom'
   require_relative 'operation/result_interface'
   require_relative 'operation/instance_builder'
 

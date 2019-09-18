@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2019-09-18
+### Added
+- New result type: `SmartCore::Operation::Custom` with custom logic provided as a proc;
+
 ## [0.5.2] - 2019-06-05
 ### Added
 - Common Result Object interface (realized as a mixin (`SmartCore::Operation::ResultInterface`))

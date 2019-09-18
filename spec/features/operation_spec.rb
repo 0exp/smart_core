@@ -427,5 +427,16 @@ describe SmartCore::Operation do
       expect(result.success?).to eq(true)
       expect(result.service).to eq(:base)
     end
+
+    specify 'custom result' do
+      class CustomResultOperation < SmartCore::Operation
+        def call
+          Custom() { 'it_works!' }
+        end
+      end
+
+      result = CustomResultOperation.call
+      expect(result.call).to eq('it_works!')
+    end
   end
 end
