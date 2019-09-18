@@ -17,3 +17,7 @@ AllCops:
 # NOTE: support for old ruby versions
 Style/RedundantBegin:
   Enabled: false
+
+# NOTE: temporary disabled
+RSpec/LeakyConstantDeclaration:
+  Enabled: false

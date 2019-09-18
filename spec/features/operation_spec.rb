@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/LineLength
 describe SmartCore::Operation do
   specify do
     class MegaKruto < SmartCore::Operation
@@ -381,7 +382,6 @@ describe SmartCore::Operation do
     end
 
     describe '#call & .call behavior' do
-      # rubocop:disable Metrics/LineLength
       specify '#call & .call' do
         class_call_res = UserRegService.call('kek@pek.tv', 'test', active: true, role: :admin)
         instance_call_res = UserRegService.new('kek@pek.tv', 'test', active: false, role: :kek).call
@@ -399,7 +399,6 @@ describe SmartCore::Operation do
         expect(class_call_res.failure?).to eq(true)
         expect(instance_call_res.failure?).to eq(true)
       end
-      # rubocop:enable Metrics/LineLength
     end
 
     specify 'inheritance' do
@@ -431,7 +430,7 @@ describe SmartCore::Operation do
     specify 'custom result' do
       class CustomResultOperation < SmartCore::Operation
         def call
-          Custom() { 'it_works!' }
+          Custom { 'it_works!' }
         end
       end
 
@@ -440,3 +439,4 @@ describe SmartCore::Operation do
     end
   end
 end
+# rubocop:enable Metrics/LineLength
