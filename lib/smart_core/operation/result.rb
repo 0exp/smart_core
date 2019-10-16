@@ -46,7 +46,7 @@ class SmartCore::Operation::Result
   #
   # @api public
   # @since 0.6.0
-  def custom?
+  def callback?
     false
   end
 end

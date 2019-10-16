@@ -11,7 +11,7 @@ class SmartCore::Operation
   require_relative 'operation/success'
   require_relative 'operation/failure'
   require_relative 'operation/fatal'
-  require_relative 'operation/custom'
+  require_relative 'operation/callback'
   require_relative 'operation/result_interface'
   require_relative 'operation/instance_builder'
 
@@ -30,6 +30,7 @@ class SmartCore::Operation
     # @param options [Hash<Symbol,Any>]
     # @param block [Proc]
     # @return [SmartCore::Operation::Success]
+    # @return [SmartCore::Operation::Callback]
     # @return [SmartCore::Operation::Failure]
     # @return [SmartCore::Operation::Fatal]
     #
@@ -41,6 +42,7 @@ class SmartCore::Operation
   end
 
   # @return [SmartCore::Operation::Success]
+  # @return [SmartCore::Operation::Callback]
   # @return [SmartCore::Operation::Failure]
   # @return [SmartCore::Operation::Fatal]
   # @return [Any]

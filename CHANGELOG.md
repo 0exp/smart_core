@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Changed
+- `SmartCore::Operation::Custom` result type is renamed to `SmartCore::Operation::Callback`;
+
 ## [0.6.0] - 2019-09-18
 ### Added
 - New result type: `SmartCore::Operation::Custom` with custom logic provided as a proc;

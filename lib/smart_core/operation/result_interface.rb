@@ -22,12 +22,12 @@ module SmartCore::Operation::ResultInterface
   end
 
   # @param custom_logic [Block]
-  # @return [SmartCore::Operation::Custom]
+  # @return [SmartCore::Operation::Callback]
   #
   # @api public
   # @since 0.6.0
-  def Custom(&custom_logic) # rubocop:disable Naming/MethodName
-    SmartCore::Operation::Custom.new(&custom_logic)
+  def Callback(&custom_logic) # rubocop:disable Naming/MethodName
+    SmartCore::Operation::Callback.new(&custom_logic)
   end
 
   # @param errors [Array<Symbol|Any>]

@@ -2,27 +2,27 @@
 
 # @api public
 # @since 0.6.0
-class SmartCore::Operation::Custom < SmartCore::Operation::Result
+class SmartCore::Operation::Callback < SmartCore::Operation::Result
   # @return [Block]
   #
   # @api public
   # @since 0.6.0
-  attr_reader :custom_logic
+  attr_reader :callback
 
-  # @param custom_logic [Block]
+  # @param callback [Block]
   # @return [void]
   #
   # @api public
   # @since 0.6.0
-  def initialize(&custom_logic)
-    @custom_logic = custom_logic
+  def initialize(&callback)
+    @callback = callback
   end
 
   # @return [Boolean]
   #
   # @api public
   # @since 0.6.0
-  def custom?
+  def callback?
     true
   end
 
@@ -33,6 +33,6 @@ class SmartCore::Operation::Custom < SmartCore::Operation::Result
   # @api public
   # @since 0.6.0
   def call(*attributes, **options)
-    custom_logic.call(*attributes, **options)
+    callback.call(*attributes, **options)
   end
 end
