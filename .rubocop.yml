@@ -1,0 +1,19 @@
+inherit_gem:
+  armitage-rubocop:
+    - lib/rubocop.general.yml
+    - lib/rubocop.rspec.yml
+
+AllCops:
+  UseCache: true
+  TargetRubyVersion: 2.6.5
+  Include:
+    - bin/console
+    - lib/**/*.rb
+    - spec/**/*.rb
+    - Gemfile
+    - Rakefile
+    - quantum_core.gemspec
+
+# NOTE: support for old ruby versions
+Style/RedundantBegin:
+  Enabled: false

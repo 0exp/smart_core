@@ -1,4 +1,6 @@
-require "quantum_core/version"
+# frozen_string_literal: true
+
+require 'quantum_core/version'
 
 module QuantumCore
   class Error < StandardError; end
