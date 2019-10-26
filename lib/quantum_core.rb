@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require 'quantum_core/version'
-
+# @api public
+# @since 0.1.0
 module QuantumCore
-  class Error < StandardError; end
-  # Your code goes here...
+  require_relative 'quantum_core/version'
+  require_relative 'quantum_core/errors'
+  require_relative 'quantum_core/container'
 end
