@@ -74,6 +74,10 @@ class QuantumCore::Container
     thread_safe { registry.frozen? }
   end
 
+  # @return [void]
+  #
+  # @api public
+  # @since 0.1.0
   def reload!
     thread_safe { build_registry! }
   end
