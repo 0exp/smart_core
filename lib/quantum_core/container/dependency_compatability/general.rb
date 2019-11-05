@@ -42,7 +42,9 @@ module QuantumCore::Container::DependencyCompatability::General
   # @api private
   # @since 0.1.0
   def potential_namespace_overlap?(context, dependency_name)
+    # :nocov:
     raise NoMethodError
+    # :nocov:
   end
 
   # @param context [Class<QuantumCore::Container>, QuantumCore::Container::Registry]
@@ -52,6 +54,8 @@ module QuantumCore::Container::DependencyCompatability::General
   # @api private
   # @since 0.1.0
   def potential_dependency_overlap?(context, namespace_name)
+    # :nocov:
     raise NoMethodError
+    # :nocov:
   end
 end

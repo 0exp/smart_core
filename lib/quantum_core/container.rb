@@ -35,7 +35,7 @@ class QuantumCore::Container
   #
   # @api public
   # @sicne 0.1.0
-  def register_dependency(dependency_name, &dependency_definition)
+  def register(dependency_name, &dependency_definition)
     thread_safe { registry.register_dependency(dependency_name, &dependency_definition) }
   end
 
@@ -45,7 +45,7 @@ class QuantumCore::Container
   #
   # @api public
   # @since 0.1.0
-  def register_namespace(namespace_name, &dependencies_definition)
+  def namespace(namespace_name, &dependencies_definition)
     thread_safe { registry.register_namespace(namespace_name, &dependencies_definition) }
   end
 

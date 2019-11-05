@@ -16,7 +16,7 @@ module QuantumCore::Container::DependencyCompatability::Definition
     def potential_namespace_overlap?(container_klass, dependency_name)
       begin
         anonymous_container = Class.new(container_klass).new
-        anonymous_container.register_dependency(dependency_name, &(proc {}))
+        anonymous_container.register(dependency_name, &(proc {}))
         false
       rescue QuantumCore::Container::DependencyOverNamespaceOverlapError
         true
@@ -32,7 +32,7 @@ module QuantumCore::Container::DependencyCompatability::Definition
     def potential_dependency_overlap?(container_klass, namespace_name)
       begin
         anonymous_container = Class.new(container_klass).new
-        anonymous_container.register_namespace(namespace_name, &(proc {}))
+        anonymous_container.namespace(namespace_name, &(proc {}))
         false
       rescue QuantumCore::Container::NamespaceOverDependencyOverlapError
         true

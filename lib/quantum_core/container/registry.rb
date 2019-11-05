@@ -116,7 +116,7 @@ class QuantumCore::Container::Registry
 
   # @param dependency_name [String, Symbol]
   # @param dependency_definition [Proc]
-  # @return [void]
+  # @return [QuantumCore::Container::Entities::Dependency]
   #
   # @raise [QuantumCore::Container::DependencyOverNamespaceOverlapError]
   #
@@ -133,12 +133,12 @@ class QuantumCore::Container::Registry
       dependency_name, dependency_definition
     )
 
-    registry[dependency_name] = dependency_entity
+    dependency_entity.tap { registry[dependency_name] = dependency_entity }
   end
 
   # @param namespace_name [String, Symbol]
   # @param dependencies_definition [Proc]
-  # @return [void]
+  # @return [QuantumCore::Container::Entities::Namespace]
   #
   # @raise [QuantumCore::Container::NamespaceOverDependencyOverlapError]
   #
@@ -161,7 +161,7 @@ class QuantumCore::Container::Registry
     end
     # rubocop:enable Layout/RescueEnsureAlignment
 
-    namespace_entity.append_definitions(dependencies_definition)
+    namespace_entity.tap { namespace_entity.append_definitions(dependencies_definition) }
   end
 
   # @param name [String, Symbol]
