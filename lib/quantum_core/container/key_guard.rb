@@ -7,13 +7,13 @@ module QuantumCore::Container::KeyGuard
     # @param key [Symbol, String]
     # @return [void]
     #
-    # @raise [QuantumCore::Container::ArgumentError]
+    # @raise [QuantumCore::Container::IncompatibleEntityNameError]
     #
     # @api private
     # @since 0.1.0
     def prevent_incomparabilities!(key)
       raise(
-        QuantumCore::Container::ArgumentError,
+        QuantumCore::Container::IncompatibleEntityNameError,
         'Namespace/Dependency name should be a symbol or a string'
       ) unless key.is_a?(String) || key.is_a?(Symbol)
     end

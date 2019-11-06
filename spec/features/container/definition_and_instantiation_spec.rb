@@ -114,7 +114,7 @@ describe '[Container] Definition and instantiation' do
     )
   end
 
-  specify "inherited dependency tree does not affect the parent dependency tree" do
+  specify 'inherited dependency tree does not affect the parent dependency tree' do
     database_adapter_stub = Object.new
     database_logger_stub = Object.new
     base_api_client_stub = Object.new
@@ -155,5 +155,29 @@ describe '[Container] Definition and instantiation' do
     expect(child_container.resolve(:database).resolve(:logger)).to eq(database_logger_stub)
     expect(child_container.resolve(:api_client)).to eq(child_api_client_stub)
     expect(child_container.resolve(:queue_adapter)).to eq(queue_adapter_stub)
+  end
+
+  specify 'dependency/namespace name accepts does not accept non-strings/non-symbols' do
+    incompatible_name = Object.new
+
+    expect do
+      Class.new(QuantumCore::Container) do
+        namespace(incompatible_name) {}
+      end
+    end.to raise_error(QuantumCore::Container::IncompatibleEntityNameError)
+
+    container = Class.new(QuantumCore::Container).new
+
+    expect { container.namespace(incompatible_name) {} }.to raise_error(
+      QuantumCore::Container::IncompatibleEntityNameError
+    )
+
+    expect { container.register(incompatible_name) {} }.to raise_error(
+      QuantumCore::Container::IncompatibleEntityNameError
+    )
+
+    expect { container.resolve(incompatible_name) }.to raise_error(
+      QuantumCore::Container::IncompatibleEntityNameError
+    )
   end
 end

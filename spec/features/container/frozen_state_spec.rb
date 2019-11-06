@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe '[Container] Freeze state' do
+describe '[Container] Frozen state' do
   let(:container) do
     Class.new(QuantumCore::Container) do
       namespace :database do
@@ -12,7 +12,17 @@ describe '[Container] Freeze state' do
     end.new
   end
 
-  context 'frozen state (frozen state locks any mutation)' do
+  specify 'frozen? predicate' do
+    expect(container.frozen?).to eq(false)
+    container.freeze!
+    expect(container.frozen?).to eq(true)
+    container.reload!
+    expect(container.frozen?).to eq(false)
+    container.freeze!
+    expect(container.frozen?).to eq(true)
+  end
+
+  context 'frozen state' do
     before { container.freeze! }
 
     specify 'registration of the new dependency should fail' do

@@ -5,6 +5,14 @@ class QuantumCore::Container
   # @since 0.1.0
   Error = Class.new(QuantumCore::Error)
 
+  # @api public
+  # @since 0.1.0
+  ArgumentError = Class.new(QuantumCore::ArgumentError)
+
+  # @api public
+  # @since 0.1.0
+  IncompatibleEntityNameError = Class.new(ArgumentError)
+
   # @see QuantumCore::Container::Registry
   #
   # @api public
