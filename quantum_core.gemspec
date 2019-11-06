@@ -27,8 +27,8 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_development_dependency 'simplecov',        '~> 0.17'
-  spec.add_development_dependency 'armitage-rubocop', '~> 0.75'
-  spec.add_development_dependency 'rspec',            '~> 3.8'
+  spec.add_development_dependency 'armitage-rubocop', '~> 0.76'
+  spec.add_development_dependency 'rspec',            '~> 3.9'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
