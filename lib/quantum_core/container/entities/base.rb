@@ -22,5 +22,5 @@ class QuantumCore::Container::Entities::Base
   #
   # @api private
   # @since 0.1.0
-  def call; end
+  def resolve; end
 end

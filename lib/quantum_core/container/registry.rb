@@ -72,7 +72,7 @@ class QuantumCore::Container::Registry
   # @api private
   # @since 0.1.0
   def each(&block)
-    thread_safe { block_given? ? registry.each_value(&block) : registry.each_value }
+    thread_safe { enumerate(&block) }
   end
 
   private
@@ -96,7 +96,20 @@ class QuantumCore::Container::Registry
   # @api private
   # @since 0.1.0
   def freeze_state
-    registry.freeze
+    registry.freeze.tap do
+      enumerate do |(entity_name, entity)|
+        entity.freeze! if entity.is_a?(QuantumCore::Container::Entities::Namespace)
+      end
+    end
+  end
+
+  # @param block
+  # @return [Enumerable]
+  #
+  # @api private
+  # @since 0.1.0
+  def enumerate(&block)
+    block_given? ? registry.each(&block) : registry.each
   end
 
   # @paramm entity_path [String, Symbol]

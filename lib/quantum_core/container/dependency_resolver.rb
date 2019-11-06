@@ -9,13 +9,13 @@ module QuantumCore::Container::DependencyResolver
     # @return [Any, QuantumCore::Container]
     #
     # @see QuantumCore::Container::Registry#resolve
-    # @see QuantumCore::Container::Entities::Namespace#call
-    # @see QuantumCore::Container::Entities::Dependency#call
+    # @see QuantumCore::Container::Entities::Namespace#resolve
+    # @see QuantumCore::Container::Entities::Dependency#resolve
     #
     # @api private
     # @since 0.1.0
     def resolve(registry, dependency_path)
-      registry.resolve(dependency_path).call
+      registry.resolve(dependency_path).resolve
     end
   end
 end

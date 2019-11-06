@@ -24,7 +24,7 @@ class QuantumCore::Container::Entities::Dependency < QuantumCore::Container::Ent
   #
   # @api private
   # @since 0.1.0
-  def call
+  def resolve
     dependency_definition.call
   end
 

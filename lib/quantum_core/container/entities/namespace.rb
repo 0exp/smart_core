@@ -25,8 +25,8 @@ class QuantumCore::Container::Entities::Namespace < QuantumCore::Container::Enti
   #
   # @api private
   # @since 0.1.0
-  def call
-    thread_safe { @container_instance ||= container_klass.new }
+  def resolve
+    thread_safe { container_instance }
   end
 
   # @param dependencies_definition [Proc]
@@ -38,6 +38,14 @@ class QuantumCore::Container::Entities::Namespace < QuantumCore::Container::Enti
     thread_safe { container_klass.instance_eval(&dependencies_definition) }
   end
 
+  # @return [void]
+  #
+  # @api private
+  # @since 0.1.0
+  def freeze!
+    thread_safe { container_instance.freeze! }
+  end
+
   private
 
   # @return [Class<QuantumCore::Container>]
@@ -45,6 +53,14 @@ class QuantumCore::Container::Entities::Namespace < QuantumCore::Container::Enti
   # @api private
   # @since 0.1.0
   attr_reader :container_klass
+
+  # @return [QuantumCore::Container]
+  #
+  # @api private
+  # @since 0.1.0
+  def container_instance
+    @container_instance ||= container_klass.new
+  end
 
   # @param block [Block]
   # @return [Any]

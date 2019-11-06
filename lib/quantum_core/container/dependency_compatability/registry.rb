@@ -14,7 +14,7 @@ module QuantumCore::Container::DependencyCompatability::Registry
     # @api private
     # @since 0.1.0
     def potential_namespace_overlap?(registry, dependency_name)
-      registry.any? do |entity|
+      registry.any? do |(entity_name, entity)|
         next unless entity.is_a?(QuantumCore::Container::Entities::Namespace)
         entity.namespace_name == dependency_name
       end
@@ -27,7 +27,7 @@ module QuantumCore::Container::DependencyCompatability::Registry
     # @api private
     # @since 0.1.0
     def potential_dependency_overlap?(registry, namespace_name)
-      registry.any? do |entity|
+      registry.any? do |(entity_name, entity)|
         next unless entity.is_a?(QuantumCore::Container::Entities::Dependency)
         entity.dependency_name == namespace_name
       end
