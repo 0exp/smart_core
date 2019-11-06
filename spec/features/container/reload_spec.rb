@@ -73,7 +73,7 @@ describe '[Container] Container reloading' do
     expect(container.resolve(:storages).resolve(:cache)).to eq(:cache)
   end
 
-  specify "resets frozen state" do
+  specify 'resets frozen state' do
     container = Class.new(QuantumCore::Container).new
 
     expect(container.frozen?).to eq(false)

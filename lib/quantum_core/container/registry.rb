@@ -75,6 +75,16 @@ class QuantumCore::Container::Registry
     thread_safe { enumerate(&block) }
   end
 
+  # @return [Hash<String|Symbol,QuantumCore::Container::Entities::Base|Any>]
+  #
+  # @api private
+  # @since 0.1.0
+  def hash_tree(resolve_dependencies: false)
+    thread_safe { build_hash_tree(resolve_dependencies: resolve_dependencies) }
+  end
+  alias_method :to_h, :hash_tree
+  alias_method :to_hash, :hash_tree
+
   private
 
   # @return [Mutex]
@@ -89,6 +99,23 @@ class QuantumCore::Container::Registry
   # @since 0.1.0
   def state_frozen?
     registry.frozen?
+  end
+
+  # @return [Hash<String|Symbol,QuantumCore::Container::Entities::Base|Any>]
+  #
+  # @api private
+  # @since 0.1.0
+  def build_hash_tree(resolve_dependencies: false)
+    {}.tap do |tree|
+      enumerate do |(entity_name, entity)|
+        case entity
+        when QuantumCore::Container::Entities::Namespace
+          tree[entity_name] = entity.resolve.hash_tree(resolve_dependencies: resolve_dependencies)
+        when QuantumCore::Container::Entities::Dependency
+          tree[entity_name] = resolve_dependencies ? entity.resolve : entity
+        end
+      end
+    end
   end
 
   # @return [void]

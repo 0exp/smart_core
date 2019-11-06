@@ -82,6 +82,16 @@ class QuantumCore::Container
     thread_safe { build_registry! }
   end
 
+  # @return [Hash<String|Symbol,QuantumCore::Container::Entities::Base|Any>]
+  #
+  # @api public
+  # @since 0.1.0
+  def hash_tree(resolve_dependencies: false)
+    thread_safe { registry.hash_tree(resolve_dependencies: resolve_dependencies) }
+  end
+  alias_method :to_h, :hash_tree
+  alias_method :to_hash, :to_h
+
   private
 
   # @return [QuantumCore::Container::Registry]
