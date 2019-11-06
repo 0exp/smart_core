@@ -16,10 +16,6 @@ describe '[Container] Frozen state' do
     expect(container.frozen?).to eq(false)
     container.freeze!
     expect(container.frozen?).to eq(true)
-    container.reload!
-    expect(container.frozen?).to eq(false)
-    container.freeze!
-    expect(container.frozen?).to eq(true)
   end
 
   context 'frozen state' do
