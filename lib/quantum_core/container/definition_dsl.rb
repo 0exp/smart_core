@@ -82,6 +82,17 @@ class QuantumCore::Container
         end
       end
 
+      # @param container_klass [Class<QuantumCore::Container>]
+      # @return [void]
+      #
+      # @api public
+      # @since 0.1.0
+      def compose(container_klass)
+        @__container_definition_lock__.thread_safe do
+          __container_definition_commands__ << Commands::Definition::Compose.new(container_klass)
+        end
+      end
+
       # @return [void]
       #
       # @api public
