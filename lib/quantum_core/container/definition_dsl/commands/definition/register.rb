@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module QuantumCore::Container::DefinitionDSL::Commands
+module QuantumCore::Container::DefinitionDSL::Commands::Definition
   # @api private
   # @since 0.1.0
-  class Register < Base
+  class Register < QuantumCore::Container::DefinitionDSL::Commands::Base
     # @return [String]
     #
     # @api private

@@ -15,7 +15,6 @@ class QuantumCore::Container
 
   # TODO: composition (at DSL level)
   # TODO: merge/merge! (at instance level)
-  # TODO: to_h
 
   # @since 0.1.0
   include DefinitionDSL
@@ -105,7 +104,7 @@ class QuantumCore::Container
   # @api private
   # @since 0.1.0
   def build_registry!
-    @registry = RegistryBuilder.build(self.class.__container_definition_commands__)
+    @registry = RegistryBuilder.build(self)
   end
 
   # @param block [Block]

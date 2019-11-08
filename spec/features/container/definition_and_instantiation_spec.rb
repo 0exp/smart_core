@@ -42,6 +42,16 @@ describe '[Container] Definition and instantiation' do
     expect(container.resolve(:logger)).to eq(logger_stub)
   end
 
+  specify 'define container as frozen that means it should be freezed after instantiation' do
+    non_frozen_container_klass = Class.new(QuantumCore::Container) {}
+    non_frozen_container = non_frozen_container_klass.new
+    expect(non_frozen_container.frozen?).to eq(false)
+
+    frozen_container_klass = Class.new(QuantumCore::Container) { freeze_state! }
+    frozen_container = frozen_container_klass.new
+    expect(frozen_container.frozen?).to eq(true)
+  end
+
   specify 'instance-level namespace/dependency registration/resolving' do
     database_dependency_stub = Object.new
     logger_dependency_stub = Object.new

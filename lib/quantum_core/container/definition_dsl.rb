@@ -15,8 +15,10 @@ class QuantumCore::Container
       # @since 0.1.0
       def included(base_klass)
         base_klass.instance_variable_set(:@__container_definition_commands__, CommandSet.new)
+        base_klass.instance_variable_set(:@__container_instantiation_commands__, CommandSet.new)
         base_klass.instance_variable_set(:@__container_definition_lock__, ArbitaryLock.new)
         base_klass.singleton_class.send(:attr_reader, :__container_definition_commands__)
+        base_klass.singleton_class.send(:attr_reader, :__container_instantiation_commands__)
         base_klass.extend(ClassMethods)
         base_klass.singleton_class.prepend(ClassInheritance)
       end
@@ -32,8 +34,14 @@ class QuantumCore::Container
       # @since 0.1.0
       def inherited(child_klass)
         child_klass.instance_variable_set(:@__container_definition_commands__, CommandSet.new)
+        child_klass.instance_variable_set(:@__container_instantiation_commands__, CommandSet.new)
         child_klass.instance_variable_set(:@__container_definition_lock__, ArbitaryLock.new)
-        child_klass.__container_definition_commands__.concat(__container_definition_commands__)
+        child_klass.__container_definition_commands__.concat(
+          __container_definition_commands__
+        )
+        child_klass.__container_instantiation_commands__.concat(
+          __container_instantiation_commands__
+        )
         child_klass.singleton_class.prepend(ClassInheritance)
         super
       end
@@ -52,7 +60,7 @@ class QuantumCore::Container
         @__container_definition_lock__.thread_safe do
           DependencyCompatability::Definition.prevent_dependency_overlap!(self, namespace_name)
 
-          __container_definition_commands__ << Commands::Namespace.new(
+          __container_definition_commands__ << Commands::Definition::Namespace.new(
             namespace_name, dependencies_definition
           )
         end
@@ -68,9 +76,19 @@ class QuantumCore::Container
         @__container_definition_lock__.thread_safe do
           DependencyCompatability::Definition.prevent_namespace_overlap!(self, dependency_name)
 
-          __container_definition_commands__ << Commands::Register.new(
+          __container_definition_commands__ << Commands::Definition::Register.new(
             dependency_name, dependency_definition
           )
+        end
+      end
+
+      # @return [void]
+      #
+      # @api public
+      # @since 0.1.0
+      def freeze_state!
+        @__container_definition_lock__.thread_safe do
+          __container_instantiation_commands__ << Commands::Instantiation::FreezeState.new
         end
       end
     end
