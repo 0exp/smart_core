@@ -6,7 +6,7 @@ module QuantumCore::Container::DependencyResolver
   class << self
     # @param registry [QuantumCore::Container::Registry]
     # @param dependency_path [String, Symbol]
-    # @return [Any, QuantumCore::Container]
+    # @return [QuantumCore::Container, Any]
     #
     # @see QuantumCore::Container::Registry#resolve
     # @see QuantumCore::Container::Entities::Namespace#resolve
