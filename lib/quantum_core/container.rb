@@ -86,7 +86,7 @@ class QuantumCore::Container
     thread_safe { registry.hash_tree(resolve_dependencies: resolve_dependencies) }
   end
   alias_method :to_h, :hash_tree
-  alias_method :to_hash, :to_h
+  alias_method :to_hash, :hash_tree
 
   private
 
