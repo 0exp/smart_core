@@ -5,19 +5,44 @@
 module QuantumCore::Container::RegistryBuilder
   class << self
     # @parma container [QuantumCore::Container]
+    # @option ignored_definition_commands [Array<Class::QuantumCore::Container::DefinitionDSL::Commands::Base>>]
+    # @option ignored_instantiation_commands [Array<Class::QuantumCore::Container::DefinitionDSL::Commands::Base>>]
     # @return [QuantumCore::Container::Registry]
     #
     # @api private
     # @since 0.1.0
-    def build(container)
+    def build(container, ignored_definition_commands: [], ignored_instantiation_commands: [])
       QuantumCore::Container::Registry.new.tap do |registry|
-        container.class.__container_definition_commands__.each do |command|
-          command.call(registry)
-        end
+        build_definitions(container.class, registry, ignored_commands: ignored_definition_commands)
+        build_state(container.class, registry, ignored_commands: ignored_instantiation_commands)
+      end
+    end
 
-        container.class.__container_instantiation_commands__.each do |command|
-          command.call(registry)
-        end
+    # @param container_klass [Class<QuantumCore::Container>]
+    # @param registry [QuantumCore::Container::Registry]
+    # @option ignored_commands [Array<Class<QuantumCore::Container::DefinitionDSL::Commands::Base>>]
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
+    def build_definitions(container_klass, registry, ignored_commands: [])
+      container_klass.__container_definition_commands__.each do |command|
+        next if ignored_commands.include?(command.class)
+        command.call(registry)
+      end
+    end
+
+    # @param container_klass [Class<QuantumCore::Container>]
+    # @param registry [QuantumCore::Container::Registry]
+    # @option ignored_commands [Array<Class<QuantumCore::Container::DefinitionDSL::Commands::Base>>]
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
+    def build_state(container_klass, registry, ignored_commands: [])
+      container_klass.__container_instantiation_commands__.each do |command|
+        next if ignored_commands.include?(command.class)
+        command.call(registry)
       end
     end
   end

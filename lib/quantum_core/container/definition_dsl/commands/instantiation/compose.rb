@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module QuantumCore::Container::DefinitionDSL::Commands::Definition
+module QuantumCore::Container::DefinitionDSL::Commands::Instantiation
   # @api private
   # @since 0.1.0
   class Compose < QuantumCore::Container::DefinitionDSL::Commands::Base
@@ -24,7 +24,11 @@ module QuantumCore::Container::DefinitionDSL::Commands::Definition
     # @api private
     # @since 0.1.0
     def call(registry)
-      QuantumCore::Container::RegistryBuilder.build_definitions(container_klass, registry)
+      QuantumCore::Container::RegistryBuilder.build_state(
+        container_klass, registry, ignored_commands: [
+          QuantumCore::Container::DefinitionDSL::Commands::Instantiation::FreezeState
+        ]
+      )
     end
 
     private

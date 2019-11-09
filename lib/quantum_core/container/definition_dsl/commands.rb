@@ -7,5 +7,6 @@ module QuantumCore::Container::DefinitionDSL::Commands
   require_relative 'commands/definition/namespace'
   require_relative 'commands/definition/register'
   require_relative 'commands/definition/compose'
+  require_relative 'commands/instantiation/compose'
   require_relative 'commands/instantiation/freeze_state'
 end

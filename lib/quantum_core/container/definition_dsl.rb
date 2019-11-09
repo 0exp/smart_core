@@ -36,12 +36,15 @@ class QuantumCore::Container
         child_klass.instance_variable_set(:@__container_definition_commands__, CommandSet.new)
         child_klass.instance_variable_set(:@__container_instantiation_commands__, CommandSet.new)
         child_klass.instance_variable_set(:@__container_definition_lock__, ArbitaryLock.new)
+
         child_klass.__container_definition_commands__.concat(
           __container_definition_commands__
         )
+
         child_klass.__container_instantiation_commands__.concat(
           __container_instantiation_commands__
         )
+
         child_klass.singleton_class.prepend(ClassInheritance)
         super
       end
@@ -89,7 +92,13 @@ class QuantumCore::Container
       # @since 0.1.0
       def compose(container_klass)
         @__container_definition_lock__.thread_safe do
-          __container_definition_commands__ << Commands::Definition::Compose.new(container_klass)
+          __container_definition_commands__ << Commands::Definition::Compose.new(
+            container_klass
+          )
+
+          __container_instantiation_commands__ << Commands::Instantiation::Compose.new(
+            container_klass
+          )
         end
       end
 
