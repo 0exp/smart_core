@@ -13,9 +13,6 @@ class QuantumCore::Container
   require_relative 'container/registry_builder'
   require_relative 'container/dependency_resolver'
 
-  # TODO: composition (at DSL level)
-  # TODO: merge/merge! (at instance level)
-
   # @since 0.1.0
   include DefinitionDSL
 
