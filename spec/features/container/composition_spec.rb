@@ -53,8 +53,7 @@ describe '[Container] Composition (.compose macros)' do
     expect(root_container.resolve(:database).frozen?).to eq(false)
   end
 
-  specify 'fails on incompatible overlappings' do
-    # NOTE: namespace overlap
+  specify 'fails on incompatible overlappings (at instantiation step only)' do
     stub_const('DbContainer', Class.new(QuantumCore::Container) do
       namespace(:database) {}
     end)
@@ -62,18 +61,22 @@ describe '[Container] Composition (.compose macros)' do
       register(:database) {}
     end)
 
+    # NOTE: namespace overlap
+    stub_const('CompositionRoot', Class.new(QuantumCore::Container) do
+      compose(DbContainer)
+      compose(AnotherDbContainer)
+    end)
     expect do
-      Class.new(QuantumCore::Container) do
-        compose(DbContainer)
-        compose(AnotherDbContainer)
-      end
+      CompositionRoot.new
     end.to raise_error(QuantumCore::Container::DependencyOverNamespaceOverlapError)
 
+    # NOTE: dependency overlap
+    stub_const('CompositionRoot', Class.new(QuantumCore::Container) do
+      compose(AnotherDbContainer)
+      compose(DbContainer)
+    end)
     expect do
-      Class.new(QuantumCore::Container) do
-        compose(AnotherDbContainer)
-        compose(DbContainer)
-      end
+      CompositionRoot.new
     end.to raise_error(QuantumCore::Container::NamespaceOverDependencyOverlapError)
   end
 end
