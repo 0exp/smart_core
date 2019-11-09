@@ -2,6 +2,7 @@
 
 # @api private
 # @since 0.1.0
+# rubocop:disable Metrics/ClassLength
 class QuantumCore::Container::Registry
   # @since 0.1.0
   include Enumerable
@@ -246,3 +247,4 @@ class QuantumCore::Container::Registry
     @access_lock.thread_safe(&block)
   end
 end
+# rubocop:enable Metrics/ClassLength

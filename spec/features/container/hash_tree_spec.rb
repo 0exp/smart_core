@@ -23,16 +23,16 @@ describe '[Container] Hash tree (#to_h / #to_hash / #hash_tree)' do
     context "(#{method_name}) with dependency resolving (resolve_dependencies: true)" do
       specify 'dependency tree is represented as a hash with resolved dependencies' do
         expect(container.public_send(method_name, resolve_dependencies: true)).to match(
-          "storages" => {
-            "adapters" => {
-              "database" => :database,
-              "cache" => :cache,
+          'storages' => {
+            'adapters' => {
+              'database' => :database,
+              'cache' => :cache
             },
-            "logger" => :storage_logger,
+            'logger' => :storage_logger
           },
-          "queues" => {
-            "async" => :sidekiq,
-            "sync" => :in_memory
+          'queues' => {
+            'async' => :sidekiq,
+            'sync' => :in_memory
           }
         )
       end
@@ -41,16 +41,16 @@ describe '[Container] Hash tree (#to_h / #to_hash / #hash_tree)' do
     context "(#{method_name}) without dependency resolving (resolve_dependencies: false)" do
       specify 'dependency tree is represented as a hash with container entities' do
         expect(container.public_send(method_name)).to match(
-          "storages" => {
-            "adapters" => {
-              "database" => an_instance_of(QuantumCore::Container::Entities::Dependency),
-              "cache" => an_instance_of(QuantumCore::Container::Entities::Dependency),
+          'storages' => {
+            'adapters' => {
+              'database' => an_instance_of(QuantumCore::Container::Entities::Dependency),
+              'cache' => an_instance_of(QuantumCore::Container::Entities::Dependency)
             },
-            "logger" => an_instance_of(QuantumCore::Container::Entities::Dependency),
+            'logger' => an_instance_of(QuantumCore::Container::Entities::Dependency)
           },
-          "queues" => {
-            "async" => an_instance_of(QuantumCore::Container::Entities::Dependency),
-            "sync" => an_instance_of(QuantumCore::Container::Entities::Dependency)
+          'queues' => {
+            'async' => an_instance_of(QuantumCore::Container::Entities::Dependency),
+            'sync' => an_instance_of(QuantumCore::Container::Entities::Dependency)
           }
         )
       end

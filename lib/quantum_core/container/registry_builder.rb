@@ -3,6 +3,7 @@
 # @api private
 # @since 0.1.0
 module QuantumCore::Container::RegistryBuilder
+  # rubocop:disable Metrics/LineLength
   class << self
     # @parma container [QuantumCore::Container]
     # @option ignored_definition_commands [Array<Class::QuantumCore::Container::DefinitionDSL::Commands::Base>>]
@@ -46,4 +47,5 @@ module QuantumCore::Container::RegistryBuilder
       end
     end
   end
+  # rubocop:enable Metrics/LineLength
 end
