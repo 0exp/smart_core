@@ -29,7 +29,17 @@ require 'smart_core'
 - IoC Container (Dependency Container);
 - Initializer (DSL);
 - Validator (Validation Layer);
-- (Soon) Schema;
+
+---
+
+#### Roadmap
+
+- Value Object (`SmartCore::ValueObject` (`DTO`));
+- Schema Structure Validator (`SmartCore::Schema`);
+- Saga (`SmartCore::Saga`);
+- External Type System (`SmartCore::Types`);
+- Step-like execution behavior for `SmartCore::Operation` (`.step`);
+- Automatic result instantiation and handling for `SmartCore::Operation`;
 
 ---
 
