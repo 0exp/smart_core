@@ -34,7 +34,7 @@ require 'smart_core'
 
 #### Roadmap
 
-- Value Object (`SmartCore::ValueObject` (`DTO`));
+- Value Object (`SmartCore::ValueObject` (`DTO`) (truely immutable and comparable objects 😈));
 - Schema Structure Validator (`SmartCore::Schema`);
 - Saga (`SmartCore::Saga`);
 - External Type System (`SmartCore::Types`);
