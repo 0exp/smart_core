@@ -12,5 +12,13 @@ module SmartCore::Container::DefinitionDSL::Commands::Instantiation
     def call(registry)
       registry.freeze!
     end
+
+    # @return [SmartCore::Container::DefinitionDSL::Commands::Instantiation::FreezeState]
+    #
+    # @api private
+    # @since 0.7.0
+    def dup
+      self.class.new
+    end
   end
 end

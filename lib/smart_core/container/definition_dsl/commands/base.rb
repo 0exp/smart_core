@@ -9,6 +9,4 @@ class SmartCore::Container::DefinitionDSL::Commands::Base
   # @api private
   # @since 0.7.0
   def call(registry); end
-
-  # TODO: #dup
 end

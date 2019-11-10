@@ -32,6 +32,14 @@ module SmartCore::Container::DefinitionDSL::Commands::Definition
       registry.register_namespace(namespace_name, &dependencies_definition)
     end
 
+    # @return [SmartCore::Container::DefinitionDSL::Commands::Definition::Namespace]
+    #
+    # @api private
+    # @since 0.7.0
+    def dup
+      self.class.new(namespace_name, dependencies_definition)
+    end
+
     private
 
     # @return [Proc]

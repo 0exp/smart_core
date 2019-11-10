@@ -32,6 +32,14 @@ module SmartCore::Container::DefinitionDSL::Commands::Definition
       registry.register_dependency(dependency_name, &dependency_definition)
     end
 
+    # @return [SmartCore::Container::DefinitionDSL::Commands::Definition::Register]
+    #
+    # @api private
+    # @since 0.7.0
+    def dup
+      self.class.new(dependency_name, dependency_definition)
+    end
+
     private
 
     # @return [Proc]

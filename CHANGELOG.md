@@ -1,9 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.7.0] - 2019-11-10
 ### Changed
 - `SmartCore::Operation::Custom` result type is renamed to `SmartCore::Operation::Callback`;
+- Full reimplementation of `SmartCore::Container`;
 
 ## [0.6.0] - 2019-09-18
 ### Added

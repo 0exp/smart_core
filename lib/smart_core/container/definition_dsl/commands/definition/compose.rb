@@ -27,6 +27,14 @@ module SmartCore::Container::DefinitionDSL::Commands::Definition
       SmartCore::Container::RegistryBuilder.build_definitions(container_klass, registry)
     end
 
+    # @return [SmartCore::Container::DefinitionDSL::Commands::Definition::Compose]
+    #
+    # @api private
+    # @since 0.7.0
+    def dup
+      self.class.new(container_klass)
+    end
+
     private
 
     # @return [Class<SmartCore::Container>]

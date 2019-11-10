@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# TODO: think about memoization
-
 # @api private
 # @since 0.7.0
 class SmartCore::Container::Entities::Dependency < SmartCore::Container::Entities::Base

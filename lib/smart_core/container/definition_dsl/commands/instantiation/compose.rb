@@ -31,6 +31,14 @@ module SmartCore::Container::DefinitionDSL::Commands::Instantiation
       )
     end
 
+    # @return [SmartCore::Container::DefinitionDSL::Commands::Instantiation::Compose]
+    #
+    # @api private
+    # @since 0.7.0
+    def dup
+      self.class.new(container_klass)
+    end
+
     private
 
     # @return [Class<SmartCore::Container>]
