@@ -55,9 +55,7 @@ module SmartCore::Container::Mixin
     def dependencies(freeze_state: false, &block)
       @__smart_core_container_access_lock__.thread_safe do
         @__smart_core_container_klass__.instance_eval(&block) if block_given?
-        @__smart_core_container_klass__.instance_eval do
-          freeze_state!
-        end if freeze_state
+        @__smart_core_container_klass__.instance_eval { freeze_state! } if freeze_state
       end
     end
 
