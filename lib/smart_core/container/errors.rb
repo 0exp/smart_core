@@ -40,4 +40,10 @@ class SmartCore::Container
   # @api public
   # @since 0.7.0
   NamespaceOverDependencyOverlapError = Class.new(Error)
+
+  # @see SmartCore::Container::DependencyResolver
+  #
+  # @api public
+  # @since 0.8.0
+  FetchError = Class.new(Error)
 end

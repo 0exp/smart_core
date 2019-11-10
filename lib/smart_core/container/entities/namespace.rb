@@ -25,7 +25,7 @@ class SmartCore::Container::Entities::Namespace < SmartCore::Container::Entities
   #
   # @api private
   # @since 0.7.0
-  def resolve
+  def reveal
     thread_safe { container_instance }
   end
 

@@ -24,7 +24,7 @@ class SmartCore::Container::Entities::Dependency < SmartCore::Container::Entitie
   #
   # @api private
   # @since 0.7.0
-  def resolve
+  def reveal
     dependency_definition.call
   end
 
