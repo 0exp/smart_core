@@ -2,6 +2,8 @@
 
 require 'simplecov'
 
+SimpleCov.minimum_coverage = 85
+
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
 ])
