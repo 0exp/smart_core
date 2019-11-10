@@ -1,7 +1,8 @@
 language: ruby
 sudo: false
-before_install: gem install bundler
 cache: bundler
+before_install: gem install bundler
+script: bundle exec rspec
 matrix:
   fast_finish: true
   include:
@@ -14,7 +15,3 @@ matrix:
   allow_failures:
   - rvm: ruby-head
   - rvm: jruby-head
-script: bundle exec rspec
-notifications:
-  slack:
-    secure: CUM3xnSJvn/y6Z+epQrO5uSk1EUuP4S+ugcS+48nlWD6eEzhYZwcBAK9tvD6kYGOPzoWyKSbW6Is1kzSunNr6f8ICc8HtrVHzoHE8UCzwZ7FpjgD0JgMgC4+xLLBO6lV0Hc7dNh4KLAhy4Zvbr09DPjcG8UW9/QgUdn+wBf9LHMgA+2SpBPEzMwz6pMbWW/+kkoCz2KU877kEfuFFGfvoOEFWTxUUhuCYi5a1SmTjm9A7CFTEWNkX8yHJwdgVgONjvm9lnhTeV0DvMeEOhk8Kx/hzQ2OGIicXZXWyZFkzNzpQm5xE12Hs4rY7mGPbo3bsYRDH9Ys6yf4fpNf0oZ/1agzl/gnDzacA2wL2b+eq1uZblE/fdwrNp+GIH0R+Ec2rsVKM7kh71sA6Xp1pzFb2DnHj5O4QFaPMsLyIZqD0BkVt4pNfwi4ZUB56sWkYeRQGm8x2Beh02IyFfxI65lY5kZrW6GjXx5eFeOHcmzQzeADWLSBf4iw01G/A/QqwZzlZ3fm0fRJi8BKDh3Jj0IrGndE9Bl+E7uOClKKngTPxOVLOLo/vY5mfI8M94f99kr0J45XkoAdc0SQfi3hDa/tHaakI5GJsmByjgOQwV7OU/2wzJoXAg/RPYjsYcwnTgzm9bLXPhQzfM8rUS5vLTOWIW+N0QKmWml7eWVtiedcwXA=

@@ -28,7 +28,7 @@ require 'smart_core'
 - Service Object (Operation, Functional Object);
 - Initializer (DSL);
 - Validator (Validation Layer);
-- Dependency Container;
+- IoC Container;
 - (Soon) Schema;
 
 ---
@@ -37,7 +37,7 @@ require 'smart_core'
 
 - Fork it ( https://github.com/0exp/smart_core/fork )
 - Create your feature branch (`git checkout -b feature/my-new-feature`)
-- Commit your changes (`git commit -am 'Add some feature'`)
+- Commit your changes (`git commit -am '[feature_context] Add some feature'`)
 - Push to the branch (`git push origin feature/my-new-feature`)
 - Create new Pull Request
 

@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
 # @api private
-# @since 0.5.0
-class SmartCore::Container::Entity
+# @since 0.7.0
+class SmartCore::Container::Entities::Base
   # @return [String]
   #
   # @api private
-  # @since 0.5.0
+  # @since 0.7.0
   attr_reader :external_name
 
   # @param external_name [String]
   # @return [void]
   #
   # @api private
-  # @since 0.5.0
+  # @since 0.7.0
   def initialize(external_name)
     @external_name = external_name
   end
 
-  # @return [void]
+  # @return [Any]
   #
   # @api private
-  # @since 0.5.0
-  def call; end
+  # @since 0.7.0
+  def resolve; end
 end
