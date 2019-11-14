@@ -38,6 +38,7 @@ require 'smart_core'
 - Schema Structure Validator (`SmartCore::Schema`);
 - Saga (`SmartCore::Saga`);
 - External Type System (`SmartCore::Types`);
+  - Suport for **Interface Type Checking** (**Duck**-typing checker 🤔);
 - Step-like execution behavior for `SmartCore::Operation` (`.step`, `SmartCore::Railway`);
 - Automatic result instantiation and handling for `SmartCore::Operation`;
 
