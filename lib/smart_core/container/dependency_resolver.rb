@@ -32,6 +32,7 @@ module SmartCore::Container::DependencyResolver
     #
     # @api private
     # @since 0.7.0
+    # @version 0.8.0
     def resolve(container, dependency_path)
       entity = container
 
@@ -62,5 +63,4 @@ module SmartCore::Container::DependencyResolver
       MESSAGE
     end
   end
-
 end

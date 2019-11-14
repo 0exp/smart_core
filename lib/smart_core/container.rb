@@ -57,6 +57,7 @@ class SmartCore::Container
   #
   # @api public
   # @since 0.7.0
+  # @version 0.8.0
   def resolve(dependency_path)
     thread_safe { DependencyResolver.resolve(self, dependency_path) }
   end
@@ -95,6 +96,7 @@ class SmartCore::Container
     thread_safe { build_registry! }
   end
 
+  # @option resolve_dependencies [Boolean]
   # @return [Hash<String|Symbol,SmartCore::Container::Entities::Base|Any>]
   #
   # @api public

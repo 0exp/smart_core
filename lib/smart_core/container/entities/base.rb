@@ -21,6 +21,6 @@ class SmartCore::Container::Entities::Base
   # @return [Any]
   #
   # @api private
-  # @since 0.7.0
+  # @since 0.8.0
   def reveal; end
 end

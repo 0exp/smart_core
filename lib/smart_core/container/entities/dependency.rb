@@ -6,7 +6,7 @@ class SmartCore::Container::Entities::Dependency < SmartCore::Container::Entitie
   # @return [String]
   #
   # @api private
-  # @sicne 0.7.0
+  # @since 0.7.0
   alias_method :dependency_name, :external_name
 
   # @param dependency_name [String]
@@ -23,7 +23,7 @@ class SmartCore::Container::Entities::Dependency < SmartCore::Container::Entitie
   # @return [Any]
   #
   # @api private
-  # @since 0.7.0
+  # @since 0.8.0
   def reveal
     dependency_definition.call
   end

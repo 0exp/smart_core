@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2019-11-14
+### Added
+- [**SmartCore::Container**]
+  - support for `dot-notation`;
+
+### Changed
+- [**SmartCore::Container**]
+  - new `#resolve`: now supports only the dot-notated invokation style;
+  - old `#resolve` renamed to `#fetch`;
+  - added `#[](dependency_path)` - an alias for `#resolve`;
+
 ## [0.7.0] - 2019-11-10
 ### Changed
 - `SmartCore::Operation::Custom` result type is renamed to `SmartCore::Operation::Callback`;
