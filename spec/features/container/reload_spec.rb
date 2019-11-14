@@ -27,26 +27,26 @@ describe '[Container] Container reloading' do
     container.namespace(:system) { register(:queue) { :sidekiq } }
 
     # check that our new dependencies are created
-    expect(container.resolve(:randomizer)).to eq(:randomizer)
-    expect(container.resolve(:storages).resolve(:database)).to eq(:database)
-    expect(container.resolve(:storages).resolve(:cache)).to eq(:cache)
-    expect(container.resolve(:logger)).to eq(:logger)
-    expect(container.resolve(:system).resolve(:queue)).to eq(:sidekiq)
+    expect(container.fetch(:randomizer)).to eq(:randomizer)
+    expect(container.fetch(:storages).fetch(:database)).to eq(:database)
+    expect(container.fetch(:storages).fetch(:cache)).to eq(:cache)
+    expect(container.fetch(:logger)).to eq(:logger)
+    expect(container.fetch(:system).fetch(:queue)).to eq(:sidekiq)
 
     # reload!
     container.reload!
 
     # check that we have old dependencies
-    expect(container.resolve(:randomizer)).to eq(randomizer_dependency_stub)
-    expect(container.resolve(:storages).resolve(:database)).to eq(database_dependency_stub)
-    expect(container.resolve(:storages).resolve(:cache)).to eq(cache_dependency_stub)
+    expect(container.fetch(:randomizer)).to eq(randomizer_dependency_stub)
+    expect(container.fetch(:storages).fetch(:database)).to eq(database_dependency_stub)
+    expect(container.fetch(:storages).fetch(:cache)).to eq(cache_dependency_stub)
     # check that we have no new dependencies
     expect do
-      container.resolve(:logger)
-    end.to raise_error(SmartCore::Container::NonexistentEntityError)
+      container.fetch(:logger)
+    end.to raise_error(SmartCore::Container::FetchError)
     expect do
-      container.resolve(:system)
-    end.to raise_error(SmartCore::Container::NonexistentEntityError)
+      container.fetch(:system)
+    end.to raise_error(SmartCore::Container::FetchError)
   end
 
   specify "new definitions from a container's class will be considered too" do
@@ -58,10 +58,10 @@ describe '[Container] Container reloading' do
 
     container = container_klass.new
 
-    expect(container.resolve(:storages).resolve(:database)).to eq(:database)
+    expect(container.fetch(:storages).fetch(:database)).to eq(:database)
     expect do
-      container.resolve(:storages).resolve(:cache)
-    end.to raise_error(SmartCore::Container::NonexistentEntityError)
+      container.fetch(:storages).fetch(:cache)
+    end.to raise_error(SmartCore::Container::FetchError)
 
     # register new dependencies on class-level dependency tree
     container_klass.namespace(:storages) { register(:cache) { :cache } }
@@ -69,8 +69,8 @@ describe '[Container] Container reloading' do
     # reload existing container and check that new definitions are exist
     container.reload!
 
-    expect(container.resolve(:storages).resolve(:database)).to eq(:database)
-    expect(container.resolve(:storages).resolve(:cache)).to eq(:cache)
+    expect(container.fetch(:storages).fetch(:database)).to eq(:database)
+    expect(container.fetch(:storages).fetch(:cache)).to eq(:cache)
   end
 
   specify 'resets frozen state' do

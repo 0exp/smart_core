@@ -20,9 +20,9 @@ describe '[Container] Mixin' do
     expect(application.container).to be_a(SmartCore::Container)
     expect(application.container).to eq(app_klass.container)
 
-    expect(application.container.resolve(:database).resolve(:cache)).to eq(:dalli)
-    expect(application.container.resolve(:database).resolve(:store)).to eq(:pg)
-    expect(application.container.resolve(:logger)).to eq(:app_logger)
+    expect(application.container.fetch(:database).fetch(:cache)).to eq(:dalli)
+    expect(application.container.fetch(:database).fetch(:store)).to eq(:pg)
+    expect(application.container.fetch(:logger)).to eq(:app_logger)
   end
 
   specify "you can freeze container state by DSL's macros attribute" do

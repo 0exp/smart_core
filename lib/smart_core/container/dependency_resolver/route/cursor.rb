@@ -8,6 +8,7 @@ class SmartCore::Container::DependencyResolver::Route::Cursor
   # @api private
   # @since 0.8.0
   attr_reader :path_part
+  alias_method :current_path, :path_part
 
   # @param path_part [String]
   # @param path_part_index [Integer]

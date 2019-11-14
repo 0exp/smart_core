@@ -19,11 +19,9 @@ class SmartCore::Container
   # @since 0.7.0
   FrozenRegistryError = Class.new(SmartCore::FrozenError)
 
-  # @see SmartCore::Container::Registry
-  #
   # @api public
-  # @since 0.7.0
-  NonexistentEntityError = Class.new(Error)
+  # @since 0.8.0
+  FetchError = Class.new(Error)
 
   # @see SmartCore::Container::DependencyCompatability::General
   # @see SmartCore::Container::DependencyCompatability::Definition
@@ -42,8 +40,26 @@ class SmartCore::Container
   NamespaceOverDependencyOverlapError = Class.new(Error)
 
   # @see SmartCore::Container::DependencyResolver
+  # @see SmartCore::Container::Registry
   #
   # @api public
   # @since 0.8.0
-  FetchError = Class.new(Error)
+  class ResolvingError < FetchError
+    # @return [String]
+    #
+    # @api private
+    # @since 0.8.0
+    attr_reader :path_part
+
+    # @param message [String]
+    # @param path_part [String]
+    # @return [void]
+    #
+    # @api private
+    # @since 0.8.0
+    def initialize(messegae = nil, path_part:)
+      @path_part = path_part
+      super(message)
+    end
+  end
 end

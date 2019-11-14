@@ -23,6 +23,14 @@ class SmartCore::Container::DependencyResolver::Route
     def build(path)
       new(SmartCore::Container::KeyGuard.indifferently_accessable_key(path))
     end
+
+    # @return [Array<String>]
+    #
+    # @api private
+    # @since 0.8.0
+    def build_path(*path_parts)
+      path_parts.join(PATH_PART_SEPARATOR)
+    end
   end
 
   # @return [Integer]

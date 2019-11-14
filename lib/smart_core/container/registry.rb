@@ -145,14 +145,14 @@ class SmartCore::Container::Registry
   #
   # @api private
   # @since 0.7.0
+  # @version 0.8.0
   def fetch_entity(entity_path)
     dependency_name = indifferently_accessable_name(entity_path)
     registry.fetch(dependency_name)
   rescue KeyError
-    raise(
-      SmartCore::Container::NonexistentEntityError,
-      "Entity with '#{dependency_name}' name does not exist!"
-    )
+    raise(SmartCore::Container::ResolvingError.new(<<~MESSAGE, path_part: dependency_name))
+      Entity with \"#{dependency_name}\" name does not exist
+    MESSAGE
   end
 
   # @param dependency_name [String, Symbol]
@@ -195,7 +195,7 @@ class SmartCore::Container::Registry
     # rubocop:disable Layout/RescueEnsureAlignment
     namespace_entity = begin
       fetch_entity(namespace_name)
-    rescue SmartCore::Container::NonexistentEntityError
+    rescue SmartCore::Container::FetchError
       registry[namespace_name] = SmartCore::Container::Entities::NamespaceBuilder.build(
         namespace_name
       )

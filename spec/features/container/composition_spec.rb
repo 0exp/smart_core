@@ -30,10 +30,10 @@ describe '[Container] Composition (.compose macros)' do
 
     root_container = CompositionRoot.new
 
-    expect(root_container.resolve(:database).resolve(:adapter)).to eq(:pg)
-    expect(root_container.resolve(:client).resolve(:proxy)).to eq(:proxy)
-    expect(root_container.resolve(:database).resolve(:cache)).to eq(:cache)
-    expect(root_container.resolve(:nested).resolve(:database).resolve(:adapter)).to eq(:pg)
+    expect(root_container.fetch(:database).fetch(:adapter)).to eq(:pg)
+    expect(root_container.fetch(:client).fetch(:proxy)).to eq(:proxy)
+    expect(root_container.fetch(:database).fetch(:cache)).to eq(:cache)
+    expect(root_container.fetch(:nested).fetch(:database).fetch(:adapter)).to eq(:pg)
   end
 
   specify 'ignores frozen state (ignores .freeze_state macros)' do
@@ -50,7 +50,7 @@ describe '[Container] Composition (.compose macros)' do
     root_container = CompositionRoot.new
 
     expect(root_container.frozen?).to eq(false)
-    expect(root_container.resolve(:database).frozen?).to eq(false)
+    expect(root_container.fetch(:database).frozen?).to eq(false)
   end
 
   specify 'fails on incompatible overlappings (at instantiation step only)' do

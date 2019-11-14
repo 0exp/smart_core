@@ -35,11 +35,11 @@ describe '[Container] Definition and instantiation' do
     # create container instance
     container = container_klass.new
 
-    expect(container.resolve(:storages).resolve(:cache)).to eq(cache_dependency_stub)
-    expect(container.resolve(:storages).resolve(:database)).to eq(database_dependency_stub)
-    expect(container.resolve(:storages).resolve(:messaging)).to eq(messaging_dependency_stub)
-    expect(container.resolve(:api).resolve(:common).resolve(:general)).to eq(api_dependency_stub)
-    expect(container.resolve(:logger)).to eq(logger_stub)
+    expect(container.fetch(:storages).fetch(:cache)).to eq(cache_dependency_stub)
+    expect(container.fetch(:storages).fetch(:database)).to eq(database_dependency_stub)
+    expect(container.fetch(:storages).fetch(:messaging)).to eq(messaging_dependency_stub)
+    expect(container.fetch(:api).fetch(:common).fetch(:general)).to eq(api_dependency_stub)
+    expect(container.fetch(:logger)).to eq(logger_stub)
   end
 
   specify 'define container as frozen that means it should be freezed after instantiation' do
@@ -76,21 +76,21 @@ describe '[Container] Definition and instantiation' do
     container.register(:randomizer) { randomizer_dependency_stub }
 
     # check already existing dependencies
-    expect(container.resolve(:database).resolve(:connection)).to eq(database_dependency_stub)
-    expect(container.resolve(:logger)).to eq(logger_dependency_stub)
+    expect(container.fetch(:database).fetch(:connection)).to eq(database_dependency_stub)
+    expect(container.fetch(:logger)).to eq(logger_dependency_stub)
 
     # check new registered namespaces and dependencies
-    expect(container.resolve(:api).resolve(:client)).to eq(api_client_dependency_stub)
-    expect(container.resolve(:randomizer)).to eq(randomizer_dependency_stub)
+    expect(container.fetch(:api).fetch(:client)).to eq(api_client_dependency_stub)
+    expect(container.fetch(:randomizer)).to eq(randomizer_dependency_stub)
 
     another_container = container_klass.new
 
     # check that new registered dependnecies does not mutate class-level dependency tree
-    expect { another_container.resolve(:api) }.to raise_error(
-      SmartCore::Container::NonexistentEntityError
+    expect { another_container.fetch(:api) }.to raise_error(
+      SmartCore::Container::FetchError
     )
-    expect { another_container.resolve(:randomizer) }.to raise_error(
-      SmartCore::Container::NonexistentEntityError
+    expect { another_container.fetch(:randomizer) }.to raise_error(
+      SmartCore::Container::FetchError
     )
   end
 
@@ -155,18 +155,18 @@ describe '[Container] Definition and instantiation' do
     child_container = child_container_klass.new
 
     # no affections from child_container_klass
-    expect { base_container.resolve(:database).resolve(:logger) }.to raise_error(
-      SmartCore::Container::NonexistentEntityError
+    expect { base_container.fetch(:database).fetch(:logger) }.to raise_error(
+      SmartCore::Container::FetchError
     )
-    expect { base_container.resolve(:queue_adapter) }.to raise_error(
-      SmartCore::Container::NonexistentEntityError
+    expect { base_container.fetch(:queue_adapter) }.to raise_error(
+      SmartCore::Container::FetchError
     )
-    expect(base_container.resolve(:api_client)).to eq(base_api_client_stub)
+    expect(base_container.fetch(:api_client)).to eq(base_api_client_stub)
 
     # inherited container has own dependency tree
-    expect(child_container.resolve(:database).resolve(:logger)).to eq(database_logger_stub)
-    expect(child_container.resolve(:api_client)).to eq(child_api_client_stub)
-    expect(child_container.resolve(:queue_adapter)).to eq(queue_adapter_stub)
+    expect(child_container.fetch(:database).fetch(:logger)).to eq(database_logger_stub)
+    expect(child_container.fetch(:api_client)).to eq(child_api_client_stub)
+    expect(child_container.fetch(:queue_adapter)).to eq(queue_adapter_stub)
   end
 
   specify 'dependency/namespace name accepts does not accept non-strings/non-symbols' do
@@ -188,7 +188,7 @@ describe '[Container] Definition and instantiation' do
       SmartCore::Container::IncompatibleEntityNameError
     )
 
-    expect { container.resolve(incompatible_name) }.to raise_error(
+    expect { container.fetch(incompatible_name) }.to raise_error(
       SmartCore::Container::IncompatibleEntityNameError
     )
   end

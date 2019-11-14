@@ -17,6 +17,12 @@ class SmartCore::Container
   # @since 0.7.0
   include DefinitionDSL
 
+  # @return [SmartCore::Container::Registry]
+  #
+  # @api private
+  # @since 0.7.0
+  attr_reader :registry
+
   # @return [void]
   #
   # @api public
@@ -52,18 +58,18 @@ class SmartCore::Container
   # @api public
   # @since 0.7.0
   def resolve(dependency_path)
-    thread_safe { DependencyResolver.resolve(registry, dependency_path) }
+    thread_safe { DependencyResolver.resolve(self, dependency_path) }
   end
+  alias_method :[], :resolve
 
-  # @param dependency_path [String]
+  # @param dependency_path [String, Symbol]
   # @return [Any]
   #
   # @api public
   # @since 0.8.0
   def fetch(dependency_path)
-    thread_safe { DependencyResolver.fetch(registry, dependency_path) }
+    thread_safe { DependencyResolver.fetch(self, dependency_path) }
   end
-  alias_method :[], :fetch
 
   # @return [void]
   #
@@ -100,12 +106,6 @@ class SmartCore::Container
   alias_method :to_hash, :hash_tree
 
   private
-
-  # @return [SmartCore::Container::Registry]
-  #
-  # @api private
-  # @since 0.7.0
-  attr_reader :registry
 
   # @return [void]
   #

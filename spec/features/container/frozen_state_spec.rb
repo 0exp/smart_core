@@ -26,8 +26,8 @@ describe '[Container] Frozen state' do
         SmartCore::Container::FrozenRegistryError
       )
 
-      expect { container.resolve(:logger) }.to raise_error(
-        SmartCore::Container::NonexistentEntityError
+      expect { container.fetch(:logger) }.to raise_error(
+        SmartCore::Container::FetchError
       )
     end
 
@@ -36,7 +36,7 @@ describe '[Container] Frozen state' do
         SmartCore::Container::FrozenRegistryError
       )
 
-      expect(container.resolve(:randomizer)).to eq(:randomizer)
+      expect(container.fetch(:randomizer)).to eq(:randomizer)
     end
 
     specify 'creation of the new namespace should fail' do
@@ -44,8 +44,8 @@ describe '[Container] Frozen state' do
         SmartCore::Container::FrozenRegistryError
       )
 
-      expect { container.resolve(:services) }.to raise_error(
-        SmartCore::Container::NonexistentEntityError
+      expect { container.fetch(:services) }.to raise_error(
+        SmartCore::Container::FetchError
       )
     end
 
@@ -62,18 +62,18 @@ describe '[Container] Frozen state' do
         end
       end.to raise_error(SmartCore::Container::FrozenRegistryError)
 
-      expect { container.resolve(:database).resolve(:service) }.to raise_error(
-        SmartCore::Container::NonexistentEntityError
+      expect { container.fetch(:database).fetch(:service) }.to raise_error(
+        SmartCore::Container::FetchError
       )
     end
 
     specify 'all nested containers should be frozen too' do
       expect do
-        container.resolve(:database).register(:service) { :service }
+        container.fetch(:database).register(:service) { :service }
       end.to raise_error(SmartCore::Container::FrozenRegistryError)
 
-      expect { container.resolve(:database).resolve(:service) }.to raise_error(
-        SmartCore::Container::NonexistentEntityError
+      expect { container.fetch(:database).fetch(:service) }.to raise_error(
+        SmartCore::Container::FetchError
       )
     end
   end

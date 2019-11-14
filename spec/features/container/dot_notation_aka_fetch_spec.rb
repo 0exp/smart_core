@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 describe '[Container] Dot-notation' do
-  specify do
-    container_klass = Class.new(SmartCore::Container) do
+  let(:container) do
+    Class.new(SmartCore::Container) do
       namespace :storages do
         namespace :cache do
           register(:general) { :dalli }
@@ -12,17 +12,37 @@ describe '[Container] Dot-notation' do
           register(:general) { :postgres }
         end
       end
-    end
+    end.new
+  end
 
-    container = container_klass.new
+  specify 'method-based resolving (#resolve)' do
+    expect(container.resolve('storages.cache.general')).to eq(:dalli)
+    expect(container.resolve('storages.persistent.general')).to eq(:postgres)
+  end
 
-    expect(container.fetch('storages.cache.general')).to eq(:dalli)
-    expect(container.fetch('storages.persistent.general')).to eq(:postgres)
-
+  specify 'index-like resolving (#[])' do
     expect(container['storages.cache.general']).to eq(:dalli)
     expect(container['storages.persistent.general']).to eq(:postgres)
+  end
 
-    expect { container.fetch('storages.cache') }.to raise_error(SmartCore::Container::FetchError)
-    expect { container.fetch('storages.persistent') }.to raise_error(SmartCore::Container::FetchError)
+  specify 'fails on non-finalized dependency key path' do
+    # namespace-ended dependency is not a dependency
+    expect do
+      container.resolve('storages.cache')
+    end.to raise_error(SmartCore::Container::ResolvingError)
+    expect do
+      container.resolve('storages.persistent')
+    end.to raise_error(SmartCore::Container::ResolvingError)
+  end
+
+  specify 'fails on non-existent dependencies' do
+    # nonexistent dependency is not a dependency
+    expect do
+      container.resolve('fantasy.world')
+    end.to raise_error(SmartCore::Container::ResolvingError)
+
+    expect do
+      container['storages.virtual']
+    end.to raise_error(SmartCore::Container::ResolvingError)
   end
 end
