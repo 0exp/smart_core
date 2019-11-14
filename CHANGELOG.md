@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.8.1] - 2019-11-4
+- RubyGems re-push with fixed gem version;
+
 ## [0.8.0] - 2019-11-14
 ### Added
 - [**SmartCore::Container**]
