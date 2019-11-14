@@ -3,6 +3,8 @@
 # @api private
 # @since 0.8.0
 class SmartCore::Container::DependencyResolver::Route
+  require_relative 'route/cursor'
+
   # @since 0.8.0
   include Enumerable
 
@@ -13,17 +15,13 @@ class SmartCore::Container::DependencyResolver::Route
   PATH_PART_SEPARATOR = '.'
 
   class << self
-    # @param dependency_path [String, Symbol]
+    # @param path [String, Symbol]
     # @return [SmartCore::Container::DependencyResolver::Route]
     #
     # @api private
     # @since 0.8.0
-    def build(dependency_path)
-      dependency_path = SmartCore::Container::KeyGuard.indifferently_accessable_key(
-        dependency_path
-      )
-      dependency_path_parts = dependency_path.split(PATH_PART_SEPARATOR)
-      new(dependency_path, *dependency_path_parts)
+    def build(path)
+      new(SmartCore::Container::KeyGuard.indifferently_accessable_key(path))
     end
   end
 
@@ -40,45 +38,31 @@ class SmartCore::Container::DependencyResolver::Route
   attr_reader :path
 
   # @param path [String]
-  # @param path_parts [Array<String>]
   # @return [void]
   #
   # @api private
   # @since 0.8.0
-  def initialize(path, *path_parts)
+  def initialize(path)
     @path = path
-    @path_parts = path_parts.dup.freeze
-    @size = path_parts.size
+    @path_parts = path.split(PATH_PART_SEPARATOR).freeze
+    @size = @path_parts.size
   end
 
   # @param block [Block]
-  # @yield path_part [String]
+  # @yield cursor [SmartCore::Container::DependencyResolver::Route::Cursor]
   # @return [Enumerable]
   #
   # @api private
   # @since 0.8.0
   def each(&block)
-    block_given? ? path_parts.each(&block) : path_parts.each
-  end
+    enumerator = Enumerator.new do |yielder|
+      path_parts.each_with_index do |path_part, path_part_index|
+        cursor = Cursor.new(path_part, path_part_index, self)
+        yielder.yield(cursor)
+      end
+    end
 
-  # @param block [Block]
-  # @yield path_part [String]
-  # @yield path_part_index [Integer]
-  # @return [Enumerable]
-  #
-  # @api private
-  # @since 0.8.0
-  def each_with_index(&block)
-    block_given? ? path_parts.each_with_index(&block) : path_parts.each_with_index
-  end
-
-  # @param path_part_index [Integer]
-  # @return [Boolean]
-  #
-  # @api private
-  # @since 0.1.0
-  def end?(path_part_index)
-    size <= (path_part_index + 1)
+    block_given? ? enumerator.each(&block) : enumerator
   end
 
   private

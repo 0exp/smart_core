@@ -111,9 +111,9 @@ class SmartCore::Container::Registry
       enumerate do |(entity_name, entity)|
         case entity
         when SmartCore::Container::Entities::Namespace
-          tree[entity_name] = entity.resolve.hash_tree(resolve_dependencies: resolve_dependencies)
+          tree[entity_name] = entity.reveal.hash_tree(resolve_dependencies: resolve_dependencies)
         when SmartCore::Container::Entities::Dependency
-          tree[entity_name] = resolve_dependencies ? entity.resolve : entity
+          tree[entity_name] = resolve_dependencies ? entity.reveal : entity
         end
       end
     end

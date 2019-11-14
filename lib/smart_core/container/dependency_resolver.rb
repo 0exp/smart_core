@@ -33,48 +33,15 @@ module SmartCore::Container::DependencyResolver
     def fetch(registry, dependency_path)
       entity = registry
 
-      Route.build(dependency_path).tap do |route|
-        route.each_with_index do |route_part, route_part_index|
-          entity = entity.resolve(route_part)
-          prevent_unfinished_resolving!(route, route_part, route_part_index, entity)
-          entity = entity.reveal
-        end
+      Route.build(dependency_path).each do |cursor|
+        entity = entity.fetch(cursor.path_part)
+        raise SmartCore::Container::FetchError if cursor.last? && entity.is_a?(SmartCore::Container::Entities::Namespace)
+        raise SmartCore::Container::FetchError if !cursor.last? && entity.is_a?(SmartCore::Container::Entities::Dependency)
+        binding.pry
+        entity = entity.reveal if entity.is_a?(SmartCore::Container::Entities::Namespace)
       end
 
       entity.reveal
-    end
-
-    private
-
-    def extract
-
-    end
-
-    # @param route [SmartCore::Container::DependencyResolver::Route]
-    # @param route_part [String]
-    # @param route_part_index [Integer]
-    # @param container_entity [SmartCore::Container::Entites::Base]
-    # @return [void]
-    #
-    # @raise [SmartCore::Container::FetchError]
-    #
-    # @api private
-    # @since 0.8.0
-    def prevent_unfinished_resolving!(route, route_part, route_part_index, container_entity)
-      if route.end?(route_part_index) && !container_entity.is_a?(SmartCore::Container::Entities::Dependency)
-        binding.pry
-        raise(
-          SmartCore::Container::FetchError,
-          "No registered dependency with \"#{route.path}\" path"
-        )
-      end
-
-      if !route.end?(route_part_index) && container_entity.is_a?(SmartCore::Container::Entities::Dependency)
-        raise(
-          SmartCore::Container::FetchError,
-          "Can not fetch dependency \"#{route.path}\" because \"#{route_part}\" is not a namespace"
-        )
-      end
     end
   end
 end
