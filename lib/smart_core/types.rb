@@ -3,6 +3,9 @@
 # @api public
 # @since 0.9.0
 module SmartCore::Types
+  require_relative 'types/errors'
+  require_relative 'types/lock'
+
   # 1. проверять, что является таким-то инстансом
   # 2. проверять, что является таким-то типом
   # 3. проверять, что интерфейс совпадает и заимплемечен (респонд_ту проверочка)
