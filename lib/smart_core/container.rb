@@ -4,7 +4,7 @@
 # @since 0.7.0
 class SmartCore::Container
   require_relative 'container/errors'
-  require_relative 'container/arbitary_lock'
+  require_relative 'container/arbitrary_lock'
   require_relative 'container/key_guard'
   require_relative 'container/entities'
   require_relative 'container/definition_dsl'
@@ -29,7 +29,7 @@ class SmartCore::Container
   # @since 0.7.0
   def initialize
     build_registry!
-    @access_lock = ArbitaryLock.new
+    @access_lock = ArbitraryLock.new
   end
 
   # @param dependency_name [String, Symbol]
