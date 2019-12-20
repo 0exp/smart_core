@@ -18,7 +18,7 @@ class SmartCore::Container::DefinitionDSL::CommandSet
   # @since 0.7.0
   def initialize
     @commands = []
-    @access_lock = SmartCore::Container::ArbitaryLock.new
+    @access_lock = SmartCore::Container::ArbitraryLock.new
   end
 
   # @param [SmartCore::Container::DefinitionDSL::Commands::Base]

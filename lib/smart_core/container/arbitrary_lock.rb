@@ -2,7 +2,7 @@
 
 # @api private
 # @since 0.7.0
-class SmartCore::Container::ArbitaryLock
+class SmartCore::Container::ArbitraryLock
   # @return [void]
   #
   # @api private
