@@ -1,6 +1,6 @@
 # SmartCore &middot; [![Gem Version](https://badge.fury.io/rb/smart_core.svg)](https://badge.fury.io/rb/smart_core) [![Build Status](https://travis-ci.org/0exp/smart_core.svg?branch=master)](https://travis-ci.org/0exp/smart_core)
 
-[DEPRECATED] Redesigned as @smart-rb
+[ARCHIVED] The project is totally redesigned as [@smart-rb](https://github.com/smart-rb)
 
 
 > Meetup Slides: [link](docs/SmartCore.pdf)
